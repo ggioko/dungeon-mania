@@ -38,7 +38,8 @@ public class CharacterTest {
         // test for not in inv
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("advanced", "standard");
-        controller.interact("invincibility_potion1110");
+        //move to collect potion
+        
         assertThrows(InvalidActionException.class, () -> {
             controller.tick("bomb134", Direction.NONE);
         });
