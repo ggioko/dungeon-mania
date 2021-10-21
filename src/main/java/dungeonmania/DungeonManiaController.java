@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class DungeonManiaController {
+    Dungeon currentDungeon;
     public DungeonManiaController() {
     }
 
@@ -64,14 +65,17 @@ public class DungeonManiaController {
             return null;
         }
         Dungeon newDungeon = new Dungeon(dungeonName, obj);
+        currentDungeon = newDungeon;
         return newDungeon.createResponse();
     }
     
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
+        //turn a dungeon class into a .json file and save it
         return null;
     }
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
+        //should be the same as new game
         return null;
     }
 
@@ -80,7 +84,10 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        currentDungeon.player.position = currentDungeon.player.position.translateBy(movementDirection);
+        //gets the item that is used
+        currentDungeon.getItem(itemUsed);
+        return currentDungeon.createResponse();
     }
 
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {

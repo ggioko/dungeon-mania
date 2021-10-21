@@ -20,6 +20,7 @@ public class Dungeon {
     List<String> buildables;
     String goals;
     List<AnimationQueue> animations;
+    Player player;
 
 
     public Dungeon(String dungeonName, JSONObject entities) {
@@ -27,13 +28,28 @@ public class Dungeon {
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
         for (Object entity : entities.getJSONArray("entities")) {
-            this.entities.add(new Entity((JSONObject)entity));
+            
+            if (((JSONObject)entity).getString("type").equals("player")) {
+                this.player = new Player((JSONObject)entity);
+                this.entities.add(this.player);
+            } else {
+                this.entities.add(new Entity((JSONObject)entity));
+            }
         }
         this.inventory = new ArrayList<Item>();
         this.buildables = new ArrayList<String>();
         this.goals = "";
 
 
+    }
+
+    public Item getItem(String type) {
+        for (Item i : this.inventory) {
+            if (i.type.equals(type)) {
+                return i;
+            }
+        }
+        return null;
     }
 
     public DungeonResponse createResponse() {
@@ -45,7 +61,6 @@ public class Dungeon {
         for (Item i : this.inventory) {
             itemList.add(i.creatResponse());
         }
-        //String dungeonId, String dungeonName, List<EntityResponse> entities, List<ItemResponse> inventory, List<String> buildables, String goals
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals);
     }
 
