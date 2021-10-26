@@ -1,8 +1,6 @@
-package dungeonmania;
+package dungeonmania.entities.Static;
 
 import org.json.JSONObject;
-
-import dungeonmania.entities.Static.StaticEntity;
 
 public class Exit extends StaticEntity {
 

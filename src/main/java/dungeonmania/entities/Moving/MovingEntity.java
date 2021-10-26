@@ -1,6 +1,8 @@
-package dungeonmania;
+package dungeonmania.entities.Moving;
 
 import org.json.JSONObject;
+
+import dungeonmania.entities.Entity;
 
 public class MovingEntity extends Entity {
 
