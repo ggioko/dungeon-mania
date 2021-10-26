@@ -6,7 +6,8 @@ public class Zombie extends MovingEntity {
 
     public Zombie(JSONObject entity) {
         super(entity);
-        //TODO Auto-generated constructor stub
+        this.health = 5;
+        this.attack = 1;
     }
-    
-}
+
+}   

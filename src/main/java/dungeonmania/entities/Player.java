@@ -13,6 +13,20 @@ public class Player extends Entity {
         this.attack = 1;
     }
     
-    
+    //getters
+
+    public int getHealth() {
+        return this.health;
+    }
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getAttack() {
+        return this.attack;
+    }
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
 
 }

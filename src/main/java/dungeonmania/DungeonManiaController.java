@@ -6,6 +6,7 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
+import dungeonmania.entities.Moving.MovingEntity;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -106,16 +107,16 @@ public class DungeonManiaController {
             if (e instanceof MovingEntity) {
                 MovingEntity enemy = (MovingEntity)e;
                 //if the entity is on the same ssquare as character
-                if (e.position.equals(current.player.position)) {
+                if (e.getPosition().equals(current.player.getPosition())) {
                     //change health values
-                    current.player.health -= ((enemy.health * enemy.attack) / 10);
-                    enemy.health -= ((current.player.health * current.player.attack) / 5);
+                    current.player.setHealth(current.player.getHealth() - ((enemy.getHealth() * enemy.getAttack()) / 10));
+                    enemy.setHealth(((enemy.getHealth() - current.player.getHealth() * current.player.getAttack()) / 5));
                     
-                    if (current.player.health <= 0) {
+                    if (current.player.getHealth() <= 0) {
                         //game over
                         return null;
                     }
-                    if (enemy.health <= 0) {
+                    if (enemy.getHealth() <= 0) {
                         //enemy is dead
                         current.enemyDeath(enemy);
                         return current;
