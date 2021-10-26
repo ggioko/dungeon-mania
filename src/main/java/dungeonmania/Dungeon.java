@@ -2,6 +2,9 @@ package dungeonmania;
 
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.Player;
+import dungeonmania.items.Item;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Position;
@@ -53,7 +56,7 @@ public class Dungeon {
 
     public Item getItem(String type) {
         for (Item i : this.inventory) {
-            if (i.type.equals(type)) {
+            if (i.getType().equals(type)) {
                 return i;
             }
         }

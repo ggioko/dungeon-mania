@@ -1,4 +1,4 @@
-package dungeonmania;
+package dungeonmania.entities;
 
 import org.json.JSONObject;
 
@@ -25,5 +25,15 @@ public class Entity {
 
     public EntityResponse createResponse() {
         return new EntityResponse(this.id, this.type, this.position, this.isInteractable);
+    }
+
+    //getters
+
+    public Position getPosition() {
+        return this.position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 }

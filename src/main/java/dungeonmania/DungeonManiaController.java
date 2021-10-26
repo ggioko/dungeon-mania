@@ -5,6 +5,7 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.entities.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -84,7 +85,7 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        currentDungeon.player.position = currentDungeon.player.position.translateBy(movementDirection);
+        currentDungeon.player.setPosition(currentDungeon.player.getPosition().translateBy(movementDirection));
         //gets the item that is used
         currentDungeon.getItem(itemUsed);
         currentDungeon = enemyInteraction(currentDungeon);
