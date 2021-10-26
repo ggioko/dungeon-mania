@@ -1,4 +1,4 @@
-package dungeonmania;
+package dungeonmania.items;
 
 import dungeonmania.response.models.ItemResponse;
 
@@ -13,6 +13,12 @@ public class Item {
 
     public ItemResponse creatResponse() {
         return new ItemResponse(this.id, this.type);
+    }
+
+    //getters
+
+    public String getType() {
+        return this.type;
     }
 
 }
