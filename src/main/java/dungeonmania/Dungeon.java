@@ -33,6 +33,12 @@ public class Dungeon {
             if (((JSONObject)entity).getString("type").equals("player")) {
                 this.player = new Player((JSONObject)entity);
                 this.entities.add(this.player);
+            } else if (((JSONObject)entity).getString("type").equals("mercenary")) {
+                this.entities.add(new Mercenary((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("spider")) {
+                this.entities.add(new Spider((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("zombie_toast")) {
+                this.entities.add(new Zombie((JSONObject)entity));
             } else {
                 this.entities.add(new Entity((JSONObject)entity));
             }
@@ -64,6 +70,11 @@ public class Dungeon {
             itemList.add(i.creatResponse());
         }
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals);
+    }
+
+    public void enemyDeath(MovingEntity enemy) {
+        //remove enemy from entities and give player loot
+        this.entities.remove(enemy);
     }
 
 }

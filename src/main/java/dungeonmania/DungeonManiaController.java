@@ -87,7 +87,7 @@ public class DungeonManiaController {
         currentDungeon.player.position = currentDungeon.player.position.translateBy(movementDirection);
         //gets the item that is used
         currentDungeon.getItem(itemUsed);
-        System.out.print(itemUsed);
+        currentDungeon = enemyInteraction(currentDungeon);
         return currentDungeon.createResponse();
     }
 
@@ -97,5 +97,31 @@ public class DungeonManiaController {
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
         return null;
+    }
+
+    public Dungeon enemyInteraction(Dungeon current) {
+        for (Entity e : current.entities) {
+            //for all moving entities aka enemies
+            if (e instanceof MovingEntity) {
+                MovingEntity enemy = (MovingEntity)e;
+                //if the entity is on the same ssquare as character
+                if (e.position.equals(current.player.position)) {
+                    //change health values
+                    current.player.health -= ((enemy.health * enemy.attack) / 10);
+                    enemy.health -= ((current.player.health * current.player.attack) / 5);
+                    
+                    if (current.player.health <= 0) {
+                        //game over
+                        return null;
+                    }
+                    if (enemy.health <= 0) {
+                        //enemy is dead
+                        current.enemyDeath(enemy);
+                        return current;
+                    }
+                }
+            }
+        }
+        return current;
     }
 }
