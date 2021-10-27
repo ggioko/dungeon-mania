@@ -86,6 +86,7 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         currentDungeon.player.setPosition(currentDungeon.player.getPosition().translateBy(movementDirection));
+        currentDungeon.itemPickup();
         //gets the item that is used
         currentDungeon.getItem(itemUsed);
         System.out.print(itemUsed);
@@ -97,6 +98,13 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        try {
+            currentDungeon.createBuildable(buildable);
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+        return currentDungeon.createResponse();
     }
 }
