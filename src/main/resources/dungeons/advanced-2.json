@@ -221,7 +221,7 @@
       {
         "x": 3,
         "y": 5,
-        "type": "spider"
+        "type": "zombie_toast_spawner"
       },
       {
         "x": 8,

@@ -4,8 +4,10 @@ import org.json.JSONObject;
 
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
+import dungeonmania.entities.Static.StaticEntity;
 import dungeonmania.entities.Static.Wall;
 import java.util.List;
+import java.time.LocalTime;
 
 public class Entity {
     String id;
@@ -16,7 +18,11 @@ public class Entity {
     public Entity(JSONObject entity) {
         this.type = entity.getString("type");
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
-        this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
+        if (this instanceof StaticEntity) {
+            this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
+        } else {
+            this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY()) + LocalTime.now();
+        }
         if (this.type.equals("wall")) {
             this.isInteractable = false;
         } else {

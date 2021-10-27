@@ -6,6 +6,7 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
+import dungeonmania.entities.Static.Spawner;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -65,7 +66,7 @@ public class DungeonManiaController {
             e.printStackTrace();
             return null;
         }
-        Dungeon newDungeon = new Dungeon(dungeonName, obj);
+        Dungeon newDungeon = new Dungeon(dungeonName, obj, gameMode);
         currentDungeon = newDungeon;
         return newDungeon.createResponse();
     }
@@ -89,6 +90,17 @@ public class DungeonManiaController {
         currentDungeon.getItem(itemUsed);
         //mercenary pathing
         currentDungeon.pathing(movementDirection);
+        //spawn zombies
+        List<Spawner> spawners = new ArrayList<>();
+        for (Entity e : currentDungeon.entities) {
+            if (e instanceof Spawner) {
+                spawners.add((Spawner)e);
+            }
+        }
+        for (Spawner s : spawners) {
+            s.spawn(currentDungeon);
+        }
+
         return currentDungeon.createResponse();
     }
 
