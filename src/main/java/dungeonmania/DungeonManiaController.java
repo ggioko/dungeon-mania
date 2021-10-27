@@ -85,11 +85,10 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        currentDungeon.player.setPosition(currentDungeon.player.getPosition().translateBy(movementDirection));
         //gets the item that is used
         currentDungeon.getItem(itemUsed);
         //mercenary pathing
-        currentDungeon.enemyPath();
+        currentDungeon.pathing(movementDirection);
         return currentDungeon.createResponse();
     }
 

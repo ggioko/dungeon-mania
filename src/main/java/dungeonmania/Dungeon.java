@@ -9,6 +9,7 @@ import dungeonmania.entities.Moving.*;
 import dungeonmania.items.Item;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 import java.util.ArrayList;
@@ -67,7 +68,8 @@ public class Dungeon {
         return null;
     }
 
-    public void enemyPath() {
+    public void pathing(Direction direction) {
+        //make a list of walls
         List<Wall> walls = new ArrayList<Wall>();
         for (Entity e : this.entities) {
             if (e instanceof Wall) {
@@ -75,7 +77,11 @@ public class Dungeon {
             }
         }
         for (Entity e : this.entities) {
-            e.move(this.player.getPosition(), walls);
+            if (e instanceof Player) {
+                e.move(this.player.getPosition().translateBy(direction), walls);
+            } else {
+                e.move(this.player.getPosition(), walls);
+            }
         }
     }
 
