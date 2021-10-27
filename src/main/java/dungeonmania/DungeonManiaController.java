@@ -88,7 +88,8 @@ public class DungeonManiaController {
         currentDungeon.player.setPosition(currentDungeon.player.getPosition().translateBy(movementDirection));
         //gets the item that is used
         currentDungeon.getItem(itemUsed);
-        System.out.print(itemUsed);
+        //mercenary pathing
+        currentDungeon.enemyPath();
         return currentDungeon.createResponse();
     }
 

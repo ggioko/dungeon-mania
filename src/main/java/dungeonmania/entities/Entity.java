@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
+import dungeonmania.entities.Static.Wall;
+import java.util.List;
 
 public class Entity {
     String id;
@@ -35,5 +37,13 @@ public class Entity {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void move(Position pos, List<Wall> walls) {
+        return;
     }
 }
