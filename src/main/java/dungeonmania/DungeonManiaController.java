@@ -1,7 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.items.colectable.Treasure;
+import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
