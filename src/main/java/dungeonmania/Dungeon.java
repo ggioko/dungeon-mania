@@ -24,6 +24,7 @@ public class Dungeon {
     String goals;
     List<AnimationQueue> animations;
     Player player;
+    boolean complete;
 
 
     public Dungeon(String dungeonName, JSONObject entities) {
@@ -42,6 +43,7 @@ public class Dungeon {
         this.inventory = new ArrayList<Item>();
         this.buildables = new ArrayList<String>();
         this.goals = "";
+        this.complete = false;
 
 
     }
