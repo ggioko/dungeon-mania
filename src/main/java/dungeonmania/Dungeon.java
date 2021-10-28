@@ -116,4 +116,9 @@ public class Dungeon {
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals);
     }
 
+    public void enemyDeath(MovingEntity enemy) {
+        //remove enemy from entities and give player loot
+        this.entities.remove(enemy);
+    }
+
 }
