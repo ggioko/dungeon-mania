@@ -43,7 +43,7 @@ public class Entity {
         this.isInteractable = isInteractable;
     }
 
-    public void move(Position pos, List<Wall> walls) {
+    public void move(Position pos, List<Entity> walls) {
         return;
     }
 }

@@ -5,6 +5,7 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
 import dungeonmania.items.Item;
@@ -89,10 +90,10 @@ public class Dungeon {
 
     public void pathing(Direction direction) {
         //make a list of walls
-        List<Wall> walls = new ArrayList<Wall>();
+        List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
             if (e instanceof Wall) {
-                walls.add((Wall)e);
+                walls.add(e);
             }
         }
         for (Entity e : this.entities) {
