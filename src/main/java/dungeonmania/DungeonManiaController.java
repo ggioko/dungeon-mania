@@ -11,6 +11,7 @@ import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.items.*;
+import dungeonmania.entities.Moving.MovingEntity;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -70,7 +71,7 @@ public class DungeonManiaController {
             e.printStackTrace();
             return null;
         }
-        Dungeon newDungeon = new Dungeon(dungeonName, obj);
+        Dungeon newDungeon = new Dungeon(dungeonName, obj, gameMode);
         currentDungeon = newDungeon;
         return newDungeon.createResponse();
     }
@@ -90,10 +91,22 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        currentDungeon.player.setPosition(currentDungeon.player.getPosition().translateBy(movementDirection));
         //gets the item that is used
         currentDungeon.getItem(itemUsed);
-        System.out.print(itemUsed);
+        currentDungeon = enemyInteraction(currentDungeon);
+        //mercenary pathing
+        currentDungeon.pathing(movementDirection);
+        //spawn zombies
+        List<Spawner> spawners = new ArrayList<>();
+        for (Entity e : currentDungeon.entities) {
+            if (e instanceof Spawner) {
+                spawners.add((Spawner)e);
+            }
+        }
+        for (Spawner s : spawners) {
+            s.spawn(currentDungeon);
+        }
+
         return currentDungeon.createResponse();
     }
 
@@ -129,5 +142,31 @@ public class DungeonManiaController {
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
         return null;
+    }
+
+    public Dungeon enemyInteraction(Dungeon current) {
+        for (Entity e : current.entities) {
+            //for all moving entities aka enemies
+            if (e instanceof MovingEntity) {
+                MovingEntity enemy = (MovingEntity)e;
+                //if the entity is on the same ssquare as character
+                if (e.getPosition().equals(current.player.getPosition())) {
+                    //change health values
+                    current.player.setHealth(current.player.getHealth() - ((enemy.getHealth() * enemy.getAttack()) / 10));
+                    enemy.setHealth(((enemy.getHealth() - current.player.getHealth() * current.player.getAttack()) / 5));
+                    
+                    if (current.player.getHealth() <= 0) {
+                        //game over
+                        return null;
+                    }
+                    if (enemy.getHealth() <= 0) {
+                        //enemy is dead
+                        current.enemyDeath(enemy);
+                        return current;
+                    }
+                }
+            }
+        }
+        return current;
     }
 }

@@ -3,10 +3,14 @@ package dungeonmania;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.Player;
+import dungeonmania.entities.Moving.*;
 import dungeonmania.items.Item;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 import java.util.ArrayList;
@@ -25,9 +29,11 @@ public class Dungeon {
     String goals;
     List<AnimationQueue> animations;
     Player player;
+    String gameMode;
+    boolean complete;
 
 
-    public Dungeon(String dungeonName, JSONObject entities) {
+    public Dungeon(String dungeonName, JSONObject entities, String gameMode) {
         this.dungeonName = dungeonName;
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
@@ -36,6 +42,21 @@ public class Dungeon {
             if (((JSONObject)entity).getString("type").equals("player")) {
                 this.player = new Player((JSONObject)entity);
                 this.entities.add(this.player);
+            } else if (((JSONObject)entity).getString("type").equals("mercenary")) {
+                this.entities.add(new Mercenary((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("spider")) {
+                this.entities.add(new Spider((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("zombie_toast")) {
+                this.entities.add(new Zombie((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("wall")) {
+                this.entities.add(new Wall((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("zombie_toast_spawner")) {
+                if (gameMode == "hard") {
+                    this.entities.add(new Spawner((JSONObject)entity, 15));
+                } else {
+                    this.entities.add(new Spawner((JSONObject)entity, 20));
+                }
+                
             } else {
                 this.entities.add(new Entity((JSONObject)entity));
             }
@@ -43,9 +64,12 @@ public class Dungeon {
         this.inventory = new ArrayList<Item>();
         this.buildables = new ArrayList<String>();
         this.goals = "";
+        this.complete = false;
 
 
     }
+
+    //getters
 
     public Item getItem(String type) {
         for (Item i : this.inventory) {
@@ -82,6 +106,31 @@ public class Dungeon {
     public Player getPlayer() {
         return this.player;
     }
+    
+    public List<Entity> getEntities() {
+        return this.entities;
+    }
+
+    public void setEntities(List<Entity> entities) {
+        this.entities = entities;
+    }
+
+    public void pathing(Direction direction) {
+        //make a list of walls
+        List<Wall> walls = new ArrayList<Wall>();
+        for (Entity e : this.entities) {
+            if (e instanceof Wall) {
+                walls.add((Wall)e);
+            }
+        }
+        for (Entity e : this.entities) {
+            if (e instanceof Player) {
+                e.move(this.player.getPosition().translateBy(direction), walls);
+            } else {
+                e.move(this.player.getPosition(), walls);
+            }
+        }
+    }
 
     public DungeonResponse createResponse() {
         List<EntityResponse> entityList = new ArrayList<EntityResponse>();
@@ -93,6 +142,11 @@ public class Dungeon {
             itemList.add(i.creatResponse());
         }
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals);
+    }
+
+    public void enemyDeath(MovingEntity enemy) {
+        //remove enemy from entities and give player loot
+        this.entities.remove(enemy);
     }
 
 }
