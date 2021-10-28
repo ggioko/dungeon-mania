@@ -1,11 +1,16 @@
 package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.items.colectable.Treasure;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.Position;
 import dungeonmania.entities.*;
+import dungeonmania.entities.Moving.Mercenary;
+import dungeonmania.entities.Static.Spawner;
+import dungeonmania.items.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -93,6 +98,32 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        if (currentDungeon.getEntity(entityId) instanceof Mercenary) {
+            Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
+
+            if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition()) && 
+                currentDungeon.getItem("treasure") != null) {
+                currentDungeon.removeItem("treasure"); 
+            }
+        }
+        else if (currentDungeon.getEntity(entityId) instanceof Spawner) {
+            Spawner spawner = (Spawner) currentDungeon.getEntity(entityId);
+            if (Position.isAdjacent(currentDungeon.getPlayer().getPosition(), spawner.getPosition())) {
+                if (currentDungeon.getItem("sword") != null) {
+                    Item sword = (Item) currentDungeon.getItem("sword");
+                    int newDurability = sword.getDurability() - 1;
+                    sword.seDurability(newDurability);
+                    currentDungeon.removeEntity(entityId);
+                }
+                else if (currentDungeon.getItem("bow") != null) {
+                    Item bow = (Item) currentDungeon.getItem("bow");
+                    int newDurability = bow.getDurability() - 1;
+                    bow.seDurability(newDurability);
+                    currentDungeon.removeEntity(entityId);
+                }
+            }
+        }
+        
         return null;
     }
 

@@ -36,4 +36,8 @@ public class Entity {
     public void setPosition(Position position) {
         this.position = position;
     }
+
+    public String getId() {
+        return this.getId();
+    }
 }
