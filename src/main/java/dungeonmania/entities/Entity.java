@@ -10,10 +10,10 @@ import java.util.List;
 import java.time.LocalTime;
 
 public class Entity {
-    String id;
-    String type;
-    Position position;
-    boolean isInteractable;
+    private String id;
+    private String type;
+    private Position position;
+    private boolean isInteractable;
 
     public Entity(JSONObject entity) {
         this.type = entity.getString("type");

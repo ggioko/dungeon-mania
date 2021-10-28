@@ -21,7 +21,7 @@ public class Player extends Entity {
             }
         }
         if (move) {
-            this.position = pos;
+            this.setPosition(pos);
         }
     }
 
