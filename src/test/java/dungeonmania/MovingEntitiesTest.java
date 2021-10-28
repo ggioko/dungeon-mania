@@ -16,10 +16,6 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
 
 public class MovingEntitiesTest {
-<<<<<<< HEAD
-=======
-    
->>>>>>> master
     @Test
     public void testItemUsed() {
         // test for invalid items
