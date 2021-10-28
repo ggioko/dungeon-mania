@@ -20,13 +20,8 @@ public class Spider extends MovingEntity {
 
     public Spider(JSONObject entity) {
         super(entity);
-<<<<<<< HEAD
         this.health = 5;
-        this.attack = 1;
-    }
-    
-}   
-=======
+        this.attack = 1; 
         this.spawned = true;
         this.pathnum = 0;
         //TODO Auto-generated constructor stub
@@ -48,4 +43,3 @@ public class Spider extends MovingEntity {
     }
 
 }
->>>>>>> master

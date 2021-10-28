@@ -16,10 +16,6 @@ public class Zombie extends MovingEntity {
         this.health = 5;
         this.attack = 1;
     }
-<<<<<<< HEAD
-
-}   
-=======
     
     @Override
     public void move(Position pos, List<Wall> walls) {
@@ -44,4 +40,3 @@ public class Zombie extends MovingEntity {
     }
 
 }  
->>>>>>> master
