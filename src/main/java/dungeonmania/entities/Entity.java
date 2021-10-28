@@ -18,7 +18,17 @@ public class Entity {
     public Entity(JSONObject entity) {
         this.type = entity.getString("type");
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
-        this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY()) + LocalTime.now();
+        if (this instanceof StaticEntity) {
+            this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
+        } else {
+            this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY()) + LocalTime.now();
+        }
+        if (this.type.equals("wall")) {
+            this.isInteractable = false;
+        } else {
+            this.isInteractable = true;
+        }
+        
     }
 
     public EntityResponse createResponse() {
@@ -37,10 +47,6 @@ public class Entity {
 
     public String getType() {
         return this.type;
-    }
-
-    public void setInteractable(boolean isInteractable) {
-        this.isInteractable = isInteractable;
     }
 
     public void move(Position pos, List<Wall> walls) {
