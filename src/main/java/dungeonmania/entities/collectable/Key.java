@@ -1,4 +1,4 @@
-package dungeonmania.items.colectable;
+package dungeonmania.entities.collectable;
 
 import org.json.JSONObject;
 
