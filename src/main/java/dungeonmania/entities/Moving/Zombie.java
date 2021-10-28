@@ -2,6 +2,7 @@ package dungeonmania.entities.Moving;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -18,7 +19,7 @@ public class Zombie extends MovingEntity {
     }
     
     @Override
-    public void move(Position pos, List<Wall> walls) {
+    public void move(Position pos, List<Entity> walls) {
         boolean move = true;
         List<Direction> directions = new ArrayList<Direction>();
         directions.add(Direction.UP);
@@ -29,7 +30,7 @@ public class Zombie extends MovingEntity {
         Random rand = new Random();
 
         pos = this.getPosition().translateBy(directions.get(rand.nextInt(directions.size())));
-        for (Wall w : walls) {
+        for (Entity w : walls) {
             if (w.getPosition().equals(pos)) {
                 move = false;
             }

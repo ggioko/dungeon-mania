@@ -4,6 +4,7 @@ import dungeonmania.entities.Moving.MovingEntity;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Direction;
@@ -19,7 +20,7 @@ public class Mercenary extends MovingEntity{
     }
 
     @Override
-    public void move(Position pos, List<Wall> walls) {
+    public void move(Position pos, List<Entity> walls) {
         //move mercenary towards position pathfinding algorithm
         int xdiff = pos.getX() - this.getPosition().getX();
         int ydiff = pos.getY() - this.getPosition().getY();
@@ -30,7 +31,7 @@ public class Mercenary extends MovingEntity{
             //x++
             if (pos.getX() - this.getPosition().getX() < 0 ) {
                 boolean move = true;
-                for (Wall w : walls) {
+                for (Entity w : walls) {
                     if (w.getPosition().equals(this.getPosition().translateBy(Direction.LEFT))) {
                         move = false;
                     }
@@ -42,7 +43,7 @@ public class Mercenary extends MovingEntity{
             } 
             if (moved == false && pos.getX() - this.getPosition().getX() > 0 ) {
                 boolean move = true;
-                for (Wall w : walls) {
+                for (Entity w : walls) {
                     if (w.getPosition().equals(this.getPosition().translateBy(Direction.RIGHT))) {
                         move = false;
                     }
@@ -57,7 +58,7 @@ public class Mercenary extends MovingEntity{
             //x++
             if (pos.getY() - this.getPosition().getY() < 0 ) {
                 boolean move = true;
-                for (Wall w : walls) {
+                for (Entity w : walls) {
                     if (w.getPosition().equals(this.getPosition().translateBy(Direction.UP))) {
                         move = false;
                     }
@@ -69,7 +70,7 @@ public class Mercenary extends MovingEntity{
             } 
             if (moved == false && pos.getY() - this.getPosition().getY() > 0 ) {
                 boolean move = true;
-                for (Wall w : walls) {
+                for (Entity w : walls) {
                     if (w.getPosition().equals(this.getPosition().translateBy(Direction.DOWN))) {
                         move = false;
                     }
@@ -82,7 +83,7 @@ public class Mercenary extends MovingEntity{
             if (moved == false) {
                 if (pos.getX() - this.getPosition().getX() < 0 ) {
                     boolean move = true;
-                    for (Wall w : walls) {
+                    for (Entity w : walls) {
                         if (w.getPosition().equals(this.getPosition().translateBy(Direction.LEFT))) {
                             move = false;
                         }
@@ -94,7 +95,7 @@ public class Mercenary extends MovingEntity{
                 } 
                 if (moved == false && pos.getX() - this.getPosition().getX() > 0 ) {
                     boolean move = true;
-                    for (Wall w : walls) {
+                    for (Entity w : walls) {
                         if (w.getPosition().equals(this.getPosition().translateBy(Direction.RIGHT))) {
                             move = false;
                         }

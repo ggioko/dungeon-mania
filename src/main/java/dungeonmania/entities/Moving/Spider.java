@@ -2,6 +2,7 @@ package dungeonmania.entities.Moving;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -28,7 +29,7 @@ public class Spider extends MovingEntity {
     }
 
     @Override
-    public void move(Position pos, List<Wall> walls) {
+    public void move(Position pos, List<Entity> walls) {
         if (this.spawned) {
             this.setPosition(this.getPosition().translateBy(Direction.UP));
             this.spawned = false;
