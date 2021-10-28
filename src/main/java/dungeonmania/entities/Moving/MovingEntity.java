@@ -1,6 +1,9 @@
 package dungeonmania.entities.Moving;
 
 import dungeonmania.entities.Entity;
+import dungeonmania.util.Position;
+import dungeonmania.entities.Static.Wall;
+import java.util.List;
 
 import org.json.JSONObject;
 
@@ -20,6 +23,7 @@ public class MovingEntity extends Entity {
         super(entity);
         //TODO Auto-generated constructor stub
     }
+<<<<<<< HEAD
 
     public int getHealth() {
         return this.health;
@@ -33,6 +37,11 @@ public class MovingEntity extends Entity {
     }
     public void setAttack(int attack) {
         this.attack = attack;
+=======
+    @Override
+    public void move(Position pos, List<Wall> walls) {
+        return;
+>>>>>>> master
     }
     
 }
