@@ -6,8 +6,7 @@ public class Wall extends StaticEntity {
 
     public Wall(JSONObject entity) {
         super(entity);
-        //TODO Auto-generated constructor 
-        this.setInteractable(false);
+        //TODO Auto-generated constructor stub
     }
     
 }

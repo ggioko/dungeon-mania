@@ -23,6 +23,7 @@ public class MovingEntity extends Entity {
         super(entity);
         //TODO Auto-generated constructor stub
     }
+<<<<<<< HEAD
 
     public int getHealth() {
         return this.health;
@@ -36,10 +37,11 @@ public class MovingEntity extends Entity {
     }
     public void setAttack(int attack) {
         this.attack = attack;
-    }
+=======
     @Override
     public void move(Position pos, List<Wall> walls) {
         return;
+>>>>>>> master
     }
     
 }
