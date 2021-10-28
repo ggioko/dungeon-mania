@@ -1,5 +1,7 @@
 package dungeonmania.entities.Moving;
 
+import dungeonmania.entities.Moving.MovingEntity;
+
 import org.json.JSONObject;
 
 import dungeonmania.entities.Player;
@@ -12,7 +14,8 @@ public class Mercenary extends MovingEntity{
 
     public Mercenary(JSONObject entity) {
         super(entity);
-        //TODO Auto-generated constructor stub
+        this.health = 5;
+        this.attack = 1;
     }
 
     @Override
@@ -105,6 +108,4 @@ public class Mercenary extends MovingEntity{
         } 
     }
     
-
-
-}
+}   

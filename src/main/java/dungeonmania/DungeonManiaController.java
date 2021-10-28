@@ -6,6 +6,7 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
+import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Spawner;
 
 import java.io.IOException;
@@ -88,6 +89,7 @@ public class DungeonManiaController {
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
         currentDungeon.getItem(itemUsed);
+        currentDungeon = enemyInteraction(currentDungeon);
         //mercenary pathing
         currentDungeon.pathing(movementDirection);
         //spawn zombies
@@ -110,5 +112,31 @@ public class DungeonManiaController {
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
         return null;
+    }
+
+    public Dungeon enemyInteraction(Dungeon current) {
+        for (Entity e : current.entities) {
+            //for all moving entities aka enemies
+            if (e instanceof MovingEntity) {
+                MovingEntity enemy = (MovingEntity)e;
+                //if the entity is on the same ssquare as character
+                if (e.getPosition().equals(current.player.getPosition())) {
+                    //change health values
+                    current.player.setHealth(current.player.getHealth() - ((enemy.getHealth() * enemy.getAttack()) / 10));
+                    enemy.setHealth(((enemy.getHealth() - current.player.getHealth() * current.player.getAttack()) / 5));
+                    
+                    if (current.player.getHealth() <= 0) {
+                        //game over
+                        return null;
+                    }
+                    if (enemy.getHealth() <= 0) {
+                        //enemy is dead
+                        current.enemyDeath(enemy);
+                        return current;
+                    }
+                }
+            }
+        }
+        return current;
     }
 }
