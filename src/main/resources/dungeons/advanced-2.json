@@ -221,7 +221,7 @@
       {
         "x": 3,
         "y": 5,
-        "type": "zombie_toast_spawner"
+        "type": "mercenary"
       },
       {
         "x": 8,
@@ -386,7 +386,7 @@
       {
         "x": 7,
         "y": 10,
-        "type": "treasure"
+        "type": "key"
       },
       {
         "x": 15,
