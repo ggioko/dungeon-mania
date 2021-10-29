@@ -22,7 +22,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class DungeonManiaController {
-    Dungeon currentDungeon;
+    private Dungeon currentDungeon;
+    private final List<String> buildables = Arrays.asList("shield", "bow");
+
     public DungeonManiaController() {
     }
 
@@ -98,9 +100,13 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
+        if (!buildables.contains(buildable)) {
+            throw new IllegalArgumentException();
+        }
+        
         try {
             currentDungeon.createBuildable(buildable);
-        } catch (JSONException e) {
+        } catch (InvalidActionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;

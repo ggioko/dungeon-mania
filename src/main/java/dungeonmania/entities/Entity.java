@@ -18,9 +18,13 @@ public class Entity {
     boolean isInteractable;
 
     public Entity(JSONObject entity) {
-        this.type = entity.getString("type");
+        if (entity.getString("type").equals("key") || entity.getString("type").equals("door")) {
+            this.type = entity.getString("type") + "_" + entity.getInt("key");
+        } else {
+            this.type = entity.getString("type");
+        }
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
-        this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
+        this.id = entity.getString("type") + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
         if (this.type.equals("wall")) {
             this.isInteractable = false;
         } else {
@@ -48,10 +52,15 @@ public class Entity {
 
     public boolean isCollectable() {
         List<String> collectables = new ArrayList<String>();
-        collectables.addAll(Arrays.asList("armour", "arrow","bomb", "health_potion", "invincibility_potion", "invisibility_potion", "key", "sword", "treasure", "wood"));
+        collectables.addAll(Arrays.asList("armour", "arrow", "bomb", "health_potion", "invincibility_potion", "invisibility_potion", "key", "sword", "treasure", "wood"));
         if (collectables.contains(this.type)) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return this.type +" "+ this.id;
     }
 }

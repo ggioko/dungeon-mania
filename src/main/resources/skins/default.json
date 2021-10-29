@@ -29,6 +29,10 @@
         "switch": "images/tileset/floor_switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
         "sword": "images/tileset/items/sword_silver.png",
-        "shield": "images/tileset/items/shield.png"
+        "shield": "images/tileset/items/shield.png",
+        "key_1": "images/tileset/items/key_gold.png",
+        "key_2": "images/tileset/items/key_silver.png",
+        "door_1": "images/tileset/walls/wooden/door_unlock.png",
+        "door_2": "images/tileset/walls/wooden/door_locked_silver.png"
     }
 }

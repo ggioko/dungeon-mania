@@ -58,6 +58,7 @@ public class Dungeon {
     public DungeonResponse createResponse() {
         List<EntityResponse> entityList = new ArrayList<EntityResponse>();
         for (Entity e : this.entities) {
+            System.out.println(e.toString());
             entityList.add(e.createResponse());
         }
         List<ItemResponse> itemList = new ArrayList<ItemResponse>();
@@ -68,15 +69,11 @@ public class Dungeon {
         if (!inventory.isEmpty()) {
             if (Buildable.getBuildable("bow").isBuildable(inventory)) {
                 if (!buildables.contains("bow")) {buildables.add("bow");}
-            } else {
-                buildables.remove("bow");
-            }
+            } else {buildables.remove("bow");}
 
             if (Buildable.getBuildable("shield").isBuildable(inventory)) {
                 if (!buildables.contains("shield")) {buildables.add("shield");}
-            } else {
-                buildables.remove("shield");
-            }
+            } else {buildables.remove("shield");}
         }
             
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals);
