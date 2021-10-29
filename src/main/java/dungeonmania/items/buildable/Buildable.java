@@ -8,8 +8,11 @@ import dungeonmania.items.Item;
 
 public abstract class Buildable extends Item {
 
-    public Buildable(String id, String type) {
+    private int durability;
+
+    public Buildable(String id, String type, int durability) {
         super(id, type);
+        this.durability = durability;
     }
 
     public abstract boolean isBuildable(List<Item> inventory);
@@ -24,6 +27,21 @@ public abstract class Buildable extends Item {
             buildable = new Bow("bow", "bow");
         }
         return buildable;
+    }
+
+    public void setDurability(int durability) {
+        this.durability = durability;
+    }
+
+    public int getDurability() {
+        return this.durability;
+    }
+
+    public void subtractDurability(List<Item> inventory) {
+        this.durability -= 1;
+        if (this.durability == 0) {
+            inventory.remove(this);
+        }
     }
 
 }

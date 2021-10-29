@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.items.buildable.Buildable;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -9,6 +10,7 @@ import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Treasure;
+
 
 import java.io.File;
 import java.io.FileWriter;
@@ -148,7 +150,7 @@ public class DungeonManiaController {
             }
             //doors
             if (e instanceof Door) {
-                currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon);
+                currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon, currentDungeon.player, movementDirection);            
             }
         }
         if (!currentDungeon.nogoals) {
@@ -218,12 +220,24 @@ public class DungeonManiaController {
                         int enemyHP = enemy.getHealth();
                         int playerAD = current.player.getAttack();
                         int enemyAD = enemy.getAttack();
+                        //Armour cuts enemy damage to half
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
                         }
-
+                        //Shield cuts enemy damage to half
+                        //If player has shield and armour, 75% of damage is negated.
+                        if (currentDungeon.getItem("shield") != null) {
+                            enemyAD = enemyAD/2;
+                            currentDungeon.getBuildableFromInventory("shield").subtractDurability(currentDungeon.inventory);
+                        }
                         current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
                         enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+
+                        //Bow allows player to attack twice
+                        if (currentDungeon.getItem("bow") != null) { 
+                            enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                            currentDungeon.getBuildableFromInventory("bow").subtractDurability(currentDungeon.inventory);
+                        }
                         
                         if (playerHP <= 0) {
                             //game over

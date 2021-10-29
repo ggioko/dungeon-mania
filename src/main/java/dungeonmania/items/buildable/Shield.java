@@ -13,10 +13,10 @@ public class Shield extends Buildable {
     private static final int woodNeeded = 2;
     private static final int keyNeeded = 1;
     private static final int treasureNeeded = 1;
-    private static final List<String> recipe = Arrays.asList("wood", "treasure", "key");
+    private static final List<String> recipe = Arrays.asList("wood", "treasure", "key_1", "key_2");
 
     public Shield(String id, String type) {
-        super(id, type);
+        super(id, type, 10);
     }
 
     @Override
@@ -38,12 +38,16 @@ public class Shield extends Buildable {
 
         HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
 
-        if (!materialCount.isEmpty() && materialCount.containsKey("wood") && materialCount.containsKey("key")) {
-            if (materialCount.get("wood") >= woodNeeded && (materialCount.get("key") >= keyNeeded)) {
+        if (!materialCount.isEmpty() && materialCount.containsKey("wood") && materialCount.containsKey("key_1")) {
+            if (materialCount.get("wood") >= woodNeeded && (materialCount.get("key_1") >= keyNeeded)) {
                 return true;
             } 
         } else if (!materialCount.isEmpty() && materialCount.containsKey("wood") && materialCount.containsKey("treasure")) {
             if (materialCount.get("wood") >= woodNeeded && (materialCount.get("treasure") >= treasureNeeded)) {
+                return true;
+            }
+        } else if (!materialCount.isEmpty() && materialCount.containsKey("wood") && materialCount.containsKey("key_2")) {
+            if (materialCount.get("wood") >= woodNeeded && (materialCount.get("key_2") >= keyNeeded)) {
                 return true;
             }
         }
@@ -57,15 +61,20 @@ public class Shield extends Buildable {
         HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
         Map<String, Integer> returnMap = new HashMap<>();
 
-        if (materialCount.get("treasure") >= keyNeeded) {
+        if (materialCount.containsKey("treasure")) {
             returnMap = Map.of(
                 "wood", 2,
                 "treasure", 1
             );
-        } else {
+        } else if (materialCount.containsKey("key_1")) {
             returnMap = Map.of(
                 "wood", 2,
-                "key", 1
+                "key_1", 1
+            );
+        } else if (materialCount.containsKey("key_2")) {
+            returnMap = Map.of(
+                "wood", 2,
+                "key_2", 1
             );
         }
         return returnMap;
