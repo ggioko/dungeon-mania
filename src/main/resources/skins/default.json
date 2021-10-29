@@ -16,6 +16,7 @@
     },
     "entities": {
         "boulder": "images/tileset/entities/boulder_00.png",
+        "boulders" : "images/tileset/entities/boulder_00.png",
         "bow": "images/tileset/items/bow_0.png",
         "player": "images/tileset/entities/entity.png",
         "bomb": "images/tileset/items/bomb.png",
@@ -26,10 +27,13 @@
         "wall": "images/tileset/walls/wooden/wood_bottom.png",
         "spider": "images/tileset/entities/spider_00.png",
         "mercenary": "images/tileset/entities/ranger.png",
+        "enemies" : "images/tileset/entities/ranger.png",
         "switch": "images/tileset/floor_switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
         "sword": "images/tileset/items/sword_silver.png",
         "zombie_toast": "images/tileset/entities/zombie_00.png",
-        "zombie_toast_spawner": "images/tileset/entities/zombie_spawner.png"
+        "zombie_toast_spawner": "images/tileset/entities/zombie_spawner.png",
+        "portal" : "images/tileset/entities/portal_00.png",
+        "door" : "images/tileset/entities/walls/wooden/door_locked"
     }
 }

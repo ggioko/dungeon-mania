@@ -6,14 +6,18 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 import dungeonmania.entities.Static.StaticEntity;
 import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.collectable.Armour;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.time.LocalTime;
 
 public class Entity {
-    String id;
-    String type;
-    Position position;
-    boolean isInteractable;
+    private String id;
+    private String type;
+    private Position position;
+    private boolean isInteractable;
 
     public Entity(JSONObject entity) {
         this.type = entity.getString("type");
@@ -46,7 +50,16 @@ public class Entity {
         this.isInteractable = isInteractable;
     }
 
-    public void move(Position pos, List<Wall> walls) {
+    public void move(Position pos, List<Entity> walls) {
         return;
+    }
+
+    public boolean isCollectable() {
+        List<String> collectables = new ArrayList<String>();
+        collectables.addAll(Arrays.asList("armour", "arrow","bomb", "health_potion", "invincibility_potion", "invisibility_potion", "key", "sword", "treasure", "wood"));
+        if (collectables.contains(this.type)) {
+            return true;
+        }
+        return false;
     }
 }
