@@ -3,6 +3,10 @@ package dungeonmania;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Static.Door;
+import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Spawner;
@@ -47,12 +51,15 @@ public class Dungeon {
     String goaltype;
     List<String> goalsToComplete;
     List<String> goalsCompleted;
+    boolean nogoals;
 
 
     public Dungeon(String dungeonName, JSONObject entities, String gameMode) {
         this.dungeonName = dungeonName;
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
+        boolean keycreated = false;
+        boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
             if (((JSONObject)entity).getString("type").equals("player")) {
                 this.player = new Player((JSONObject)entity);
@@ -73,6 +80,24 @@ public class Dungeon {
                 }
             } else if (((JSONObject)entity).getString("type").equals("treasure")) {
                 this.entities.add(new Treasure((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("door")) {
+                Door door = new Door((JSONObject)entity);
+                if (doorcreated) {
+                    door.setType("door_2");
+                } else {
+                    door.setType("door_1");
+                    doorcreated = true;
+                }
+                this.entities.add(door);
+            } else if (((JSONObject)entity).getString("type").equals("key")) {
+                Key key = new Key((JSONObject)entity);
+                if (keycreated) {
+                    key.setType("key_2");
+                } else {
+                    key.setType("key_1");
+                    keycreated = true;
+                }
+                this.entities.add(key);
             } else if (((JSONObject)entity).getString("type").equals("sword")) {
                 this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("armour")) {
@@ -97,23 +122,25 @@ public class Dungeon {
         }
         this.inventory = new ArrayList<Item>();
         this.buildables = new ArrayList<String>();
-
-        this.goals = ":" + entities.getJSONObject("goal-condition").getString("goal");
-        if (this.goals.equals(":AND") || this.goals.equals(":OR")) {
-            this.goals = "";
-            for (Object o : entities.getJSONObject("goal-condition").getJSONArray("subgoals")) {
-                this.goals += ":" + ((JSONObject)o).getString("goal") + " ";
-                this.goals += entities.getJSONObject("goal-condition").getString("goal") + " ";
+        try {
+            this.goals = ":" + entities.getJSONObject("goal-condition").getString("goal");
+            if (this.goals.equals(":AND") || this.goals.equals(":OR")) {
+                this.goals = "";
+                for (Object o : entities.getJSONObject("goal-condition").getJSONArray("subgoals")) {
+                    this.goals += ":" + ((JSONObject)o).getString("goal") + " ";
+                    this.goals += entities.getJSONObject("goal-condition").getString("goal") + " ";
+                }
+                this.goals = this.goals.substring(0,this.goals.length()-5);
+                this.goaltype = entities.getJSONObject("goal-condition").getString("goal");
             }
-            this.goals = this.goals.substring(0,this.goals.length()-5);
-            this.goaltype = entities.getJSONObject("goal-condition").getString("goal");
+            this.complete = false;
             this.goalsToComplete = Arrays.asList(this.goals.replace(":","").replace(" ", "").split(this.goaltype));
-        } else {
-            this.goaltype = "";
+            this.goalsCompleted = new ArrayList<>();
+        } catch (Exception e) {
+            //TODO: handle exception
+            this.nogoals = true;
         }
-        this.complete = false;
-        this.goalsToComplete = Arrays.asList(this.goals.replace(":",""));
-        this.goalsCompleted = new ArrayList<>();
+        
     }
 
     //getters
@@ -135,12 +162,26 @@ public class Dungeon {
         this.entities = entities;
     }
 
+    public void setItems(List<Item> items) {
+        this.inventory = items;
+    }
+
+    public List<Item> getItems() {
+        return this.inventory;
+    }
+
     public void pathing(Direction direction) {
         //make a list of walls
         List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
-            if (e instanceof Wall) {
-                walls.add(e);
+            if (e instanceof Wall || e instanceof Door) {
+                if (e instanceof Wall) {
+                    walls.add(e);
+                } else {
+                    if (!(((Door)e).getType().equals("door_unlocked"))) {
+                        walls.add(e);
+                    }
+                }
             }
         }
         for (Entity e : this.entities) {
