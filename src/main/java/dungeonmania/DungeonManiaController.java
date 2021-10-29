@@ -170,17 +170,16 @@ public class DungeonManiaController {
         if (currentDungeon.getEntity(entityId) == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
-        
         else if (currentDungeon.getEntity(entityId).getType().equals("mercenary")) {
             Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
 
             if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
-                if (currentDungeon.getItem("treasure") != null) {
-                    currentDungeon.removeItem("treasure");
-                    mercenary.setBribed(true);
+                if (currentDungeon.getItem("treasure") == null) {
+                    throw new InvalidActionException("No treasure in inventory");
                 }
                 else {
-                    throw new InvalidActionException("No treasure in inventory");
+                    currentDungeon.removeItem("treasure");
+                    mercenary.setBribed(true);
                 }
             }
             else {
@@ -189,25 +188,26 @@ public class DungeonManiaController {
         }
         else if (currentDungeon.getEntity(entityId).getType().equals("zombie_toast_spawner")) {
             Spawner spawner = (Spawner) currentDungeon.getEntity(entityId);
-            if (Position.isAdjacent(currentDungeon.getPlayer().getPosition(), spawner.getPosition())) {
-                if (currentDungeon.getItem("sword") != null) {
-                    Item sword = (Item) currentDungeon.getItem("sword");
-                    int newDurability = sword.getDurability() - 1;
-                    sword.seDurability(newDurability);
-                    currentDungeon.removeEntity(entityId);
+            if (spawner.isInDestroyableRange(currentDungeon.getPlayer().getPosition())) {
+                if (currentDungeon.getItem("sword") == null && currentDungeon.getItem("bow") == null) {
+                    throw new InvalidActionException("No weapon in inventory");
                 }
-                else if (currentDungeon.getItem("bow") != null) {
-                    Item bow = (Item) currentDungeon.getItem("bow");
-                    int newDurability = bow.getDurability() - 1;
-                    bow.seDurability(newDurability);
-                    currentDungeon.removeEntity(entityId);
+                else {
+                    for (Item item : currentDungeon.inventory) {
+                        if (item.getType().equals("sword") || item.getType().equals("bow")) {      
+                            int newDurability = item.getDurability() - 1;
+                            item.setDurability(newDurability);
+                            currentDungeon.removeEntity(entityId);
+                            break;
+                        }
+                    }
                 }
-            }
+            } 
             else {
-                throw new InvalidActionException("No weapon in inventory");
+                throw new InvalidActionException("Spawner not in range");
             }
         }
-        return null;
+        return currentDungeon.createResponse();
     }
 
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {

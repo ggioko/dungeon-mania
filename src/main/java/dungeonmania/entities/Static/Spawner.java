@@ -38,4 +38,13 @@ public class Spawner extends StaticEntity {
         return current;
     }
 
+    public boolean isInDestroyableRange(Position player) {
+        for (Position i : this.getPosition().getAdjacentPositions()) {
+            if (player.getX() == i.getX() && player.getY() == i.getY()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

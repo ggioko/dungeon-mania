@@ -26,7 +26,7 @@ public class Item {
         return this.durability;
     }
 
-    public void seDurability(int durability) {
+    public void setDurability(int durability) {
         this.durability = durability;
     }
 }

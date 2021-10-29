@@ -104,12 +104,12 @@
       {
         "x": 2,
         "y": 1,
-        "type": "sword"
+        "type": "treasure"
       },
       {
         "x": 3,
         "y": 1,
-        "type": "treasure"
+        "type": "sword"
       },
       {
         "x": 4,
