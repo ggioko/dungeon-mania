@@ -39,6 +39,10 @@ public class Entity {
         return this.type;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public void setInteractable(boolean isInteractable) {
         this.isInteractable = isInteractable;
     }

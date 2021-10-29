@@ -7,6 +7,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
+import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -115,36 +116,41 @@ public class DungeonManiaController {
             if (e instanceof MovingEntity || e instanceof Spawner) {
                 enemiesComplete = false;
             }
-        }
-        //add treasure to completed goals if it is completed
-        if (treasureComplete) {
-            currentDungeon.goalsCompleted.add("treasure");
-        }
-        //add enemies to completed if it is completed
-        if (enemiesComplete) {
-            currentDungeon.goalsCompleted.add("enemies");
-        }
-
-        if (currentDungeon.goaltype.equals("AND")) {
-            if (currentDungeon.goalsCompleted.containsAll(currentDungeon.goalsToComplete)) {
-                //game won
-                currentDungeon.complete = true;
-                currentDungeon.goals = "";
+            //doors
+            if (e instanceof Door) {
+                currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon);
             }
-        } else if (currentDungeon.goaltype.equals("OR")) {
-            for (String s : currentDungeon.goalsCompleted) {
-                if (currentDungeon.goalsToComplete.contains(s)) {
+        }
+        if (!currentDungeon.nogoals) {
+            //add treasure to completed goals if it is completed
+            if (treasureComplete) {
+                currentDungeon.goalsCompleted.add("treasure");
+            }
+            //add enemies to completed if it is completed
+            if (enemiesComplete) {
+                currentDungeon.goalsCompleted.add("enemies");
+            }
+            if (currentDungeon.goaltype.equals("AND")) {
+                if (currentDungeon.goalsCompleted.containsAll(currentDungeon.goalsToComplete)) {
                     //game won
                     currentDungeon.complete = true;
                     currentDungeon.goals = "";
                 }
-            }
-        } else {
-            if (currentDungeon.goalsCompleted.contains(currentDungeon.goals.replace(":", "").replace(" ", ""))) {
-                //game won
-                currentDungeon.complete = true;
-                currentDungeon.goals = "";
-            }
+            } else if (currentDungeon.goaltype.equals("OR")) {
+                for (String s : currentDungeon.goalsCompleted) {
+                    if (currentDungeon.goalsToComplete.contains(s)) {
+                        //game won
+                        currentDungeon.complete = true;
+                        currentDungeon.goals = "";
+                    }
+                }
+            } else {
+                if (currentDungeon.goalsCompleted.contains(currentDungeon.goals.replace(":", "").replace(" ", ""))) {
+                    //game won
+                    currentDungeon.complete = true;
+                    currentDungeon.goals = "";
+                }
+            }               
         }
         return currentDungeon.createResponse();
     }
