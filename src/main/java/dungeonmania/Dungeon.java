@@ -17,6 +17,7 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,6 +137,17 @@ public class Dungeon {
             itemList.add(i.creatResponse());
         }
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals);
+    }
+
+    public void itemPickup() {
+        for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
+            Entity anEntity = it.next();
+            EntityResponse entityResponse = anEntity.createResponse();
+            if (entityResponse.getPosition().equals(player.getPosition()) && anEntity.isCollectable()) {
+                inventory.add(new Item(entityResponse.getId(), entityResponse.getType()));
+                it.remove();
+            }
+        }
     }
 
     public void enemyDeath(MovingEntity enemy) {
