@@ -61,6 +61,7 @@ public class Dungeon {
         this.dungeonName = dungeonName;
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
+        this.gameMode = gameMode;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
             if (((JSONObject)entity).getString("type").equals("player")) {
