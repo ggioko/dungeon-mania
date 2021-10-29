@@ -13,6 +13,7 @@ public class Entity {
     private String id;
     private String type;
     private Position position;
+    private int durability;
     private boolean isInteractable;
 
     public Entity(JSONObject entity) {
