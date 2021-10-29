@@ -8,6 +8,8 @@ import dungeonmania.entities.Static.StaticEntity;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.time.LocalTime;
 
@@ -50,5 +52,12 @@ public class Entity {
         return;
     }
 
-    
+    public boolean isCollectable() {
+        List<String> collectables = new ArrayList<String>();
+        collectables.addAll(Arrays.asList("armour", "arrow","bomb", "health_potion", "invincibility_potion", "invisibility_potion", "key", "sword", "treasure", "wood"));
+        if (collectables.contains(this.type)) {
+            return true;
+        }
+        return false;
+    }
 }

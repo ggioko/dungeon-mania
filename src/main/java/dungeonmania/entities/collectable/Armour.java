@@ -8,8 +8,5 @@ public class Armour extends CollectableEntity {
         super(entity);
         int durability = (int)Math.floor(Math.random()*(15-4+1)+4);
         this.setDurability(durability);
-        //TODO Auto-generated constructor stub
     }
-
-    
 }
