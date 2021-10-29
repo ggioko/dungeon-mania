@@ -150,7 +150,7 @@ public class DungeonManiaController {
             }
             //doors
             if (e instanceof Door) {
-                currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon);
+                currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon, currentDungeon.player, movementDirection);
             }
             if (e instanceof Portal) {
                 if (e.getPosition().equals(currentDungeon.player.getPosition()) && !teleported) {
