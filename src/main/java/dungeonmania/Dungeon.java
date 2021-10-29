@@ -211,14 +211,19 @@ public class Dungeon {
         //make a list of walls
         List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
-            if (e instanceof Wall || e instanceof Door) {
-                if (e instanceof Wall) {
+            if (e instanceof Door) {
+                if (!(((Door)e).getType().equals("door_unlocked"))) {
                     walls.add(e);
-                } else {
-                    if (!(((Door)e).getType().equals("door_unlocked"))) {
-                        walls.add(e);
-                    }
                 }
+            }
+            else if (e instanceof Mercenary){
+                Mercenary m = (Mercenary) e;
+                if (m.isBribed()) {
+                    walls.add(this.player);
+                }
+            }
+            else if (e instanceof Wall) {
+                walls.add(e);
             }
         }
         for (Entity e : this.entities) {
