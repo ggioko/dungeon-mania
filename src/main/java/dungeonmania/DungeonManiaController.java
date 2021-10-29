@@ -30,6 +30,7 @@ import java.nio.file.Paths;
 
 public class DungeonManiaController {
     Dungeon currentDungeon;
+    private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
     }
 
@@ -128,7 +129,7 @@ public class DungeonManiaController {
                 ((FloorSwitch)e).trigger(currentDungeon.entities);
             }
         }
-
+        
         //add treasure to completed goals if it is completed
         if (treasureComplete) {
             currentDungeon.goalsCompleted.add("treasure");
@@ -137,7 +138,7 @@ public class DungeonManiaController {
         if (enemiesComplete) {
             currentDungeon.goalsCompleted.add("enemies");
         }
-
+        
         if (currentDungeon.goaltype.equals("AND")) {
             if (currentDungeon.goalsCompleted.containsAll(currentDungeon.goalsToComplete)) {
                 //game won
@@ -162,13 +163,25 @@ public class DungeonManiaController {
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
-
+    
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         return null;
     }
-
+    
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        if (!buildables.contains(buildable)) {
+            throw new IllegalArgumentException();
+        }
+        
+        try {
+            currentDungeon.createBuildable(buildable);
+        } catch (InvalidActionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+        return currentDungeon.createResponse();
+
     }
 
     public Dungeon enemyInteraction(Dungeon current) {

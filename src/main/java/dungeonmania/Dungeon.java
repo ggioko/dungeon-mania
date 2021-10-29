@@ -155,7 +155,6 @@ public class Dungeon {
     public DungeonResponse createResponse() {
         List<EntityResponse> entityList = new ArrayList<EntityResponse>();
         for (Entity e : this.entities) {
-            System.out.println(e.toString());
             entityList.add(e.createResponse());
         }
         List<ItemResponse> itemList = new ArrayList<ItemResponse>();
@@ -181,11 +180,23 @@ public class Dungeon {
             Entity anEntity = it.next();
             EntityResponse entityResponse = anEntity.createResponse();
             if (entityResponse.getPosition().equals(player.getPosition()) && anEntity.isCollectable()) {
-                inventory.add(new Item(entityResponse.getId(), entityResponse.getType()));
-                it.remove();
+                if ((entityResponse.getType().equals("key_1") || entityResponse.getType().equals("key_2")) && hasKey()) {
+                } else {
+                    inventory.add(new Item(entityResponse.getId(), entityResponse.getType()));
+                    it.remove();
+                }
             }
         }
     }
+
+    public boolean hasKey() {
+        for (Item i : inventory) {
+            if (i.getType().equals("key_1") || i.getType().equals("key_2")) {
+                return true;
+            }
+        }
+        return false;
+     }
 
     public void removeItemFromInventory(String type) {
         for (Iterator<Item> it = inventory.iterator(); it.hasNext();) {

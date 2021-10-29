@@ -72,7 +72,7 @@ public class Entity {
 
     public boolean isCollectable() {
         List<String> collectables = new ArrayList<String>();
-        collectables.addAll(Arrays.asList("armour", "arrow","bomb", "health_potion", "invincibility_potion", "invisibility_potion", "key", "sword", "treasure", "wood"));
+        collectables.addAll(Arrays.asList("armour", "arrow","bomb", "health_potion", "invincibility_potion", "invisibility_potion", "key_1", "key_2", "sword", "treasure", "wood"));
         if (collectables.contains(this.type)) {
             return true;
         }
