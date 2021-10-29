@@ -2,37 +2,28 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
-import dungeonmania.entities.Static.Boulder;
-import dungeonmania.entities.Static.FloorSwitch;
+import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Treasure;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.spi.CurrencyNameProvider;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 public class DungeonManiaController {
     Dungeon currentDungeon;
+    private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
     }
 
@@ -155,57 +146,64 @@ public class DungeonManiaController {
             if (e instanceof MovingEntity || e instanceof Spawner) {
                 enemiesComplete = false;
             }
-        }
-        //boulder movement and floor switch
-        for (Entity e : currentDungeon.entities) {
-            if (e instanceof Boulder) {
-                currentDungeon.player = ((Boulder)e).move(movementDirection, currentDungeon.player, currentDungeon.entities);
-            }
-            if (e instanceof FloorSwitch) {
-                ((FloorSwitch)e).trigger(currentDungeon.entities);
+            //doors
+            if (e instanceof Door) {
+                currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon);
             }
         }
-
-        //add treasure to completed goals if it is completed
-        if (treasureComplete) {
-            currentDungeon.goalsCompleted.add("treasure");
-        }
-        //add enemies to completed if it is completed
-        if (enemiesComplete) {
-            currentDungeon.goalsCompleted.add("enemies");
-        }
-
-        if (currentDungeon.goaltype.equals("AND")) {
-            if (currentDungeon.goalsCompleted.containsAll(currentDungeon.goalsToComplete)) {
-                //game won
-                currentDungeon.complete = true;
-                currentDungeon.goals = "";
+        if (!currentDungeon.nogoals) {
+            //add treasure to completed goals if it is completed
+            if (treasureComplete) {
+                currentDungeon.goalsCompleted.add("treasure");
             }
-        } else if (currentDungeon.goaltype.equals("OR")) {
-            for (String s : currentDungeon.goalsCompleted) {
-                if (currentDungeon.goalsToComplete.contains(s)) {
+            //add enemies to completed if it is completed
+            if (enemiesComplete) {
+                currentDungeon.goalsCompleted.add("enemies");
+            }
+            if (currentDungeon.goaltype.equals("AND")) {
+                if (currentDungeon.goalsCompleted.containsAll(currentDungeon.goalsToComplete)) {
                     //game won
                     currentDungeon.complete = true;
                     currentDungeon.goals = "";
                 }
-            }
-        } else {
-            if (currentDungeon.goalsCompleted.contains(currentDungeon.goals.replace(":", "").replace(" ", ""))) {
-                //game won
-                currentDungeon.complete = true;
-                currentDungeon.goals = "";
-            }
+            } else if (currentDungeon.goaltype.equals("OR")) {
+                for (String s : currentDungeon.goalsCompleted) {
+                    if (currentDungeon.goalsToComplete.contains(s)) {
+                        //game won
+                        currentDungeon.complete = true;
+                        currentDungeon.goals = "";
+                    }
+                }
+            } else {
+                if (currentDungeon.goalsCompleted.contains(currentDungeon.goals.replace(":", "").replace(" ", ""))) {
+                    //game won
+                    currentDungeon.complete = true;
+                    currentDungeon.goals = "";
+                }
+            }               
         }
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
-
+    
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         return null;
     }
-
+    
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        if (!buildables.contains(buildable)) {
+            throw new IllegalArgumentException();
+        }
+        
+        try {
+            currentDungeon.createBuildable(buildable);
+        } catch (InvalidActionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+        return currentDungeon.createResponse();
+
     }
 
     public Dungeon enemyInteraction(Dungeon current) {
