@@ -6,7 +6,8 @@ public class InvincibilityPotion extends CollectableEntity {
 
     public InvincibilityPotion(JSONObject entity) {
         super(entity);
-        //TODO Auto-generated constructor stub
+        int durability = 1;
+        this.setDurability(durability);
     }
     
 }

@@ -91,6 +91,7 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
+        
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
@@ -146,6 +147,7 @@ public class DungeonManiaController {
                 currentDungeon.goals = "";
             }
         }
+        currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
 

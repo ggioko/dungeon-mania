@@ -7,8 +7,12 @@ import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.InvincibilityPotion;
+import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.Wood;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
 import dungeonmania.items.Item;
@@ -67,8 +71,18 @@ public class Dungeon {
                 this.entities.add(new Treasure((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("sword")) {
                 this.entities.add(new Sword((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("Armour")) {
+            } else if (((JSONObject)entity).getString("type").equals("armour")) {
                 this.entities.add(new Armour((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("health_potion")) {
+                this.entities.add(new HealthPotion((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("wood")) {
+                this.entities.add(new Wood((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("invincibility_potion")) {
+                this.entities.add(new InvincibilityPotion((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("invisibility_potion")) {
+                this.entities.add(new InvisibilityPotion((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("key")) {
+                this.entities.add(new InvisibilityPotion((JSONObject)entity));
             } else {
                 this.entities.add(new Entity((JSONObject)entity));
             }
