@@ -12,11 +12,13 @@ import dungeonmania.util.Position;
 import java.util.List;
 
 public class Mercenary extends MovingEntity{
+    private boolean bribed;
 
     public Mercenary(JSONObject entity) {
         super(entity);
         this.health = 5;
         this.attack = 1;
+        this.bribed = false;
     }
 
     @Override
@@ -113,5 +115,13 @@ public class Mercenary extends MovingEntity{
         int x = this.getPosition().getX() - playerPosition.getX();
         int y = this.getPosition().getY() - playerPosition.getY();
         return x + y <= 2;
+    }
+
+    public void setBribed (boolean bribed) {
+        this.bribed = bribed;
+    }
+
+    public boolean getBribed () {
+        return this.bribed;
     }
 }

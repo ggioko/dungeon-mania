@@ -30,7 +30,7 @@ public class InteractTest {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("mercenary");
+            controller.interact("mercenary51");
         });
     }
 
@@ -40,7 +40,7 @@ public class InteractTest {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("spawner");
+            controller.interact("zombie_toast_spawner41");
         });
     }
 
@@ -52,7 +52,7 @@ public class InteractTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("mercenary");
+            controller.interact("mercenary33");
         });
     }
 
@@ -64,7 +64,7 @@ public class InteractTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("mercenary");
+            controller.interact("zombie_toast_spawner14");
         });
     }
 
@@ -76,7 +76,7 @@ public class InteractTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         assertDoesNotThrow(() -> {
-            controller.interact("mercenary");
+            controller.interact("mercenary51");
         });
     }
 
@@ -88,7 +88,7 @@ public class InteractTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         assertDoesNotThrow(() -> {
-            controller.interact("spawner");
+            controller.interact("zombie_toast_spawner41");
         });
     }
 

@@ -20,7 +20,6 @@ public class Spawner extends StaticEntity {
         super(entity);
         this.ticks = ticks;
         this.currentTick = 0;
-        //TODO Auto-generated constructor stub
     }
     
     public Dungeon spawn(Dungeon current) {

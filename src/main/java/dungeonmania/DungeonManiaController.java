@@ -111,15 +111,27 @@ public class DungeonManiaController {
     }
 
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        if (currentDungeon.getEntity(entityId) instanceof Mercenary) {
+        if (currentDungeon.getEntity(entityId) == null) {
+            throw new IllegalArgumentException("entityId is not a valid entity ID");
+        }
+        
+        else if (currentDungeon.getEntity(entityId).getType().equals("mercenary")) {
             Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
 
-            if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition()) && 
-                currentDungeon.getItem("treasure") != null) {
-                currentDungeon.removeItem("treasure"); 
+            if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
+                if (currentDungeon.getItem("treasure") != null) {
+                    currentDungeon.removeItem("treasure");
+                    mercenary.setBribed(true);
+                }
+                else {
+                    throw new InvalidActionException("No treasure in inventory");
+                }
+            }
+            else {
+                throw new InvalidActionException("Mercenary not in range");
             }
         }
-        else if (currentDungeon.getEntity(entityId) instanceof Spawner) {
+        else if (currentDungeon.getEntity(entityId).getType().equals("zombie_toast_spawner")) {
             Spawner spawner = (Spawner) currentDungeon.getEntity(entityId);
             if (Position.isAdjacent(currentDungeon.getPlayer().getPosition(), spawner.getPosition())) {
                 if (currentDungeon.getItem("sword") != null) {
@@ -135,8 +147,10 @@ public class DungeonManiaController {
                     currentDungeon.removeEntity(entityId);
                 }
             }
+            else {
+                throw new InvalidActionException("No weapon in inventory");
+            }
         }
-        
         return null;
     }
 

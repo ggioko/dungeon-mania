@@ -18,7 +18,7 @@ public class Entity {
     public Entity(JSONObject entity) {
         this.type = entity.getString("type");
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
-        this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY()) + LocalTime.now();
+        this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
     }
 
     public EntityResponse createResponse() {
