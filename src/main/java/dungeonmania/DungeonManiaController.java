@@ -7,6 +7,8 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
+import dungeonmania.entities.Static.Boulder;
+import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -116,6 +118,16 @@ public class DungeonManiaController {
                 enemiesComplete = false;
             }
         }
+        //boulder movement and floor switch
+        for (Entity e : currentDungeon.entities) {
+            if (e instanceof Boulder) {
+                currentDungeon.player = ((Boulder)e).move(movementDirection, currentDungeon.player, currentDungeon.entities);
+            }
+            if (e instanceof FloorSwitch) {
+                ((FloorSwitch)e).trigger(currentDungeon.entities);
+            }
+        }
+
         //add treasure to completed goals if it is completed
         if (treasureComplete) {
             currentDungeon.goalsCompleted.add("treasure");
