@@ -33,9 +33,9 @@ public class Player extends Entity {
         this.attack = attack;
     }
     @Override
-    public void move(Position pos, List<Wall> walls) {
+    public void move(Position pos, List<Entity> walls) {
         boolean move = true;
-        for (Wall w : walls) {
+        for (Entity w : walls) {
             if (w.getPosition().equals(pos)) {
                 move = false;
             }

@@ -5,6 +5,8 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
 import dungeonmania.items.Item;
@@ -12,7 +14,7 @@ import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
-
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,9 @@ public class Dungeon {
     Player player;
     String gameMode;
     boolean complete;
+    String goaltype;
+    List<String> goalsToComplete;
+    List<String> goalsCompleted;
 
 
     public Dungeon(String dungeonName, JSONObject entities, String gameMode) {
@@ -56,16 +61,28 @@ public class Dungeon {
                     this.entities.add(new Spawner((JSONObject)entity, 20));
                 }
                 
+            } else if (((JSONObject)entity).getString("type").equals("treasure")) {
+                this.entities.add(new Treasure((JSONObject)entity));
             } else {
                 this.entities.add(new Entity((JSONObject)entity));
             }
         }
         this.inventory = new ArrayList<Item>();
         this.buildables = new ArrayList<String>();
-        this.goals = "";
+
+        this.goals = ":" + entities.getJSONObject("goal-condition").getString("goal");
+        if (this.goals.equals(":AND") || this.goals.equals(":OR")) {
+            this.goals = "";
+            for (Object o : entities.getJSONObject("goal-condition").getJSONArray("subgoals")) {
+                this.goals += ":" + ((JSONObject)o).getString("goal") + " ";
+                this.goals += entities.getJSONObject("goal-condition").getString("goal") + " ";
+            }
+            this.goals = this.goals.substring(0,this.goals.length()-5);
+            this.goaltype = entities.getJSONObject("goal-condition").getString("goal");
+        }
         this.complete = false;
-
-
+        this.goalsToComplete = Arrays.asList(this.goals.replace(":","").replace(" ", "").split(this.goaltype));
+        this.goalsCompleted = new ArrayList<>();
     }
 
     //getters
@@ -89,10 +106,10 @@ public class Dungeon {
 
     public void pathing(Direction direction) {
         //make a list of walls
-        List<Wall> walls = new ArrayList<Wall>();
+        List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
             if (e instanceof Wall) {
-                walls.add((Wall)e);
+                walls.add(e);
             }
         }
         for (Entity e : this.entities) {
