@@ -12,6 +12,8 @@ import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Treasure;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ import java.util.spi.CurrencyNameProvider;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,7 +82,41 @@ public class DungeonManiaController {
     
     public DungeonResponse saveGame(String name) throws IllegalArgumentException {
         //turn a dungeon class into a .json file and save it
-        return null;
+        JSONArray entities = new JSONArray();
+        JSONObject saveGame = new JSONObject();
+        //width, height, entities
+        for (Entity e : currentDungeon.entities) {
+            //x, y, type
+            entities.put(new JSONObject("{x:" + e.getPosition().getX() + ",y:" + e.getPosition().getY() + ",type:" + e.getType() + "}"));
+        }
+        saveGame.put("entities", entities);
+        //turn into file
+        FileWriter filewriter;
+        try {
+            File file = new File("src" + File.separator + "main" + File.separator + "java" + File.separator + "dungeonmania" + File.separator + "saves" + File.separator + name + ".json");
+            file.setWritable(true);
+            file.setReadable(true);
+            file.createNewFile();
+            filewriter = new FileWriter(file);
+            file.getAbsolutePath();
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return null;
+        }
+
+        try {
+            filewriter.write(saveGame.toString());
+            filewriter.close();
+
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return null;
+        }
+
+        return currentDungeon.createResponse();
+
     }
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
