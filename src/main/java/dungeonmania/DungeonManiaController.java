@@ -93,6 +93,7 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
+        
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
@@ -158,6 +159,7 @@ public class DungeonManiaController {
                 currentDungeon.goals = "";
             }
         }
+        currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
 
@@ -179,13 +181,21 @@ public class DungeonManiaController {
                     boolean battleOver = false;
                     while (!battleOver) {
                         //change health values
-                        current.player.setHealth(current.player.getHealth() - ((enemy.getHealth() * enemy.getAttack()) / 10));
-                        enemy.setHealth(((enemy.getHealth() - current.player.getHealth() * current.player.getAttack()) / 5));
+                        int playerHP = current.player.getHealth();
+                        int enemyHP = enemy.getHealth();
+                        int playerAD = current.player.getAttack();
+                        int enemyAD = enemy.getAttack();
+                        if (currentDungeon.getItem("armour") != null) {
+                            enemyAD = enemyAD/2;
+                        }
+
+                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
+                        enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
                         
-                        if (current.player.getHealth() <= 0) {
+                        if (playerHP <= 0) {
                             //game over
                             return null;
-                        } else if (enemy.getHealth() <= 0) {
+                        } else if (enemyHP <= 0) {
                             //enemy is dead
                             current.enemyDeath(enemy);
                             battleOver = true;

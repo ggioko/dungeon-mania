@@ -6,7 +6,8 @@ public class Key extends CollectableEntity {
 
     public Key(JSONObject entity) {
         super(entity);
-        //TODO Auto-generated constructor stub
+        int durability = 1;
+        this.setDurability(durability);
     }
     
 }
