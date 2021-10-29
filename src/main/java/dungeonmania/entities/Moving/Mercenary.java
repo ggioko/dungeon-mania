@@ -8,10 +8,13 @@ import org.json.JSONObject;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Static.Wall;
+
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import java.util.List;
 import java.lang.Math;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Mercenary extends MovingEntity{
     private boolean bribed;
@@ -115,21 +118,51 @@ public class Mercenary extends MovingEntity{
     }
     
     public boolean isInBribableRange (Position playerPosition) {
-        int x = this.getPosition().getX() - playerPosition.getX();
-        int y = this.getPosition().getY() - playerPosition.getY();
-        if (Math.abs(x) >= 2 && Math.abs(y) >= 2){
-            return true;
+        int x = this.getPosition().getX();
+        int y = this.getPosition().getY();
+
+        List<Position> adjacentPositions = new ArrayList<>();
+        adjacentPositions.add(new Position(x-1, y-1));
+        adjacentPositions.add(new Position(x  , y-1));
+        adjacentPositions.add(new Position(x+1, y-1));
+        adjacentPositions.add(new Position(x+1, y));
+        adjacentPositions.add(new Position(x+1, y+1));
+        adjacentPositions.add(new Position(x  , y+1));
+        adjacentPositions.add(new Position(x-1, y+1));
+        adjacentPositions.add(new Position(x-1, y));
+
+        adjacentPositions.add(new Position(x-2, y));
+        adjacentPositions.add(new Position(x-2, y-2));
+        adjacentPositions.add(new Position(x, y-2));
+        adjacentPositions.add(new Position(x+2, y-2));
+        adjacentPositions.add(new Position(x+2, y));
+        adjacentPositions.add(new Position(x+2, y-2));
+        adjacentPositions.add(new Position(x, y+2));
+        adjacentPositions.add(new Position(x-2, y+2));
+
+        adjacentPositions.add(new Position(x-1, y-2));
+        adjacentPositions.add(new Position(x+1, y-2));
+        adjacentPositions.add(new Position(x+2, y-1));
+        adjacentPositions.add(new Position(x+2, y+1));
+        adjacentPositions.add(new Position(x+1, y+2));
+        adjacentPositions.add(new Position(x-1, y+2));
+        adjacentPositions.add(new Position(x-2, y+1));
+        adjacentPositions.add(new Position(x-2, y-1));
+
+        for (Position i : adjacentPositions) {
+            if (playerPosition.getX() == i.getX() && playerPosition.getY() == i.getY()) {
+                return true;
+            }
         }
-        else {
-            return false;
-        }
+
+        return false;
     }
-       
+
     public void setBribed (boolean bribed) {
         this.bribed = bribed;
     }
 
-    public boolean getBribed () {
+    public boolean isBribed () {
         return this.bribed;
     }
 }

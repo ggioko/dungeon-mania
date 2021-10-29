@@ -181,6 +181,7 @@ public class DungeonManiaController {
                     currentDungeon.removeItem("treasure");
                     mercenary.setBribed(true);
                     mercenary.setInteractable(false);
+                    return currentDungeon.createResponse();
                 }
             }
             else {
@@ -199,7 +200,7 @@ public class DungeonManiaController {
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
                             currentDungeon.removeEntity(entityId);
-                            break;
+                            return currentDungeon.createResponse();
                         }
                     }
                 }
@@ -219,6 +220,12 @@ public class DungeonManiaController {
         for (Entity e : current.entities) {
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {
+                if (e instanceof Mercenary) {
+                    Mercenary mercenary = (Mercenary) e;
+                    if (mercenary.isBribed()) {
+                        continue;
+                    }
+                }
                 MovingEntity enemy = (MovingEntity)e;
                 //if the entity is on the same ssquare as character
                 if (e.getPosition().equals(current.player.getPosition())) {
