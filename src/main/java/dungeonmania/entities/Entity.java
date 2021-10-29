@@ -6,6 +6,8 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 import dungeonmania.entities.Static.StaticEntity;
 import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.collectable.Armour;
+
 import java.util.List;
 import java.time.LocalTime;
 
@@ -13,13 +15,13 @@ public class Entity {
     private String id;
     private String type;
     private Position position;
-    private int durability;
     private boolean isInteractable;
 
     public Entity(JSONObject entity) {
         this.type = entity.getString("type");
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
         this.id = this.type + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY()) + LocalTime.now();
+        
     }
 
     public EntityResponse createResponse() {
@@ -47,4 +49,6 @@ public class Entity {
     public void move(Position pos, List<Entity> walls) {
         return;
     }
+
+    
 }

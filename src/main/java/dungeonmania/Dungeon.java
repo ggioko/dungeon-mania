@@ -5,7 +5,9 @@ import dungeonmania.response.models.ItemResponse;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
@@ -60,9 +62,12 @@ public class Dungeon {
                 } else {
                     this.entities.add(new Spawner((JSONObject)entity, 20));
                 }
-                
             } else if (((JSONObject)entity).getString("type").equals("treasure")) {
                 this.entities.add(new Treasure((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("sword")) {
+                this.entities.add(new Sword((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("Armour")) {
+                this.entities.add(new Armour((JSONObject)entity));
             } else {
                 this.entities.add(new Entity((JSONObject)entity));
             }
@@ -136,6 +141,9 @@ public class Dungeon {
     public void enemyDeath(MovingEntity enemy) {
         //remove enemy from entities and give player loot
         this.entities.remove(enemy);
+        if (enemy instanceof Mercenary) {
+            
+        }
     }
 
 }
