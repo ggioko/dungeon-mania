@@ -180,6 +180,7 @@ public class DungeonManiaController {
                 else {
                     currentDungeon.removeItem("treasure");
                     mercenary.setBribed(true);
+                    mercenary.setInteractable(false);
                 }
             }
             else {

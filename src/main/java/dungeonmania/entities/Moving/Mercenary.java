@@ -11,6 +11,7 @@ import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import java.util.List;
+import java.lang.Math;
 
 public class Mercenary extends MovingEntity{
     private boolean bribed;
@@ -20,6 +21,7 @@ public class Mercenary extends MovingEntity{
         this.health = 5;
         this.attack = 1;
         this.bribed = false;
+        this.setInteractable(true);
     }
 
     @Override
@@ -115,9 +117,14 @@ public class Mercenary extends MovingEntity{
     public boolean isInBribableRange (Position playerPosition) {
         int x = this.getPosition().getX() - playerPosition.getX();
         int y = this.getPosition().getY() - playerPosition.getY();
-        return x + y <= 2;
+        if (Math.abs(x) >= 2 && Math.abs(y) >= 2){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
-
+       
     public void setBribed (boolean bribed) {
         this.bribed = bribed;
     }

@@ -20,6 +20,7 @@ public class Spawner extends StaticEntity {
         super(entity);
         this.ticks = ticks;
         this.currentTick = 0;
+        this.setInteractable(true);
     }
     
     public Dungeon spawn(Dungeon current) {
