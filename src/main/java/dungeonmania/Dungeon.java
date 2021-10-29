@@ -83,9 +83,9 @@ public class Dungeon {
             } else if (((JSONObject)entity).getString("type").equals("door")) {
                 Door door = new Door((JSONObject)entity);
                 if (doorcreated) {
-                    door.setType("key_2");
+                    door.setType("door_2");
                 } else {
-                    door.setType("key_1");
+                    door.setType("door_1");
                     doorcreated = true;
                 }
                 this.entities.add(door);
@@ -174,8 +174,14 @@ public class Dungeon {
         //make a list of walls
         List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
-            if (e instanceof Wall) {
-                walls.add(e);
+            if (e instanceof Wall || e instanceof Door) {
+                if (e instanceof Wall) {
+                    walls.add(e);
+                } else {
+                    if (!(((Door)e).getType().equals("door_unlocked"))) {
+                        walls.add(e);
+                    }
+                }
             }
         }
         for (Entity e : this.entities) {

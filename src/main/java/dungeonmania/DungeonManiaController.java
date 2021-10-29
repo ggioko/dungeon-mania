@@ -2,32 +2,21 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Door;
-import dungeonmania.entities.Static.Boulder;
-import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Treasure;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.spi.CurrencyNameProvider;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class DungeonManiaController {
     Dungeon currentDungeon;

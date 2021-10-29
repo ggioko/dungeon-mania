@@ -29,11 +29,13 @@ public class Door extends StaticEntity {
                         ((Door)e).setType("door_unlocked");
                         this.unlocked = true;
                         inventory.remove(i);
+                        break;
                     } else if (i.getType().equals("key_2") && doornum.equals("2")) {
                         //unlock
                         ((Door)e).setType("door_unlocked");
                         this.unlocked = true;
                         inventory.remove(i);
+                        break;
                     }
                 }
             }
