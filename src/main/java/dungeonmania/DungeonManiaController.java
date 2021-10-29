@@ -172,14 +172,12 @@ public class DungeonManiaController {
         if (!buildables.contains(buildable)) {
             throw new IllegalArgumentException();
         }
-        
-        try {
-            currentDungeon.createBuildable(buildable);
-        } catch (InvalidActionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+
+        if (!currentDungeon.buildables.contains(buildable)) {
+            throw new InvalidActionException("Not Enough Materials");
         }
+        currentDungeon.createBuildable(buildable);
+
         return currentDungeon.createResponse();
 
     }

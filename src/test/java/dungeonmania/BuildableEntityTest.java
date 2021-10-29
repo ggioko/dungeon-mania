@@ -21,24 +21,26 @@ public class BuildableEntityTest {
         // test for crafting a bow
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("advanced-2", "standard");
+        DungeonResponse d = controller.newGame("advanced-2", "standard");
+
+        System.out.println(d.getInventory());
 
         controller.interact("wood1111");
         controller.interact("arrow1113");
         controller.interact("arrow1114");
         controller.interact("arrow1214");
 
-        controller.build("bow");
+        System.out.println(d.getInventory());
+        System.out.println(d.getBuildables());
 
-        assertThrows(InvalidActionException.class, () -> {
-            controller.tick("wood1111", Direction.NONE);
-            controller.tick("arrow1113", Direction.NONE);
-            controller.tick("arrow1114", Direction.NONE);
-            controller.tick("arrow1214", Direction.NONE);
-        });
+
+
         assertDoesNotThrow(() -> {
-            controller.tick("bow", Direction.NONE);
+            controller.build("bow");
         });
+
+        System.out.println(d.getInventory());
+
     }
 
     @Test
