@@ -7,6 +7,7 @@ import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Door;
+import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -139,6 +140,7 @@ public class DungeonManiaController {
         //goals
         boolean treasureComplete = true;
         boolean enemiesComplete = true;
+        boolean teleported = false;
         for (Entity e : currentDungeon.entities) {
             if (e instanceof Treasure) {
                 treasureComplete = false;
@@ -149,6 +151,12 @@ public class DungeonManiaController {
             //doors
             if (e instanceof Door) {
                 currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon);
+            }
+            if (e instanceof Portal) {
+                if (e.getPosition().equals(currentDungeon.player.getPosition()) && !teleported) {
+                    currentDungeon.player.setPosition(((Portal)e).getCoords());
+                    teleported = true;
+                }
             }
         }
         if (!currentDungeon.nogoals) {

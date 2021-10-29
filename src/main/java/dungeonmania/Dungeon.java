@@ -9,6 +9,7 @@ import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
+import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
@@ -34,6 +35,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.sound.sampled.Port;
+
 import org.json.JSONObject;
 
 
@@ -58,7 +61,6 @@ public class Dungeon {
         this.dungeonName = dungeonName;
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
-        boolean keycreated = false;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
             if (((JSONObject)entity).getString("type").equals("player")) {
@@ -90,14 +92,7 @@ public class Dungeon {
                 }
                 this.entities.add(door);
             } else if (((JSONObject)entity).getString("type").equals("key")) {
-                Key key = new Key((JSONObject)entity);
-                if (keycreated) {
-                    key.setType("key_2");
-                } else {
-                    key.setType("key_1");
-                    keycreated = true;
-                }
-                this.entities.add(key);
+                this.entities.add(new Key((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("sword")) {
                 this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("armour")) {
@@ -110,10 +105,24 @@ public class Dungeon {
                 this.entities.add(new InvincibilityPotion((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("invisibility_potion")) {
                 this.entities.add(new InvisibilityPotion((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("key")) {
-                this.entities.add(new InvisibilityPotion((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("boulder")) {
                 this.entities.add(new Boulder((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("portal")) {
+                Position coords = new Position(0,0);
+                for (Object o : entities.getJSONArray("entities")){
+                    try {
+                        if (((JSONObject)o).getString("colour").equals(((JSONObject)entity).getString("colour"))) {
+                            if (((((JSONObject)o).getInt("x") != (((JSONObject)entity).getInt("x"))) || (((JSONObject)o).getInt("y") != (((JSONObject)entity).getInt("y"))))) {
+                                coords = new Position(((JSONObject)o).getInt("x"), ((JSONObject)o).getInt("y"));
+                            }
+                        }
+                    } catch (Exception e) {
+                        //TODO: handle exception
+                    }
+                }
+                Portal portal = new Portal((JSONObject)entity, coords);
+                portal.setType("portal_" + ((JSONObject)entity).getString("colour"));
+                this.entities.add(portal);
             } else if (((JSONObject)entity).getString("type").equals("switch")) {
                 this.entities.add(new FloorSwitch((JSONObject)entity));
             } else {
