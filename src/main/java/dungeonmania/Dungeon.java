@@ -3,6 +3,8 @@ package dungeonmania;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Static.Boulder;
+import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
@@ -83,6 +85,10 @@ public class Dungeon {
                 this.entities.add(new InvisibilityPotion((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("key")) {
                 this.entities.add(new InvisibilityPotion((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("boulder")) {
+                this.entities.add(new Boulder((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("switch")) {
+                this.entities.add(new FloorSwitch((JSONObject)entity));
             } else {
                 this.entities.add(new Entity((JSONObject)entity));
             }
@@ -99,9 +105,12 @@ public class Dungeon {
             }
             this.goals = this.goals.substring(0,this.goals.length()-5);
             this.goaltype = entities.getJSONObject("goal-condition").getString("goal");
+            this.goalsToComplete = Arrays.asList(this.goals.replace(":","").replace(" ", "").split(this.goaltype));
+        } else {
+            this.goaltype = "";
         }
         this.complete = false;
-        this.goalsToComplete = Arrays.asList(this.goals.replace(":","").replace(" ", "").split(this.goaltype));
+        this.goalsToComplete = Arrays.asList(this.goals.replace(":",""));
         this.goalsCompleted = new ArrayList<>();
     }
 
