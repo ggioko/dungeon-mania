@@ -15,11 +15,13 @@ public class Spawner extends StaticEntity {
 
     int ticks;
     int currentTick;
+    int ids;
 
     public Spawner(JSONObject entity, int ticks) {
         super(entity);
         this.ticks = ticks;
         this.currentTick = 0;
+        this.ids = 0;
         //TODO Auto-generated constructor stub
     }
     
@@ -31,10 +33,12 @@ public class Spawner extends StaticEntity {
             obj.put("y", this.getPosition().getY());
             obj.put("type", "zombie_toast");
             Zombie zombie = new Zombie(obj);
+            zombie.setId("zombie_toast_" + ((Integer)this.ids).toString());
             List<Entity> list = current.getEntities();
             list.add(zombie);
             current.setEntities(list);
             this.currentTick = 0;
+            this.ids++;
         }
         return current;
     }

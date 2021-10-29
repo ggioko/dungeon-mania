@@ -1,6 +1,7 @@
 package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.items.Item;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -9,6 +10,7 @@ import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 
 import java.io.File;
@@ -129,10 +131,21 @@ public class DungeonManiaController {
         currentDungeon = enemyInteraction(currentDungeon);
         //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
+        Entity spawner = null;
         for (Entity e : currentDungeon.entities) {
             if (e instanceof Spawner) {
                 spawners.add((Spawner)e);
+                if (e.getPosition().equals(currentDungeon.player.getPosition())) {
+                    for (Item i : currentDungeon.inventory) {
+                        if (i.getType().equals("sword")) {
+                            spawner = e;
+                        }
+                    }
+                }
             }
+        }
+        if (spawner != null) {
+            currentDungeon.entities.remove(spawner);
         }
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
