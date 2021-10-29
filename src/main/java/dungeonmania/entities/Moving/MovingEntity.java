@@ -38,7 +38,7 @@ public class MovingEntity extends Entity {
         this.attack = attack;
     }
     @Override
-    public void move(Position pos, List<Wall> walls) {
+    public void move(Position pos, List<Entity> walls) {
         return;
     }
     

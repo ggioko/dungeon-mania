@@ -8,6 +8,8 @@ import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Door;
+import dungeonmania.entities.Static.Boulder;
+import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -29,6 +31,7 @@ import java.nio.file.Paths;
 
 public class DungeonManiaController {
     Dungeon currentDungeon;
+    private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
     }
 
@@ -92,10 +95,11 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
+        
         currentDungeon.getItem(itemUsed);
-        currentDungeon = enemyInteraction(currentDungeon);
-        //mercenary pathing
+        //enemy pathing
         currentDungeon.pathing(movementDirection);
+        currentDungeon = enemyInteraction(currentDungeon);
         //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
         for (Entity e : currentDungeon.entities) {
@@ -152,15 +156,28 @@ public class DungeonManiaController {
                 }
             }               
         }
+        currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
-
+    
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
         return null;
     }
-
+    
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        if (!buildables.contains(buildable)) {
+            throw new IllegalArgumentException();
+        }
+        
+        try {
+            currentDungeon.createBuildable(buildable);
+        } catch (InvalidActionException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+        return currentDungeon.createResponse();
+
     }
 
     public Dungeon enemyInteraction(Dungeon current) {
@@ -170,19 +187,30 @@ public class DungeonManiaController {
                 MovingEntity enemy = (MovingEntity)e;
                 //if the entity is on the same ssquare as character
                 if (e.getPosition().equals(current.player.getPosition())) {
-                    //change health values
-                    current.player.setHealth(current.player.getHealth() - ((enemy.getHealth() * enemy.getAttack()) / 10));
-                    enemy.setHealth(((enemy.getHealth() - current.player.getHealth() * current.player.getAttack()) / 5));
-                    
-                    if (current.player.getHealth() <= 0) {
-                        //game over
-                        return null;
+                    boolean battleOver = false;
+                    while (!battleOver) {
+                        //change health values
+                        int playerHP = current.player.getHealth();
+                        int enemyHP = enemy.getHealth();
+                        int playerAD = current.player.getAttack();
+                        int enemyAD = enemy.getAttack();
+                        if (currentDungeon.getItem("armour") != null) {
+                            enemyAD = enemyAD/2;
+                        }
+
+                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
+                        enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                        
+                        if (playerHP <= 0) {
+                            //game over
+                            return null;
+                        } else if (enemyHP <= 0) {
+                            //enemy is dead
+                            current.enemyDeath(enemy);
+                            battleOver = true;
+                        }
                     }
-                    if (enemy.getHealth() <= 0) {
-                        //enemy is dead
-                        current.enemyDeath(enemy);
-                        return current;
-                    }
+                    return current;
                 }
             }
         }
