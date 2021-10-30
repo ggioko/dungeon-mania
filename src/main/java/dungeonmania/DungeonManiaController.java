@@ -262,7 +262,6 @@ public class DungeonManiaController {
                             currentDungeon.getBow().subtractDurability(currentDungeon.inventory);
                         }
                         
-
                         if (playerHP <= 0) {
                             //game over
                             return null;
