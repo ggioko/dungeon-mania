@@ -220,6 +220,7 @@ public class DungeonManiaController {
         }
         if (currentDungeon.getEntity(itemUsed) instanceof HealthPotion) {
             currentDungeon.player.setHealth(10);
+            HealthPotion.durability -= 1;
         }
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
