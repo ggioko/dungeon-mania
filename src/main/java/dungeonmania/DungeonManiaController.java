@@ -2,14 +2,16 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.items.buildable.Buildable;
-
+import dungeonmania.items.Item;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Door;
+import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 
 
@@ -128,13 +130,26 @@ public class DungeonManiaController {
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
-        currentDungeon = enemyInteraction(currentDungeon);
+        if (!currentDungeon.gameMode.equals("Peaceful")) {
+            currentDungeon = enemyInteraction(currentDungeon);
+        }
         //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
+        Entity spawner = null;
         for (Entity e : currentDungeon.entities) {
             if (e instanceof Spawner) {
                 spawners.add((Spawner)e);
+                if (e.getPosition().equals(currentDungeon.player.getPosition())) {
+                    for (Item i : currentDungeon.inventory) {
+                        if (i.getType().equals("sword")) {
+                            spawner = e;
+                        }
+                    }
+                }
             }
+        }
+        if (spawner != null) {
+            currentDungeon.entities.remove(spawner);
         }
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
@@ -142,6 +157,7 @@ public class DungeonManiaController {
         //goals
         boolean treasureComplete = true;
         boolean enemiesComplete = true;
+        boolean teleported = false;
         for (Entity e : currentDungeon.entities) {
             if (e instanceof Treasure) {
                 treasureComplete = false;
@@ -151,7 +167,13 @@ public class DungeonManiaController {
             }
             //doors
             if (e instanceof Door) {
-                currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon, currentDungeon.player, movementDirection);            
+                currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon, currentDungeon.player, movementDirection);
+            }
+            if (e instanceof Portal) {
+                if (e.getPosition().equals(currentDungeon.player.getPosition()) && !teleported) {
+                    currentDungeon.player.setPosition(((Portal)e).getCoords());
+                    teleported = true;
+                }
             }
         }
         if (!currentDungeon.nogoals) {
@@ -240,6 +262,7 @@ public class DungeonManiaController {
                             currentDungeon.getBow().subtractDurability(currentDungeon.inventory);
                         }
                         
+
                         if (playerHP <= 0) {
                             //game over
                             return null;
