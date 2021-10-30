@@ -169,12 +169,6 @@ public class Dungeon {
         return null;
     }
 
-    public void removeItem(String type) {
-        for (Iterator<Item> item = inventory.iterator(); item.hasNext();) {
-            Item value = item.next();
-            if (value.getType().equals(type)) item.remove();
-        }
-    }
 
     public void removeEntity(String stringId) {
         for (Iterator<Entity> entity = entities.iterator(); entity.hasNext();) {
@@ -206,6 +200,10 @@ public class Dungeon {
 
     public void setItems(List<Item> items) {
         this.inventory = items;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public List<Item> getItems() {
@@ -298,6 +296,14 @@ public class Dungeon {
         } 
     }
 
+    public void removeItem(String type) {
+        for (Iterator<Item> item = inventory.iterator(); item.hasNext();) {
+            Item value = item.next();
+            if (value.getType().equals(type)) item.remove();
+        }
+    }
+
+
     public void createBuildable(String type) {
         Buildable buildable = Buildable.getBuildable(type);
         if (buildables.contains(buildable.getType())) {
@@ -325,9 +331,11 @@ public class Dungeon {
                 return (Shield) i;
             } else if (i.getType().equals("bow")) {
                 return (Bow) i;
-            }
+            } 
         }
         return null;
     }
+
+
 
 }
