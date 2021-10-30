@@ -8,6 +8,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
+import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.FloorSwitch;
@@ -30,8 +31,10 @@ import org.json.JSONObject;
 
 public class DungeonManiaController {
     Dungeon currentDungeon;
+    int ticknum;
     private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
+        this.ticknum = 0;
     }
 
     public String getSkin() {
@@ -128,7 +131,11 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
-        
+        if (ticknum >= 10) {
+            currentDungeon = Spider.spawn(currentDungeon);
+            this.ticknum = 0;
+        }
+        this.ticknum++;
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
