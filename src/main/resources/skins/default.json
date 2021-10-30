@@ -16,6 +16,7 @@
     },
     "entities": {
         "boulder": "images/tileset/entities/boulder_00.png",
+        "boulders" : "images/tileset/entities/boulder_00.png",
         "bow": "images/tileset/items/bow_0.png",
         "player": "images/tileset/entities/entity.png",
         "bomb": "images/tileset/items/bomb.png",
@@ -26,8 +27,21 @@
         "wall": "images/tileset/walls/wooden/wood_bottom.png",
         "spider": "images/tileset/entities/spider_00.png",
         "mercenary": "images/tileset/entities/ranger.png",
+        "enemies" : "images/tileset/entities/ranger.png",
         "switch": "images/tileset/floor_switch.png",
         "invincibility_potion": "images/tileset/items/potion_10.png",
-        "sword": "images/tileset/items/sword_silver.png"
+        "sword": "images/tileset/items/sword_silver.png",
+        "shield": "images/tileset/items/shield.png",
+        "zombie_toast": "images/tileset/entities/zombie_00.png",
+        "zombie_toast_spawner": "images/tileset/entities/zombie_spawner.png",
+        "door_1" : "images/tileset/walls/wooden/door_locked_silver.png",
+        "door_2" : "images/tileset/walls/wooden/door_locked_silver.png",
+        "door_unlocked" : "images/tileset/walls/wooden/door_unlocked.png",
+        "key_1" : "images/tileset/items/key_silver.png",
+        "key_2" : "images/tileset/items/key_gold.png",
+        "portal_BLUE" : "images/tileset/entities/portal_00.png",
+        "portal_YELLOW" : "images/tileset/entities/portal_08.png",
+        "portal_RED" : "images/tileset/entities/portal_04.png",
+        "portal_GREY" : "images/tileset/entities/portal_12.png"
     }
 }

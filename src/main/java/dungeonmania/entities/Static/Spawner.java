@@ -1,0 +1,56 @@
+package dungeonmania.entities.Static;
+
+import org.json.JSONObject;
+
+import dungeonmania.DungeonManiaController;
+import dungeonmania.entities.Moving.Zombie;
+import dungeonmania.Dungeon;
+import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.util.Position;
+
+import java.util.List;
+import dungeonmania.entities.Entity;
+
+public class Spawner extends StaticEntity {
+
+    int ticks;
+    int currentTick;
+    int ids;
+
+    public Spawner(JSONObject entity, int ticks) {
+        super(entity);
+        this.ticks = ticks;
+        this.currentTick = 0;
+        this.setInteractable(true);
+        this.ids = 0;
+        //TODO Auto-generated constructor stub
+    }
+    
+    public Dungeon spawn(Dungeon current) {
+        this.currentTick++;
+        if (this.currentTick == this.ticks) {
+            JSONObject obj = new JSONObject();
+            obj.put("x", this.getPosition().getX());
+            obj.put("y", this.getPosition().getY());
+            obj.put("type", "zombie_toast");
+            Zombie zombie = new Zombie(obj);
+            zombie.setId("zombie_toast_" + ((Integer)this.ids).toString());
+            List<Entity> list = current.getEntities();
+            list.add(zombie);
+            current.setEntities(list);
+            this.currentTick = 0;
+            this.ids++;
+        }
+        return current;
+    }
+
+    public boolean isInDestroyableRange(Position player) {
+        for (Position i : this.getPosition().getAdjacentPositions()) {
+            if (player.getX() == i.getX() && player.getY() == i.getY()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
