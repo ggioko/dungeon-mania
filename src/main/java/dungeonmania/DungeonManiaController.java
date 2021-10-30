@@ -21,6 +21,7 @@ import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -39,9 +40,13 @@ import org.json.JSONObject;
 public class DungeonManiaController {
     Dungeon currentDungeon;
     int ticknum;
+    boolean potion_effect;
+    int invincibility_ticks;
     private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
         this.ticknum = 0;
+        this.potion_effect = false;
+        this.invincibility_ticks = 0;
     }
 
     public String getSkin() {
@@ -147,7 +152,7 @@ public class DungeonManiaController {
         //enemy pathing
         currentDungeon.pathing(movementDirection);
         if (!currentDungeon.gameMode.equals("Peaceful")) {
-            currentDungeon = enemyInteraction(currentDungeon);
+            currentDungeon = enemyInteraction(currentDungeon, itemUsed);
         }
         //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
@@ -230,6 +235,9 @@ public class DungeonManiaController {
                 }
             }               
         }
+        
+
+
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
@@ -295,7 +303,7 @@ public class DungeonManiaController {
 
     }
 
-    public Dungeon enemyInteraction(Dungeon current) {
+    public Dungeon enemyInteraction(Dungeon current, String itemUsed) {
         for (Entity e : current.entities) {
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {
@@ -341,6 +349,20 @@ public class DungeonManiaController {
                             enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
                             currentDungeon.getBuildableFromInventory("bow").subtractDurability(currentDungeon.inventory);
                         }
+                        
+                        Item invincibility = null;
+                        if (itemUsed != null) {
+                            if (itemUsed.contains("invincibility_potion")) {
+                                invincibility = currentDungeon.getItem("invincibility_potion");
+                            }
+                        }
+                        if (invincibility != null && itemUsed != null) {
+                            if (itemUsed.equals("invincibility_potion")) {
+                                currentDungeon.inventory.remove(invincibility);
+                                battleOver = true;
+                            }                            
+                        }
+
                         
 
                         if (playerHP <= 0) {
