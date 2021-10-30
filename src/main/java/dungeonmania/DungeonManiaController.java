@@ -2,6 +2,7 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.items.buildable.Buildable;
+
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -228,7 +229,7 @@ public class DungeonManiaController {
                         //If player has shield and armour, 75% of damage is negated.
                         if (currentDungeon.getItem("shield") != null) {
                             enemyAD = enemyAD/2;
-                            currentDungeon.getBuildableFromInventory("shield").subtractDurability(currentDungeon.inventory);
+                            currentDungeon.getShield().subtractDurability(currentDungeon.inventory);
                         }
                         current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
                         enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
@@ -236,7 +237,7 @@ public class DungeonManiaController {
                         //Bow allows player to attack twice
                         if (currentDungeon.getItem("bow") != null) { 
                             enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
-                            currentDungeon.getBuildableFromInventory("bow").subtractDurability(currentDungeon.inventory);
+                            currentDungeon.getBow().subtractDurability(currentDungeon.inventory);
                         }
                         
                         if (playerHP <= 0) {
