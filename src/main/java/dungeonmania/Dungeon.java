@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.sound.sampled.Port;
@@ -168,17 +169,29 @@ public class Dungeon {
         return null;
     }
 
-    public List<Entity> getEntities() {
-        return this.entities;
+
+    public void removeEntity(String stringId) {
+        for (Iterator<Entity> entity = entities.iterator(); entity.hasNext();) {
+            Entity value = entity.next();
+            if (value.getId().equals(stringId)) entity.remove();
+        }
     }
 
-    public Entity getEntity(String type) {
-        for (Entity e : entities) {
-            if (e.getType().equals(type)) {
-                return e;
+    public Entity getEntity(String stringId) {
+        for (Entity entity : this.entities) {
+            if (entity.getId().equals(stringId)) {
+                return entity;
             }
         }
         return null;
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
+    
+    public List<Entity> getEntities() {
+        return this.entities;
     }
 
     public void setEntities(List<Entity> entities) {
@@ -201,7 +214,14 @@ public class Dungeon {
         //make a list of walls
         List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
-            if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity) {
+            if (e instanceof Mercenary){
+                Mercenary m = (Mercenary) e;
+                if (m.isBribed()) {
+                    walls.add(this.player);
+                    walls.add(m);
+                }
+            }
+            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity) {
                 if (e instanceof Wall || e instanceof MovingEntity) {
                     walls.add(e);
                 } else {

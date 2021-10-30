@@ -1,20 +1,29 @@
 package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.items.buildable.Buildable;
 import dungeonmania.items.Item;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
+import dungeonmania.util.Position;
 import dungeonmania.entities.*;
+import dungeonmania.entities.Moving.Mercenary;
+import dungeonmania.entities.Static.Spawner;
+import dungeonmania.items.*;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Boulder;
-import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.FloorSwitch;
+import dungeonmania.entities.Moving.Spider;
+import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
+<<<<<<< HEAD
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.HealthPotion;
+=======
+>>>>>>> master
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -32,8 +41,10 @@ import org.json.JSONObject;
 
 public class DungeonManiaController {
     Dungeon currentDungeon;
+    int ticknum;
     private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
+        this.ticknum = 0;
     }
 
     public String getSkin() {
@@ -130,7 +141,11 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
-        
+        if (ticknum >= 10) {
+            currentDungeon = Spider.spawn(currentDungeon);
+            this.ticknum = 0;
+        }
+        this.ticknum++;
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
@@ -224,7 +239,49 @@ public class DungeonManiaController {
     }
     
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        return null;
+        if (currentDungeon.getEntity(entityId) == null) {
+            throw new IllegalArgumentException("entityId is not a valid entity ID");
+        }
+        else if (currentDungeon.getEntity(entityId).getType().equals("mercenary")) {
+            Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
+
+            if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
+                if (currentDungeon.getItem("treasure") == null) {
+                    throw new InvalidActionException("No treasure in inventory");
+                }
+                else {
+                    currentDungeon.removeItem("treasure");
+                    mercenary.setBribed(true);
+                    mercenary.setInteractable(false);
+                    return currentDungeon.createResponse();
+                }
+            }
+            else {
+                throw new InvalidActionException("Mercenary not in range");
+            }
+        }
+        else if (currentDungeon.getEntity(entityId).getType().equals("zombie_toast_spawner")) {
+            Spawner spawner = (Spawner) currentDungeon.getEntity(entityId);
+            if (spawner.isInDestroyableRange(currentDungeon.getPlayer().getPosition())) {
+                if (currentDungeon.getItem("sword") == null && currentDungeon.getItem("bow") == null) {
+                    throw new InvalidActionException("No weapon in inventory");
+                }
+                else {
+                    for (Item item : currentDungeon.inventory) {
+                        if (item.getType().equals("sword") || item.getType().equals("bow")) {      
+                            int newDurability = item.getDurability() - 1;
+                            item.setDurability(newDurability);
+                            currentDungeon.removeEntity(entityId);
+                            return currentDungeon.createResponse();
+                        }
+                    }
+                }
+            } 
+            else {
+                throw new InvalidActionException("Spawner not in range");
+            }
+        }
+        return currentDungeon.createResponse();
     }
     
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
@@ -245,6 +302,12 @@ public class DungeonManiaController {
         for (Entity e : current.entities) {
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {
+                if (e instanceof Mercenary) {
+                    Mercenary mercenary = (Mercenary) e;
+                    if (mercenary.isBribed()) {
+                        continue;
+                    }
+                }
                 MovingEntity enemy = (MovingEntity)e;
                 //if the entity is on the same ssquare as character
                 if (e.getPosition().equals(current.player.getPosition())) {
