@@ -2,6 +2,9 @@ package dungeonmania;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import dungeonmania.util.*;
 import spark.utils.Assert;
 
@@ -12,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
+import dungeonmania.items.*;
 
 public class InteractTest {
     @Test
@@ -30,7 +34,7 @@ public class InteractTest {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("mercenary");
+            controller.interact("mercenary51");
         });
     }
 
@@ -40,7 +44,7 @@ public class InteractTest {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("spawner");
+            controller.interact("zombie_toast_spawner41");
         });
     }
 
@@ -52,7 +56,7 @@ public class InteractTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("mercenary");
+            controller.interact("mercenary51");
         });
     }
 
@@ -64,7 +68,7 @@ public class InteractTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("mercenary");
+            controller.interact("zombie_toast_spawner14");
         });
     }
 
@@ -73,11 +77,14 @@ public class InteractTest {
         // test for if player bribes mercenary
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.currentDungeon.inventory.add(new Item("treasure_test", "treasure"));
         assertDoesNotThrow(() -> {
-            controller.interact("mercenary");
+            controller.interact("mercenary51");
         });
+        // check if gold is gone from inventory
+        assertTrue(controller.currentDungeon.inventory.isEmpty());
     }
 
     @Test
@@ -85,12 +92,12 @@ public class InteractTest {
         // test for if player breaks spawner
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.currentDungeon.inventory.add(new Item("sword_test", "sword"));
         assertDoesNotThrow(() -> {
-            controller.interact("spawner");
+            controller.interact("zombie_toast_spawner14");
         });
+        assertTrue(controller.currentDungeon.getEntity("zombie_toast_spawner14") == null);
     }
-
-
 }
