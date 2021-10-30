@@ -332,8 +332,15 @@ public class DungeonManiaController {
                         
 
                         if (playerHP <= 0) {
+                            //one ring
+                            if (currentDungeon.getItem("one_ring") != null) {
+                                playerHP = 100;
+                                currentDungeon.removeItem("one_ring");
+                            }
                             //game over
-                            return null;
+                            else {
+                                return null;
+                            }
                         } else if (enemyHP <= 0) {
                             //enemy is dead
                             current.enemyDeath(enemy);
