@@ -128,7 +128,9 @@ public class DungeonManiaController {
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
-        currentDungeon = enemyInteraction(currentDungeon);
+        if (!currentDungeon.gameMode.equals("Peaceful")) {
+            currentDungeon = enemyInteraction(currentDungeon);
+        }
         //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
         Entity spawner = null;
@@ -244,10 +246,8 @@ public class DungeonManiaController {
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
                         }
-
                         current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
                         enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
-                        
                         if (playerHP <= 0) {
                             //game over
                             return null;
