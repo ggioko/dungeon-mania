@@ -218,12 +218,22 @@ public class DungeonManiaController {
                 }
             }               
         }
-        if (currentDungeon.getEntity(itemUsed) instanceof HealthPotion) {
-            currentDungeon.player.setHealth(10);
-            HealthPotion.durability -= 1;
+        Item health = null;
+        if (itemUsed != null) {
+            if (itemUsed.contains("health_potion")) {
+                health = currentDungeon.getItem("health_potion");
+            }
         }
+        
+        if (health != null && itemUsed != null) {
+            currentDungeon.player.setHealth(10.0);
+            HealthPotion.durability -= 1;
+            currentDungeon.inventory.remove(health);
+        }
+        
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
+        
     }
     
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
@@ -254,10 +264,10 @@ public class DungeonManiaController {
                     boolean battleOver = false;
                     while (!battleOver) {
                         //change health values
-                        int playerHP = current.player.getHealth();
-                        int enemyHP = enemy.getHealth();
-                        int playerAD = current.player.getAttack();
-                        int enemyAD = enemy.getAttack();
+                        double playerHP = current.player.getHealth();
+                        double enemyHP = enemy.getHealth();
+                        double playerAD = current.player.getAttack();
+                        double enemyAD = enemy.getAttack();
                         //Armour cuts enemy damage to half
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
@@ -294,10 +304,12 @@ public class DungeonManiaController {
                             current.enemyDeath(enemy);
                             battleOver = true;
                         }
+
                     }
                     return current;
                 }
             }
+            
         }
         return current;
     }

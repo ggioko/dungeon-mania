@@ -272,6 +272,14 @@ public class Dungeon {
         } 
     }
 
+    public void removeItem(String type) {
+        for (Iterator<Item> item = inventory.iterator(); item.hasNext();) {
+            Item value = item.next();
+            if (value.getType().equals(type)) item.remove();
+        }
+    }
+
+
     public void createBuildable(String type) {
         Buildable buildable = Buildable.getBuildable(type);
         if (buildables.contains(buildable.getType())) {
