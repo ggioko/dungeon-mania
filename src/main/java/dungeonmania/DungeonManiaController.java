@@ -207,6 +207,7 @@ public class DungeonManiaController {
                 }
             }               
         }
+        
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
