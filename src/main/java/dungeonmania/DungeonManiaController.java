@@ -11,6 +11,7 @@ import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -207,7 +208,9 @@ public class DungeonManiaController {
                 }
             }               
         }
-        
+        if (itemUsed.equalsIgnoreCase("health_potion")) {
+            currentDungeon.player.setHealth(10);
+        }
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
