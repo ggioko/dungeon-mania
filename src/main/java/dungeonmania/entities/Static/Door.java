@@ -41,6 +41,7 @@ public class Door extends StaticEntity {
             }
         }
         current.setItems(inventory);
+
         current.setEntities(entities);
         return current;
     }

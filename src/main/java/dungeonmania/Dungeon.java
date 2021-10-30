@@ -24,6 +24,8 @@ import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
 import dungeonmania.items.Item;
 import dungeonmania.items.buildable.Buildable;
+import dungeonmania.items.buildable.Shield;
+import dungeonmania.items.buildable.Bow;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -280,6 +282,17 @@ public class Dungeon {
         if (enemy instanceof Mercenary) {
             
         }
+    }
+
+    public Buildable getBuildableFromInventory(String type) {
+        for (Item i : inventory) {
+            if (i.getType().equals("shield")) {
+                return (Shield) i;
+            } else if (i.getType().equals("bow")) {
+                return (Bow) i;
+            }
+        }
+        return null;
     }
 
 }
