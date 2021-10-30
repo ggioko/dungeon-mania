@@ -220,6 +220,7 @@ public class Dungeon {
                 Mercenary m = (Mercenary) e;
                 if (m.isBribed()) {
                     walls.add(this.player);
+                    walls.add(m);
                 }
             }
             else if (e instanceof Wall) {

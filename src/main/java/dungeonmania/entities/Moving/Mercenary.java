@@ -33,7 +33,6 @@ public class Mercenary extends MovingEntity{
         int xdiff = pos.getX() - this.getPosition().getX();
         int ydiff = pos.getY() - this.getPosition().getY();
 
-
         boolean moved = false;
         if (Math.abs(xdiff) > Math.abs(ydiff)) {
             //x++
