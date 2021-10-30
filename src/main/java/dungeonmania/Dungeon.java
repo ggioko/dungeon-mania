@@ -186,8 +186,8 @@ public class Dungeon {
         //make a list of walls
         List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
-            if (e instanceof Wall || e instanceof Door) {
-                if (e instanceof Wall) {
+            if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity) {
+                if (e instanceof Wall || e instanceof MovingEntity) {
                     walls.add(e);
                 } else {
                     if (!(((Door)e).getType().equals("door_unlocked"))) {
