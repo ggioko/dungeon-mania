@@ -8,7 +8,9 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.MovingEntity;
+import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.Door;
+import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Sword;
@@ -164,6 +166,13 @@ public class DungeonManiaController {
             }
             if (e instanceof MovingEntity || e instanceof Spawner) {
                 enemiesComplete = false;
+            }
+            //boulder movement and floor switch
+            if (e instanceof Boulder) {
+                currentDungeon.player = ((Boulder)e).move(movementDirection, currentDungeon.player, currentDungeon.entities);
+            }
+            if (e instanceof FloorSwitch) {
+                ((FloorSwitch)e).trigger(currentDungeon.entities);
             }
             //doors
             if (e instanceof Door) {
