@@ -208,7 +208,7 @@ public class DungeonManiaController {
                 }
             }               
         }
-        if (itemUsed.equalsIgnoreCase("health_potion")) {
+        if (currentDungeon.getEntity(itemUsed) instanceof HealthPotion) {
             currentDungeon.player.setHealth(10);
         }
         currentDungeon.itemPickup();
@@ -250,6 +250,12 @@ public class DungeonManiaController {
                         //Armour cuts enemy damage to half
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
+                            // decrease armour durability by 1 // TODO
+                        }
+
+                        if (currentDungeon.getItem("sword") != null) {
+                            enemy.setHealth(enemyHP - 1);
+                            // decrease sword durability by 1 // TODO
                         }
                         //Shield cuts enemy damage to half
                         //If player has shield and armour, 75% of damage is negated.

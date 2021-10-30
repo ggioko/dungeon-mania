@@ -172,6 +172,15 @@ public class Dungeon {
         return this.entities;
     }
 
+    public Entity getEntity(String type) {
+        for (Entity e : entities) {
+            if (e.getType().equals(type)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
     public void setEntities(List<Entity> entities) {
         this.entities = entities;
     }
