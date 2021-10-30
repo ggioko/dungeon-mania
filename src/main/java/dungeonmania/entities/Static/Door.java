@@ -14,10 +14,12 @@ import dungeonmania.util.Direction;
 public class Door extends StaticEntity {
 
     boolean unlocked;
+    int key;
 
     public Door(JSONObject entity) {
         super(entity);
         this.unlocked = false;
+        this.key = entity.getInt("key");
         //TODO Auto-generated constructor stub
     }
     
