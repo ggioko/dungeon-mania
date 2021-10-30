@@ -97,6 +97,8 @@ public class Dungeon {
                 this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("armour")) {
                 this.entities.add(new Armour((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("sword")) {
+                this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("health_potion")) {
                 this.entities.add(new HealthPotion((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("wood")) {
