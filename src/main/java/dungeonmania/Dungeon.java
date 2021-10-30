@@ -299,9 +299,11 @@ public class Dungeon {
                 return (Shield) i;
             } else if (i.getType().equals("bow")) {
                 return (Bow) i;
-            }
+            } 
         }
         return null;
     }
+
+
 
 }

@@ -11,6 +11,7 @@ import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
@@ -250,11 +251,13 @@ public class DungeonManiaController {
                         //Armour cuts enemy damage to half
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
+                            Armour.durability -= 1;
                             // decrease armour durability by 1 // TODO
                         }
 
                         if (currentDungeon.getItem("sword") != null) {
                             enemy.setHealth(enemyHP - 1);
+                            Sword.durability -= 1;
                             // decrease sword durability by 1 // TODO
                         }
                         //Shield cuts enemy damage to half
