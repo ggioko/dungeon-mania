@@ -189,6 +189,10 @@ public class Dungeon {
         this.inventory = items;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public List<Item> getItems() {
         return this.inventory;
     }

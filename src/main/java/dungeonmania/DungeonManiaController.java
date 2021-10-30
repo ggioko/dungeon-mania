@@ -218,22 +218,9 @@ public class DungeonManiaController {
                 }
             }               
         }
-        Item health = null;
-        if (itemUsed != null) {
-            if (itemUsed.contains("health_potion")) {
-                health = currentDungeon.getItem("health_potion");
-            }
-        }
-        
-        if (health != null && itemUsed != null) {
-            currentDungeon.player.setHealth(10.0);
-            HealthPotion.durability -= 1;
-            currentDungeon.inventory.remove(health);
-        }
-        
+        currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
-        
     }
     
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
