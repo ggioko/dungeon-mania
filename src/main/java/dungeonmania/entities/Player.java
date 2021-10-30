@@ -9,8 +9,8 @@ import java.util.List;
 
 public class Player extends Entity {
     
-    int health;
-    int attack;
+    double health;
+    double attack;
 
     public Player(JSONObject entity) {
         super(entity);
@@ -20,17 +20,17 @@ public class Player extends Entity {
     
     //getters
 
-    public int getHealth() {
+    public double getHealth() {
         return this.health;
     }
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
-    public int getAttack() {
+    public double getAttack() {
         return this.attack;
     }
-    public void setAttack(int attack) {
+    public void setAttack(double attack) {
         this.attack = attack;
     }
     @Override
