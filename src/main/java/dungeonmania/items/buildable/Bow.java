@@ -14,7 +14,7 @@ public class Bow extends Buildable {
     private static final int arrowNeeded = 3;
 
     public Bow(String id, String type) {
-        super(id, type);
+        super(id, type, 20);
     }
 
     @Override

@@ -24,6 +24,8 @@ import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
 import dungeonmania.items.Item;
 import dungeonmania.items.buildable.Buildable;
+import dungeonmania.items.buildable.Shield;
+import dungeonmania.items.buildable.Bow;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -62,6 +64,7 @@ public class Dungeon {
         this.dungeonName = dungeonName;
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
+        this.gameMode = gameMode;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
             if (((JSONObject)entity).getString("type").equals("player")) {
@@ -98,6 +101,8 @@ public class Dungeon {
                 this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("armour")) {
                 this.entities.add(new Armour((JSONObject)entity));
+            } else if (((JSONObject)entity).getString("type").equals("sword")) {
+                this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("health_potion")) {
                 this.entities.add(new HealthPotion((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("wood")) {
@@ -211,20 +216,21 @@ public class Dungeon {
         //make a list of walls
         List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
-            if (e instanceof Door) {
-                if (!(((Door)e).getType().equals("door_unlocked"))) {
-                    walls.add(e);
-                }
-            }
-            else if (e instanceof Mercenary){
+            if (e instanceof Mercenary){
                 Mercenary m = (Mercenary) e;
                 if (m.isBribed()) {
                     walls.add(this.player);
                     walls.add(m);
                 }
             }
-            else if (e instanceof Wall) {
-                walls.add(e);
+            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity) {
+                if (e instanceof Wall || e instanceof MovingEntity) {
+                    walls.add(e);
+                } else {
+                    if (!(((Door)e).getType().equals("door_unlocked"))) {
+                        walls.add(e);
+                    }
+                }
             }
         }
         for (Entity e : this.entities) {
@@ -311,6 +317,17 @@ public class Dungeon {
         if (enemy instanceof Mercenary) {
             
         }
+    }
+
+    public Buildable getBuildableFromInventory(String type) {
+        for (Item i : inventory) {
+            if (i.getType().equals("shield")) {
+                return (Shield) i;
+            } else if (i.getType().equals("bow")) {
+                return (Bow) i;
+            }
+        }
+        return null;
     }
 
 }

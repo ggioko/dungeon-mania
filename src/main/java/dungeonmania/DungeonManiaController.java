@@ -2,6 +2,8 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.items.buildable.Buildable;
+import dungeonmania.items.Item;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -13,10 +15,12 @@ import dungeonmania.items.*;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
+import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
-import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
+
 
 import java.io.File;
 import java.io.FileWriter;
@@ -31,8 +35,10 @@ import org.json.JSONObject;
 
 public class DungeonManiaController {
     Dungeon currentDungeon;
+    int ticknum;
     private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
+        this.ticknum = 0;
     }
 
     public String getSkin() {
@@ -129,17 +135,34 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
-        
+        if (ticknum >= 10) {
+            currentDungeon = Spider.spawn(currentDungeon);
+            this.ticknum = 0;
+        }
+        this.ticknum++;
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
-        currentDungeon = enemyInteraction(currentDungeon);
+        if (!currentDungeon.gameMode.equals("Peaceful")) {
+            currentDungeon = enemyInteraction(currentDungeon);
+        }
         //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
+        Entity spawner = null;
         for (Entity e : currentDungeon.entities) {
             if (e instanceof Spawner) {
                 spawners.add((Spawner)e);
+                if (e.getPosition().equals(currentDungeon.player.getPosition())) {
+                    for (Item i : currentDungeon.inventory) {
+                        if (i.getType().equals("sword")) {
+                            spawner = e;
+                        }
+                    }
+                }
             }
+        }
+        if (spawner != null) {
+            currentDungeon.entities.remove(spawner);
         }
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
@@ -154,6 +177,13 @@ public class DungeonManiaController {
             }
             if (e instanceof MovingEntity || e instanceof Spawner) {
                 enemiesComplete = false;
+            }
+            //boulder movement and floor switch
+            if (e instanceof Boulder) {
+                currentDungeon.player = ((Boulder)e).move(movementDirection, currentDungeon.player, currentDungeon.entities);
+            }
+            if (e instanceof FloorSwitch) {
+                ((FloorSwitch)e).trigger(currentDungeon.entities);
             }
             //doors
             if (e instanceof Door) {
@@ -251,14 +281,12 @@ public class DungeonManiaController {
         if (!buildables.contains(buildable)) {
             throw new IllegalArgumentException();
         }
-        
-        try {
-            currentDungeon.createBuildable(buildable);
-        } catch (InvalidActionException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
+
+        if (!currentDungeon.buildables.contains(buildable)) {
+            throw new InvalidActionException("Not Enough Materials");
         }
+        currentDungeon.createBuildable(buildable);
+
         return currentDungeon.createResponse();
 
     }
@@ -283,13 +311,26 @@ public class DungeonManiaController {
                         int enemyHP = enemy.getHealth();
                         int playerAD = current.player.getAttack();
                         int enemyAD = enemy.getAttack();
+                        //Armour cuts enemy damage to half
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
                         }
-
+                        //Shield cuts enemy damage to half
+                        //If player has shield and armour, 75% of damage is negated.
+                        if (currentDungeon.getItem("shield") != null) {
+                            enemyAD = enemyAD/2;
+                            currentDungeon.getBuildableFromInventory("shield").subtractDurability(currentDungeon.inventory);
+                        }
                         current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
                         enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+
+                        //Bow allows player to attack twice
+                        if (currentDungeon.getItem("bow") != null) { 
+                            enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                            currentDungeon.getBuildableFromInventory("bow").subtractDurability(currentDungeon.inventory);
+                        }
                         
+
                         if (playerHP <= 0) {
                             //game over
                             return null;
