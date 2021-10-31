@@ -50,6 +50,10 @@ public class Entity {
 
     //getters
 
+    public String getId() {
+        return this.id;
+    }
+
     public Position getPosition() {
         return this.position;
     }
@@ -58,9 +62,6 @@ public class Entity {
         this.position = position;
     }
 
-    public String getId() {
-        return this.id;
-    }
     public String getType() {
         return this.type;
     }

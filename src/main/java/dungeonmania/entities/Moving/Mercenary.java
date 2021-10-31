@@ -156,7 +156,23 @@ public class Mercenary extends MovingEntity{
 
         return false;
     }
+    public boolean isInBattleRadius (Position playerPosition) {
+        int x = playerPosition.getX() - this.getPosition().getX();
+        int y = playerPosition.getY() - this.getPosition().getY();
 
+        if (x < 0) {
+            x = x*(-1);
+        }
+        if (y < 0) {
+            y = y*(-1);
+        }
+
+        if (x <= 3 && y <= 3) {
+            return true;
+        }
+        else return false;
+    }
+    
     public void setBribed (boolean bribed) {
         this.bribed = bribed;
     }
