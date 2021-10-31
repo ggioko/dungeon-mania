@@ -144,6 +144,7 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
+        
         if (ticknum >= 10) {
             currentDungeon = Spider.spawn(currentDungeon);
             this.ticknum = 0;
@@ -159,24 +160,15 @@ public class DungeonManiaController {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon = enemyInteraction(currentDungeon, itemUsed);
         }
-
-        // SPAWN ZOMBIES
+        //mercenary moves again if battling
+        currentDungeon.MercenaryBattleMovement(currentDungeon);
+        currentDungeon.getPlayer().setBattling(false);
+        //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
-        Entity spawner = null;
         for (Entity e : currentDungeon.entities) {
             if (e instanceof Spawner) {
                 spawners.add((Spawner)e);
-                if (e.getPosition().equals(currentDungeon.player.getPosition())) {
-                    for (Item i : currentDungeon.inventory) {
-                        if (i.getType().equals("sword")) {
-                            spawner = e;
-                        }
-                    }
-                }
             }
-        }
-        if (spawner != null) {
-            currentDungeon.entities.remove(spawner);
         }
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
@@ -291,7 +283,7 @@ public class DungeonManiaController {
                     currentDungeon.removeItem("treasure");
                     mercenary.setBribed(true);
                     mercenary.setInteractable(false);
-                    return currentDungeon.createResponse();
+                    currentDungeon.getPlayer().setAlly(true);
                 }
             }
             else {
@@ -310,7 +302,7 @@ public class DungeonManiaController {
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
                             currentDungeon.removeEntity(entityId);
-                            return currentDungeon.createResponse();
+                            System.out.println(entityId);
                         }
                     }
                 }
@@ -346,10 +338,11 @@ public class DungeonManiaController {
                         continue;
                     }
                 }
-                MovingEntity enemy = (MovingEntity)e;
+                MovingEntity enemy = (MovingEntity) e;
                 //if the entity is on the same ssquare as character
                 if (e.getPosition().equals(current.player.getPosition())) {
                     boolean battleOver = false;
+                    currentDungeon.getPlayer().setBattling(true);
                     while (!battleOver) {
                         //change health values
                         double playerHP = current.player.getHealth();
@@ -378,6 +371,12 @@ public class DungeonManiaController {
                         //Player and Enemy damage each other
                         current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
                         enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
+
+                        //Has an ally Mercenary
+                        if (currentDungeon.getPlayer().haveAlly()) {
+                            enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
+                        }
+
                         
                         //Bow allows player to attack twice
                         if (current.getItem("bow") != null) { 

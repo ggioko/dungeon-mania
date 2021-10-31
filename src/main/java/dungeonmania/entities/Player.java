@@ -11,6 +11,8 @@ public class Player extends Entity {
     
     double health;
     double attack;
+    boolean battling;
+    boolean ally;
     boolean invincibilityPotionEffect;
     boolean invisibilityPotionEffect;
 
@@ -18,6 +20,8 @@ public class Player extends Entity {
         super(entity);
         this.health = 10;
         this.attack = 1;
+        this.battling = false;
+        this.ally = false;
         this.invincibilityPotionEffect = false;
         this.invisibilityPotionEffect = false;
     }
@@ -79,6 +83,22 @@ public class Player extends Entity {
                 }
             }
         }
+    }
+
+    public void setBattling (boolean battling) {
+        this.battling = battling;
+    }
+
+    public boolean isBattling () {
+        return this.battling;
+    }
+
+    public void setAlly (boolean ally) {
+        this.ally = ally;
+    }
+
+    public boolean haveAlly () {
+        return this.ally;
     }
 
 }

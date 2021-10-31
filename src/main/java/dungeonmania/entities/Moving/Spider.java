@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Spider extends MovingEntity {
-
+    
     boolean spawned;
     int pathnum;
     static int ids = 0;
