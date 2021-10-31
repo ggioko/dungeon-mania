@@ -298,7 +298,6 @@ public class DungeonManiaController {
 
     public Dungeon enemyInteraction(Dungeon current) {
         for (Entity e : current.entities) {
-            boolean hostileMercenary = false;
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {
                 if (e instanceof Mercenary) {
@@ -306,13 +305,10 @@ public class DungeonManiaController {
                     if (mercenary.isBribed()) {
                         continue;
                     }
-                    else if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())){
-                        hostileMercenary = true;
-                    }
                 }
                 MovingEntity enemy = (MovingEntity)e;
                 //if the entity is on the same ssquare as character
-                if (e.getPosition().equals(current.player.getPosition()) || hostileMercenary) {
+                if (e.getPosition().equals(current.player.getPosition())) {
                     boolean battleOver = false;
                     currentDungeon.getPlayer().setBattling(true);
                     while (!battleOver) {
