@@ -147,13 +147,17 @@ public class DungeonManiaController {
             currentDungeon = Spider.spawn(currentDungeon);
             this.ticknum = 0;
         }
-        boolean invincibility_potion_effect;
         if (invincibility_ticks >= 10) {
             invincibility_potion_effect = false;
             this.invincibility_ticks = 0;
+            System.out.println("Invincibility_potion effects are off");
+            
         }
         this.ticknum++;
-        this.invincibility_ticks++;
+        if (invincibility_potion_effect == true) {
+            System.out.println(invincibility_ticks);
+            this.invincibility_ticks++;
+        }
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
@@ -242,7 +246,18 @@ public class DungeonManiaController {
             }               
         }
         
-
+        // invincibility_potion
+        Item invincibility = null;
+        
+        if (itemUsed != null) {
+            if (itemUsed.contains("invincibility_potion")) {
+                invincibility = currentDungeon.getItem("invincibility_potion");
+                invincibility_potion_effect = true;
+            }
+            if (itemUsed.contains("invincibility_potion") && invincibility_potion_effect == true) {
+                currentDungeon.inventory.remove(invincibility);
+            } 
+        }
 
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
         currentDungeon.itemPickup();
@@ -357,23 +372,9 @@ public class DungeonManiaController {
                         }
                         
 
-                        // invincibility_potion
-                        Item invincibility = null;
-                        System.out.println(itemUsed);
-                        if (itemUsed != null) {
-                            
-                            if (itemUsed.contains("invincibility_potion")) {
-                                invincibility = currentDungeon.getItem("invincibility_potion");
-                                invincibility_potion_effect = true;
-                            }
+                        if (invincibility_potion_effect == true) {
+                            battleOver = true;
                         }
-                        if (invincibility != null && itemUsed != null) {
-                            if (itemUsed.equals("invincibility_potion") && invincibility_potion_effect == true) {
-                                currentDungeon.inventory.remove(invincibility);
-                                battleOver = true;
-                            }                            
-                        }
-
                         
 
                         if (playerHP <= 0) {
