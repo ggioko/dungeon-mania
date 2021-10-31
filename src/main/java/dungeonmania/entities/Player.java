@@ -2,14 +2,15 @@ package dungeonmania.entities;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Position;
 import java.util.List;
 
 public class Player extends Entity {
     
-    int health;
-    int attack;
+    double health;
+    double attack;
 
     public Player(JSONObject entity) {
         super(entity);
@@ -19,29 +20,44 @@ public class Player extends Entity {
     
     //getters
 
-    public int getHealth() {
+    public double getHealth() {
         return this.health;
     }
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
-    public int getAttack() {
+    public double getAttack() {
         return this.attack;
     }
-    public void setAttack(int attack) {
+    public void setAttack(double attack) {
         this.attack = attack;
     }
     @Override
     public void move(Position pos, List<Entity> walls) {
         boolean move = true;
+        boolean moveMercenary = false;
         for (Entity w : walls) {
             if (w.getPosition().equals(pos)) {
-                move = false;
+                if (w instanceof Mercenary) {
+                    moveMercenary = true;
+                }
+                else {
+                    move = false;
+                }
             }
         }
         if (move) {
+            Position old = this.getPosition();
             this.setPosition(pos);
+            if (moveMercenary) {
+                for (Entity entity : walls) {
+                    if (entity instanceof Mercenary) {
+                        Mercenary m = (Mercenary) entity;
+                        m.move(old, walls);
+                    }
+                }
+            }
         }
     }
 

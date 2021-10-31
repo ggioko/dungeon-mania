@@ -21,6 +21,7 @@ public class Spawner extends StaticEntity {
         super(entity);
         this.ticks = ticks;
         this.currentTick = 0;
+        this.setInteractable(true);
         this.ids = 0;
         //TODO Auto-generated constructor stub
     }
@@ -41,6 +42,15 @@ public class Spawner extends StaticEntity {
             this.ids++;
         }
         return current;
+    }
+
+    public boolean isInDestroyableRange(Position player) {
+        for (Position i : this.getPosition().getAdjacentPositions()) {
+            if (player.getX() == i.getX() && player.getY() == i.getY()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
