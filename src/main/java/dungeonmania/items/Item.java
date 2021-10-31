@@ -5,6 +5,7 @@ import dungeonmania.response.models.ItemResponse;
 public class Item {
     String id;
     String type;
+    int durability;
 
     public Item(String id, String type) {
         this.id = id;
@@ -21,4 +22,11 @@ public class Item {
         return this.type;
     }
 
+    public int getDurability() {
+        return this.durability;
+    }
+
+    public void setDurability(int durability) {
+        this.durability = durability;
+    }
 }
