@@ -58,6 +58,9 @@ public class Entity {
         this.position = position;
     }
 
+    public String getId() {
+        return this.id;
+    }
     public String getType() {
         return this.type;
     }

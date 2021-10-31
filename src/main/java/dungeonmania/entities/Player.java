@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Position;
 import java.util.List;
@@ -35,13 +36,28 @@ public class Player extends Entity {
     @Override
     public void move(Position pos, List<Entity> walls) {
         boolean move = true;
+        boolean moveMercenary = false;
         for (Entity w : walls) {
             if (w.getPosition().equals(pos)) {
-                move = false;
+                if (w instanceof Mercenary) {
+                    moveMercenary = true;
+                }
+                else {
+                    move = false;
+                }
             }
         }
         if (move) {
+            Position old = this.getPosition();
             this.setPosition(pos);
+            if (moveMercenary) {
+                for (Entity entity : walls) {
+                    if (entity instanceof Mercenary) {
+                        Mercenary m = (Mercenary) entity;
+                        m.move(old, walls);
+                    }
+                }
+            }
         }
     }
 
