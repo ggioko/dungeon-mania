@@ -352,6 +352,7 @@ public class DungeonManiaController {
                             battleOver = true;
                         }
                     
+
                     }
                     return current;
                 }
