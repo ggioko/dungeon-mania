@@ -323,7 +323,10 @@ public class Dungeon {
         //remove enemy from entities and give player loot
         this.entities.remove(enemy);
         if (enemy instanceof Mercenary) {
-            
+            int num = (int)Math.floor(Math.random()*(5-1+1)+1);
+            if (num == 2) {
+                inventory.add(new Item("armour", "armour"));
+            }
         }
     }
 

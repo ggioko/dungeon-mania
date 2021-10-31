@@ -21,6 +21,8 @@ import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.HealthPotion;
+import dungeonmania.entities.collectable.InvincibilityPotion;
+import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -39,9 +41,13 @@ import org.json.JSONObject;
 public class DungeonManiaController {
     Dungeon currentDungeon;
     int ticknum;
+    int invincibilityTicks;
+    int invisibilityTicks;
     private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
         this.ticknum = 0;
+        this.invincibilityTicks = 0;
+        this.invisibilityTicks = 0;
     }
 
     public String getSkin() {
@@ -144,11 +150,15 @@ public class DungeonManiaController {
             this.ticknum = 0;
         }
         this.ticknum++;
+
         currentDungeon.getItem(itemUsed);
-        //enemy pathing
+        
+        
+        // ENEMY PATHING
         currentDungeon.pathing(movementDirection);
         if (!currentDungeon.gameMode.equals("Peaceful")) {
-            currentDungeon = enemyInteraction(currentDungeon);
+            // making sure that enemy interactions dont happen when on the peaceful game mode
+            currentDungeon = enemyInteraction(currentDungeon, itemUsed);
         }
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
@@ -163,7 +173,9 @@ public class DungeonManiaController {
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
         }
-        //goals
+        
+        
+        // SIMPLE AND COMPLEX GOALS
         boolean treasureComplete = true;
         boolean enemiesComplete = true;
         boolean teleported = false;
@@ -217,13 +229,41 @@ public class DungeonManiaController {
                 }
             } else {
                 if (currentDungeon.goalsCompleted.contains(currentDungeon.goals.replace(":", "").replace(" ", ""))) {
-                    //game won
+                    // Game won
                     currentDungeon.complete = true;
                     currentDungeon.goals = "";
                 }
             }               
         }
+        
+
+        // POTION LOGIC
+        // Invincibility potion
+        if (invincibilityTicks >= 10) {
+            currentDungeon.player.setInvincibilityPotionEffect(false);
+            this.invincibilityTicks = 0;
+        }
+        if (currentDungeon.player.isInvincibilityPotionEffect()) {
+            this.invincibilityTicks++;
+        }
+        currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
+        // Invisibility potion
+        if (invisibilityTicks >= 10) {
+            currentDungeon.player.setInvisibilityPotionEffect(false);
+            this.invisibilityTicks = 0;
+        }
+        if (currentDungeon.player.isInvisibilityPotionEffect()) {
+            this.invisibilityTicks++;
+        }
+        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
+        // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
+
+        
+        // ITEM PICKUP
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
@@ -288,7 +328,7 @@ public class DungeonManiaController {
 
     }
 
-    public Dungeon enemyInteraction(Dungeon current) {
+    public Dungeon enemyInteraction(Dungeon current, String itemUsed) {
         for (Entity e : current.entities) {
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {
@@ -343,6 +383,12 @@ public class DungeonManiaController {
                             current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
                         }
                         
+
+                        if (currentDungeon.player.isInvincibilityPotionEffect() == true) {
+                            battleOver = true;
+                        }
+                        
+
                         if (playerHP <= 0) {
                             //game over
                             return null;
