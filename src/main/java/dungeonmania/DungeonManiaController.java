@@ -152,15 +152,13 @@ public class DungeonManiaController {
 
         if (invincibility_ticks >= 10) {
             currentDungeon.player.setInvincibility_potion_effect(false);
-            System.out.println("Invincibility potion effects are off");
             this.invincibility_ticks = 0;
         }
         if (currentDungeon.player.isInvincibility_potion_effect()) {
-            System.out.println(invincibility_ticks);
             this.invincibility_ticks++;
         }
 
-        
+
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
