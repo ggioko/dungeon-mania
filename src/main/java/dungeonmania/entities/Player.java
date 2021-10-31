@@ -11,11 +11,15 @@ public class Player extends Entity {
     
     double health;
     double attack;
+    boolean battling;
+    boolean ally;
 
     public Player(JSONObject entity) {
         super(entity);
         this.health = 10;
         this.attack = 1;
+        this.battling = false;
+        this.ally = false;
     }
     
     //getters
@@ -59,6 +63,22 @@ public class Player extends Entity {
                 }
             }
         }
+    }
+
+    public void setBattling (boolean battling) {
+        this.battling = battling;
+    }
+
+    public boolean isBattling () {
+        return this.battling;
+    }
+
+    public void setAlly (boolean ally) {
+        this.ally = ally;
+    }
+
+    public boolean haveAlly () {
+        return this.ally;
     }
 
 }

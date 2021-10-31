@@ -250,6 +250,7 @@ public class DungeonManiaController {
                     currentDungeon.removeItem("treasure");
                     mercenary.setBribed(true);
                     mercenary.setInteractable(false);
+                    currentDungeon.getPlayer().setAlly(true);
                     return currentDungeon.createResponse();
                 }
             }
@@ -297,6 +298,7 @@ public class DungeonManiaController {
 
     public Dungeon enemyInteraction(Dungeon current) {
         for (Entity e : current.entities) {
+            boolean hostileMercenary = false;
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {
                 if (e instanceof Mercenary) {
@@ -304,11 +306,15 @@ public class DungeonManiaController {
                     if (mercenary.isBribed()) {
                         continue;
                     }
+                    else if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())){
+                        hostileMercenary = true;
+                    }
                 }
                 MovingEntity enemy = (MovingEntity)e;
                 //if the entity is on the same ssquare as character
-                if (e.getPosition().equals(current.player.getPosition())) {
+                if (e.getPosition().equals(current.player.getPosition()) || hostileMercenary) {
                     boolean battleOver = false;
+                    currentDungeon.getPlayer().setBattling(true);
                     while (!battleOver) {
                         //change health values
                         double playerHP = current.player.getHealth();
@@ -336,13 +342,17 @@ public class DungeonManiaController {
                         current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
                         enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
 
+                        //Has an ally Mercenary
+                        if (currentDungeon.getPlayer().haveAlly()) {
+                            enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                        }
+
                         //Bow allows player to attack twice
                         if (currentDungeon.getItem("bow") != null) { 
                             enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
                             currentDungeon.getBuildableFromInventory("bow").subtractDurability(currentDungeon.inventory);
                         }
                         
-
                         if (playerHP <= 0) {
                             //game over
                             return null;
@@ -353,6 +363,7 @@ public class DungeonManiaController {
                         }
 
                     }
+                    currentDungeon.getPlayer().setBattling(false);
                     return current;
                 }
             }

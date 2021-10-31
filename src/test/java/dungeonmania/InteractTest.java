@@ -78,7 +78,7 @@ public class InteractTest {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
         controller.tick(null, Direction.DOWN);
-        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
         controller.currentDungeon.inventory.add(new Item("treasure_test", "treasure"));
         assertDoesNotThrow(() -> {
             controller.interact("mercenary51");

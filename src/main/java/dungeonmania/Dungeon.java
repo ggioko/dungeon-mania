@@ -217,7 +217,6 @@ public class Dungeon {
             if (e instanceof Mercenary){
                 Mercenary m = (Mercenary) e;
                 if (m.isBribed()) {
-                    walls.add(this.player);
                     walls.add(m);
                 }
             }
@@ -234,6 +233,13 @@ public class Dungeon {
         for (Entity e : this.entities) {
             if (e instanceof Player) {
                 e.move(this.player.getPosition().translateBy(direction), walls);
+            } if (e instanceof Mercenary) {
+                walls.add(this.player);
+                Mercenary m = (Mercenary) e;
+                if (m.isInBribableRange(this.player.getPosition()) && this.player.isBattling()) {
+                    e.move(this.player.getPosition(), walls);
+                }
+                e.move(this.player.getPosition(), walls);
             } else {
                 e.move(this.player.getPosition(), walls);
             }
