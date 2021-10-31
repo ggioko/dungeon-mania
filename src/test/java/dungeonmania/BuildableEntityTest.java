@@ -131,23 +131,15 @@ public class BuildableEntityTest {
 
         // look for and fight enemies        
         controller.tick(null, Direction.RIGHT);
-        System.out.println("======================");
         controller.tick(null, Direction.RIGHT);
-        System.out.println("======================");
         controller.tick(null, Direction.RIGHT);
-        System.out.println("======================");
         controller.tick(null, Direction.DOWN);
-        System.out.println("======================");
         controller.tick(null, Direction.DOWN);
-        System.out.println("======================");
         controller.tick(null, Direction.DOWN);
-        System.out.println("======================");
         controller.tick(null, Direction.DOWN);
-        System.out.println("======================");
         controller.tick(null, Direction.DOWN);
         
-        // shield durability == 0
-        // assertNull(controller.currentDungeon.getItem("shield"));
+        assertNull(controller.currentDungeon.getItem("shield"));
 
     }
 }
