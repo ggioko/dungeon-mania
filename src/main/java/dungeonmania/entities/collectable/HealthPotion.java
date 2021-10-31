@@ -29,6 +29,7 @@ public class HealthPotion extends CollectableEntity {
         }
         currentDungeon.setItems(inventory);
         currentDungeon.setPlayer(player);
+        System.out.println(player.getHealth());
         return currentDungeon;
     }
 }

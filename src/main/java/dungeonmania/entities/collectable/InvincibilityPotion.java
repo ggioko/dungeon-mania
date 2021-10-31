@@ -22,9 +22,9 @@ public class InvincibilityPotion extends CollectableEntity {
         if (itemUsed != null) {
             if (itemUsed.contains("invincibility_potion")) {
                 invincibility = currentDungeon.getItem("invincibility_potion");
-                player.setInvincibility_potion_effect(true);
+                player.setInvincibilityPotionEffect(true);
             }
-            if (itemUsed.contains("invincibility_potion") && player.isInvincibility_potion_effect() == true) {
+            if (itemUsed.contains("invincibility_potion") && player.isInvincibilityPotionEffect() == true) {
                 inventory.remove(invincibility);
             } 
         }

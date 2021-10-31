@@ -22,6 +22,7 @@ import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
+import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -40,13 +41,13 @@ import org.json.JSONObject;
 public class DungeonManiaController {
     Dungeon currentDungeon;
     int ticknum;
-    boolean invincibility_potion_effect;
-    int invincibility_ticks;
+    int invincibilityTicks;
+    int invisibilityTicks;
     private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
         this.ticknum = 0;
-        this.invincibility_potion_effect = false;
-        this.invincibility_ticks = 0;
+        this.invincibilityTicks = 0;
+        this.invisibilityTicks = 0;
     }
 
     public String getSkin() {
@@ -245,19 +246,34 @@ public class DungeonManiaController {
         
 
         // POTION LOGIC
-        if (invincibility_ticks >= 10) {
-            currentDungeon.player.setInvincibility_potion_effect(false);
-            this.invincibility_ticks = 0;
-        }
-        if (currentDungeon.player.isInvincibility_potion_effect()) {
-            this.invincibility_ticks++;
-        }
         // Invincibility potion
+        if (invincibilityTicks >= 10) {
+            System.out.println("Invicibility off");
+            currentDungeon.player.setInvincibilityPotionEffect(false);
+            this.invincibilityTicks = 0;
+        }
+        if (currentDungeon.player.isInvincibilityPotionEffect()) {
+            System.out.println("Invincibility Ticks are " + invincibilityTicks);
+            this.invincibilityTicks++;
+        }
         currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
-        
+
+        // Invisibility potion
+        if (invisibilityTicks >= 10) {
+            System.out.println("Invisibility off");
+            currentDungeon.player.setInvisibilityPotionEffect(false);
+            this.invisibilityTicks = 0;
+        }
+        if (currentDungeon.player.isInvisibilityPotionEffect()) {
+            System.out.println("Invisibility Ticks are " + invisibilityTicks);
+            this.invisibilityTicks++;
+        }
+        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
-        
+
+
         
         // ITEM PICKUP
         currentDungeon.itemPickup();
@@ -373,7 +389,7 @@ public class DungeonManiaController {
                         }
                         
 
-                        if (invincibility_potion_effect == true) {
+                        if (currentDungeon.player.isInvincibilityPotionEffect() == true) {
                             battleOver = true;
                         }
                         
