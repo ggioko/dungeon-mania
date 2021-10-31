@@ -58,9 +58,6 @@ public class Entity {
         this.position = position;
     }
 
-    public String getId() {
-        return this.id;
-    }
     public String getType() {
         return this.type;
     }
@@ -79,6 +76,10 @@ public class Entity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public boolean isCollectable() {

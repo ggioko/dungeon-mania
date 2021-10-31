@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import dungeonmania.util.*;
@@ -15,7 +16,9 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.entities.Entity;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.items.Item;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.ItemResponse;
 
@@ -102,39 +105,50 @@ public class BuildableEntityTest {
         });
     }
 
-    // @Test
-    // public void testShieldDurability() {
-    //     // test for shield durability
-    //     DungeonManiaController controller = new DungeonManiaController();
+    @Test
+    public void testBuildableDurability() {
+        // test for buildable items durability
+        DungeonManiaController controller = new DungeonManiaController();
 
-    //     controller.newGame("crafting", "standard");
+        controller.newGame("crafting", "standard");
 
-    //     controller.tick(null, Direction.DOWN);
-    //     controller.tick(null, Direction.UP);
-    //     controller.tick(null, Direction.LEFT);
-    //     controller.tick(null, Direction.UP);
-    //     controller.tick(null, Direction.RIGHT);
-    //     controller.tick(null, Direction.LEFT);
-    //     controller.tick(null, Direction.UP);
-    //     controller.tick(null, Direction.LEFT);
-    //     controller.tick(null, Direction.LEFT);
+        // collect items for shield and bow
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
 
-    //     assertDoesNotThrow(() -> {
-    //         controller.build("shield");
-    //         controller.build("bow");
-    //     });
+        // create shield and bow
+        assertDoesNotThrow(() -> {
+            controller.build("shield");
+            controller.build("bow");
+        });
 
-    //     controller.tick(null, Direction.LEFT);
-    //     controller.tick(null, Direction.LEFT);
-    //     controller.tick(null, Direction.LEFT);
-    //     controller.tick(null, Direction.LEFT);
-    //     controller.tick(null, Direction.LEFT);
-    //     controller.tick(null, Direction.RIGHT);
+        
+        // look for and fight enemies        
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+        
+        for (Entity e : controller.currentDungeon.getEntities()) {
+            if (e.getType().equals("mercenary") || e.getType().equals("player")) {
+                System.out.println(e.getType()+": "+e.getPosition());
+            }
+        }
 
-    //     System.out.println(controller.currentDungeon.getBuildableFromInventory("shield").getDurability());
+        System.out.println();
+        // shield durability == 0
+        assertNull(controller.currentDungeon.getItem("shield"));
 
-
-    //     assertTrue(controller.currentDungeon.getItem("shield").equals(null));
-
-    // }
+    }
 }
