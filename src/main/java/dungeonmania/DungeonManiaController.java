@@ -138,6 +138,7 @@ public class DungeonManiaController {
 
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
+        
         if (ticknum >= 10) {
             currentDungeon = Spider.spawn(currentDungeon);
             this.ticknum = 0;
@@ -154,21 +155,10 @@ public class DungeonManiaController {
         currentDungeon.getPlayer().setBattling(false);
         //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
-        Entity spawner = null;
         for (Entity e : currentDungeon.entities) {
             if (e instanceof Spawner) {
                 spawners.add((Spawner)e);
-                if (e.getPosition().equals(currentDungeon.player.getPosition())) {
-                    for (Item i : currentDungeon.inventory) {
-                        if (i.getType().equals("sword")) {
-                            spawner = e;
-                        }
-                    }
-                }
             }
-        }
-        if (spawner != null) {
-            currentDungeon.entities.remove(spawner);
         }
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
@@ -254,7 +244,6 @@ public class DungeonManiaController {
                     mercenary.setBribed(true);
                     mercenary.setInteractable(false);
                     currentDungeon.getPlayer().setAlly(true);
-                    return currentDungeon.createResponse();
                 }
             }
             else {
@@ -273,7 +262,7 @@ public class DungeonManiaController {
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
                             currentDungeon.removeEntity(entityId);
-                            return currentDungeon.createResponse();
+                            System.out.println(entityId);
                         }
                     }
                 }

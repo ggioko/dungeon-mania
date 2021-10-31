@@ -33,7 +33,7 @@ public class Spawner extends StaticEntity {
             obj.put("y", this.getPosition().getY());
             obj.put("type", "zombie_toast");
             Zombie zombie = new Zombie(obj);
-            zombie.setId("zombie_toast_" + ((Integer)this.ids).toString());
+            zombie.setId("zombie_toast_" + ((Integer)ids).toString());
             List<Entity> list = current.getEntities();
             list.add(zombie);
             current.setEntities(list);

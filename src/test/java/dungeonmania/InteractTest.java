@@ -79,9 +79,10 @@ public class InteractTest {
         controller.newGame("interact", "standard");
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
+
         controller.currentDungeon.inventory.add(new Item("treasure_test", "treasure"));
         assertDoesNotThrow(() -> {
-            controller.interact("mercenary51");
+            controller.interact("mercenary33");
         });
         // check if gold is gone from inventory
         assertTrue(controller.currentDungeon.inventory.isEmpty());
@@ -95,6 +96,7 @@ public class InteractTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         //controller.currentDungeon.inventory.add(new Item("sword_test", "sword"));
+        assertTrue(controller.currentDungeon.getEntity("zombie_toast_spawner41") != null);
         assertDoesNotThrow(() -> {
             controller.interact("zombie_toast_spawner41");
         });
