@@ -361,6 +361,7 @@ public class Dungeon {
             if (entity instanceof Mercenary) {
                 Mercenary mercenary = (Mercenary) entity;
                 if (mercenary.isInBattleRadius(current.getPlayer().getPosition()) && current.getPlayer().isBattling()) {
+                    walls.add(this.player);
                     mercenary.move(this.player.getPosition(), walls);
                 }
             }
