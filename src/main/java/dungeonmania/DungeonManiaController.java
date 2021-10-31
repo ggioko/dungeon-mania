@@ -248,24 +248,20 @@ public class DungeonManiaController {
         // POTION LOGIC
         // Invincibility potion
         if (invincibilityTicks >= 10) {
-            System.out.println("Invicibility off");
             currentDungeon.player.setInvincibilityPotionEffect(false);
             this.invincibilityTicks = 0;
         }
         if (currentDungeon.player.isInvincibilityPotionEffect()) {
-            System.out.println("Invincibility Ticks are " + invincibilityTicks);
             this.invincibilityTicks++;
         }
         currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         // Invisibility potion
         if (invisibilityTicks >= 10) {
-            System.out.println("Invisibility off");
             currentDungeon.player.setInvisibilityPotionEffect(false);
             this.invisibilityTicks = 0;
         }
         if (currentDungeon.player.isInvisibilityPotionEffect()) {
-            System.out.println("Invisibility Ticks are " + invisibilityTicks);
             this.invisibilityTicks++;
         }
         currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
