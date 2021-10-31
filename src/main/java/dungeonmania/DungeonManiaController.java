@@ -18,6 +18,9 @@ import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
+import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -227,6 +230,7 @@ public class DungeonManiaController {
                 }
             }               
         }
+        currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
@@ -307,13 +311,21 @@ public class DungeonManiaController {
                     boolean battleOver = false;
                     while (!battleOver) {
                         //change health values
-                        int playerHP = current.player.getHealth();
-                        int enemyHP = enemy.getHealth();
-                        int playerAD = current.player.getAttack();
-                        int enemyAD = enemy.getAttack();
+                        double playerHP = current.player.getHealth();
+                        double enemyHP = enemy.getHealth();
+                        double playerAD = current.player.getAttack();
+                        double enemyAD = enemy.getAttack();
                         //Armour cuts enemy damage to half
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
+                            Armour.durability -= 1;
+                            // decrease armour durability by 1 // TODO
+                        }
+
+                        if (currentDungeon.getItem("sword") != null) {
+                            enemy.setHealth(enemyHP - 1);
+                            Sword.durability -= 1;
+                            // decrease sword durability by 1 // TODO
                         }
                         //Shield cuts enemy damage to half
                         //If player has shield and armour, 75% of damage is negated.
@@ -346,10 +358,12 @@ public class DungeonManiaController {
                             current.enemyDeath(enemy);
                             battleOver = true;
                         }
+
                     }
                     return current;
                 }
             }
+            
         }
         return current;
     }
