@@ -40,12 +40,12 @@ import org.json.JSONObject;
 public class DungeonManiaController {
     Dungeon currentDungeon;
     int ticknum;
-    boolean potion_effect;
+    boolean invincibility_potion_effect;
     int invincibility_ticks;
     private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
         this.ticknum = 0;
-        this.potion_effect = false;
+        this.invincibility_potion_effect = false;
         this.invincibility_ticks = 0;
     }
 
@@ -147,7 +147,13 @@ public class DungeonManiaController {
             currentDungeon = Spider.spawn(currentDungeon);
             this.ticknum = 0;
         }
+        boolean invincibility_potion_effect;
+        if (invincibility_ticks >= 10) {
+            invincibility_potion_effect = false;
+            this.invincibility_ticks = 0;
+        }
         this.ticknum++;
+        this.invincibility_ticks++;
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
@@ -350,14 +356,19 @@ public class DungeonManiaController {
                             currentDungeon.getBuildableFromInventory("bow").subtractDurability(currentDungeon.inventory);
                         }
                         
+
+                        // invincibility_potion
                         Item invincibility = null;
+                        System.out.println(itemUsed);
                         if (itemUsed != null) {
+                            
                             if (itemUsed.contains("invincibility_potion")) {
                                 invincibility = currentDungeon.getItem("invincibility_potion");
+                                invincibility_potion_effect = true;
                             }
                         }
                         if (invincibility != null && itemUsed != null) {
-                            if (itemUsed.equals("invincibility_potion")) {
+                            if (itemUsed.equals("invincibility_potion") && invincibility_potion_effect == true) {
                                 currentDungeon.inventory.remove(invincibility);
                                 battleOver = true;
                             }                            
