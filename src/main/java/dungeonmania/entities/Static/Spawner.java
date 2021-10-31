@@ -12,17 +12,16 @@ import java.util.List;
 import dungeonmania.entities.Entity;
 
 public class Spawner extends StaticEntity {
-
+    
     int ticks;
     int currentTick;
-    int ids;
+    static int ids;
 
     public Spawner(JSONObject entity, int ticks) {
         super(entity);
         this.ticks = ticks;
         this.currentTick = 0;
         this.setInteractable(true);
-        this.ids = 0;
         //TODO Auto-generated constructor stub
     }
     
@@ -39,7 +38,7 @@ public class Spawner extends StaticEntity {
             list.add(zombie);
             current.setEntities(list);
             this.currentTick = 0;
-            this.ids++;
+            ids++;
         }
         return current;
     }
