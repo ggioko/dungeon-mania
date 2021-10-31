@@ -95,4 +95,9 @@ public class Shield extends Buildable {
         return durability;
     }
 
+    public double effect(double damage, List<Item> inventory) {
+        this.subtractDurability(inventory);
+        return damage/2;
+    }
+
 }
