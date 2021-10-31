@@ -44,6 +44,7 @@
         "portal_RED" : "images/tileset/entities/portal_04.png",
         "portal_GREY" : "images/tileset/entities/portal_12.png",
         "health_potion" : "images/tileset/items/potion_4.png",
-        "armour" : "images/tileset/items/armour.png"
+        "armour" : "images/tileset/items/armour.png",
+        "invisibility_potion" : "images/tileset/items/potion_2.png"
     }
 }

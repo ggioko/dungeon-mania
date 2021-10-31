@@ -149,23 +149,17 @@ public class DungeonManiaController {
         }
         this.ticknum++;
 
-
-        if (invincibility_ticks >= 10) {
-            currentDungeon.player.setInvincibility_potion_effect(false);
-            this.invincibility_ticks = 0;
-        }
-        if (currentDungeon.player.isInvincibility_potion_effect()) {
-            this.invincibility_ticks++;
-        }
-
-
         currentDungeon.getItem(itemUsed);
-        //enemy pathing
+        
+        
+        // ENEMY PATHING
         currentDungeon.pathing(movementDirection);
         if (!currentDungeon.gameMode.equals("Peaceful")) {
+            // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon = enemyInteraction(currentDungeon, itemUsed);
         }
-        //spawn zombies
+
+        // SPAWN ZOMBIES
         List<Spawner> spawners = new ArrayList<>();
         Entity spawner = null;
         for (Entity e : currentDungeon.entities) {
@@ -186,7 +180,9 @@ public class DungeonManiaController {
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
         }
-        //goals
+        
+        
+        // SIMPLE AND COMPLEX GOALS
         boolean treasureComplete = true;
         boolean enemiesComplete = true;
         boolean teleported = false;
@@ -240,15 +236,30 @@ public class DungeonManiaController {
                 }
             } else {
                 if (currentDungeon.goalsCompleted.contains(currentDungeon.goals.replace(":", "").replace(" ", ""))) {
-                    //game won
+                    // Game won
                     currentDungeon.complete = true;
                     currentDungeon.goals = "";
                 }
             }               
         }
         
+
+        // POTION LOGIC
+        if (invincibility_ticks >= 10) {
+            currentDungeon.player.setInvincibility_potion_effect(false);
+            this.invincibility_ticks = 0;
+        }
+        if (currentDungeon.player.isInvincibility_potion_effect()) {
+            this.invincibility_ticks++;
+        }
+        // Invincibility potion
         currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+        
+        // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+        
+        
+        // ITEM PICKUP
         currentDungeon.itemPickup();
         return currentDungeon.createResponse();
     }
