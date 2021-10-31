@@ -360,7 +360,6 @@ public class DungeonManiaController {
                         if (current.getItem("bow") != null) { 
                             current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
                         }
-<<<<<<< HEAD
                         
 
                         if (invincibility_potion_effect == true) {
@@ -368,8 +367,6 @@ public class DungeonManiaController {
                         }
                         
 
-=======
->>>>>>> master
                         if (playerHP <= 0) {
                             //game over
                             return null;
