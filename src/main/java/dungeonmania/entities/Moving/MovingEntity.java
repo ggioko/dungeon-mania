@@ -16,25 +16,25 @@ public class MovingEntity extends Entity {
     boolean isInteractable;
     */
 
-    int health;
-    int attack;
+    double health;
+    double attack;
 
     public MovingEntity(JSONObject entity) {
         super(entity);
         //TODO Auto-generated constructor stub
     }
 
-    public int getHealth() {
+    public double getHealth() {
         return this.health;
     }
-    public void setHealth(int health) {
+    public void setHealth(double health) {
         this.health = health;
     }
 
-    public int getAttack() {
+    public double getAttack() {
         return this.attack;
     }
-    public void setAttack(int attack) {
+    public void setAttack(double attack) {
         this.attack = attack;
     }
     @Override

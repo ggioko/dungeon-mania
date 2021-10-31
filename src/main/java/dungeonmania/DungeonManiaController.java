@@ -239,10 +239,10 @@ public class DungeonManiaController {
                     boolean battleOver = false;
                     while (!battleOver) {
                         //change health values
-                        int playerHP = current.player.getHealth();
-                        int enemyHP = enemy.getHealth();
-                        int playerAD = current.player.getAttack();
-                        int enemyAD = enemy.getAttack();
+                        double playerHP = current.player.getHealth();
+                        double enemyHP = enemy.getHealth();
+                        double playerAD = current.player.getAttack();
+                        double enemyAD = enemy.getAttack();
                         //Armour cuts enemy damage to half
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
@@ -250,16 +250,19 @@ public class DungeonManiaController {
                         //Shield cuts enemy damage to half
                         //If player has shield and armour, 75% of damage is negated.
                         if (currentDungeon.getItem("shield") != null) {
-                            enemyAD = enemyAD/2;
-                            currentDungeon.getShield().subtractDurability(currentDungeon.inventory);
+                            // enemyAD = enemyAD/2;
+                            // currentDungeon.getShield().subtractDurability(currentDungeon.inventory);
+                            current.getShield().effect(enemyAD, currentDungeon.inventory);
                         }
                         current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
+                        System.out.println(current.player.getHealth());
                         enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
 
                         //Bow allows player to attack twice
                         if (currentDungeon.getItem("bow") != null) { 
-                            enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
-                            currentDungeon.getBow().subtractDurability(currentDungeon.inventory);
+                            // enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                            // currentDungeon.getBow().subtractDurability(currentDungeon.inventory);
+                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
                         }
                         
                         if (playerHP <= 0) {

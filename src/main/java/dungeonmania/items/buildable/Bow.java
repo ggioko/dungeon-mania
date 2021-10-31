@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.items.Item;
 
 public class Bow extends Buildable {
@@ -70,5 +71,10 @@ public class Bow extends Buildable {
 
     public int getDurability() {
         return durability;
+    }
+
+    public void effect(MovingEntity e, double enemyHP, double playerHP, double playerAD, List<Item> inventory) {
+        e.setHealth(((enemyHP - playerHP * playerAD) / 5));
+        this.subtractDurability(inventory);
     }
 }
