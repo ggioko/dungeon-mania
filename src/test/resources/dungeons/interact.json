@@ -102,9 +102,14 @@
         "type": "player"
       },
       {
+        "x": 1,
+        "y": 2,
+        "type": "spider"
+      },
+      {
         "x": 2,
         "y": 1,
-        "type": "treasure"
+        "type": "spider"
       },
       {
         "x": 3,

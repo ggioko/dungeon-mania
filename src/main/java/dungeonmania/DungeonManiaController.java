@@ -346,8 +346,9 @@ public class DungeonManiaController {
                         if (playerHP <= 0) {
                             //one ring
                             if (currentDungeon.getItem("one_ring") != null) {
-                                playerHP = 100;
+                                current.getPlayer().setHealth(10);
                                 currentDungeon.removeItem("one_ring");
+                                battleOver = true;
                             }
                             //game over
                             else {

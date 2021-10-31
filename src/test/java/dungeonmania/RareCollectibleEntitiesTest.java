@@ -13,14 +13,13 @@ public class RareCollectibleEntitiesTest {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
         controller.currentDungeon.inventory.add(new Item("one_ring_test", "one_ring"));
-        controller.currentDungeon.getPlayer().setHealth(1);
-        controller.tick(null, Direction.DOWN);
-        controller.tick(null, Direction.DOWN);
-        controller.tick(null, Direction.DOWN);
-        
+        controller.currentDungeon.getPlayer().setHealth(0.01);
+        System.out.println(controller.currentDungeon.getPlayer().getHealth());
+        controller.tick(null, Direction.RIGHT);
+        System.out.println(controller.currentDungeon.getPlayer().getHealth());
         //player runs into hostile entity
         //Check if player respawns
-        assertTrue(controller.currentDungeon.getPlayer().getHealth() > 95);
+        assertTrue(controller.currentDungeon.getPlayer().getHealth() > 9);
         //Check if one ring is one use
         assertTrue(controller.currentDungeon.inventory.isEmpty());
     }
