@@ -106,8 +106,8 @@ public class BuildableEntityTest {
     }
 
     @Test
-    public void testShieldDurability() {
-        // test for shield durability
+    public void testBuildableDurability() {
+        // test for buildable items durability
         DungeonManiaController controller = new DungeonManiaController();
 
         controller.newGame("crafting", "standard");
@@ -129,6 +129,7 @@ public class BuildableEntityTest {
             controller.build("bow");
         });
 
+        
         // look for and fight enemies        
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
@@ -139,6 +140,14 @@ public class BuildableEntityTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         
+        for (Entity e : controller.currentDungeon.getEntities()) {
+            if (e.getType().equals("mercenary") || e.getType().equals("player")) {
+                System.out.println(e.getType()+": "+e.getPosition());
+            }
+        }
+
+        System.out.println();
+        // shield durability == 0
         assertNull(controller.currentDungeon.getItem("shield"));
 
     }
