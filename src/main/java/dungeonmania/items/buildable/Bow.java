@@ -74,7 +74,7 @@ public class Bow extends Buildable {
     }
 
     public void effect(MovingEntity e, double enemyHP, double playerHP, double playerAD, List<Item> inventory) {
-        e.setHealth(((enemyHP - playerHP * playerAD) / 5));
+        e.setHealth(enemyHP - ((playerHP * playerAD) / 5));
         this.subtractDurability(inventory);
     }
 }

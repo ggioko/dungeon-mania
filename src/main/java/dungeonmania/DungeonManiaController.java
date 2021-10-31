@@ -243,28 +243,8 @@ public class DungeonManiaController {
                         double enemyHP = enemy.getHealth();
                         double playerAD = current.player.getAttack();
                         double enemyAD = enemy.getAttack();
-                        //Armour cuts enemy damage to half
-                        if (currentDungeon.getItem("armour") != null) {
-                            enemyAD = enemyAD/2;
-                        }
-                        //Shield cuts enemy damage to half
-                        //If player has shield and armour, 75% of damage is negated.
-                        if (currentDungeon.getItem("shield") != null) {
-                            // enemyAD = enemyAD/2;
-                            // currentDungeon.getShield().subtractDurability(currentDungeon.inventory);
-                            current.getShield().effect(enemyAD, currentDungeon.inventory);
-                        }
-                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
-                        System.out.println(current.player.getHealth());
-                        enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                        System.out.println(e.getId()+": "+ enemyHP);
 
-                        //Bow allows player to attack twice
-                        if (currentDungeon.getItem("bow") != null) { 
-                            // enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
-                            // currentDungeon.getBow().subtractDurability(currentDungeon.inventory);
-                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
-                        }
-                        
                         if (playerHP <= 0) {
                             //game over
                             return null;
@@ -272,7 +252,32 @@ public class DungeonManiaController {
                             //enemy is dead
                             current.enemyDeath(enemy);
                             battleOver = true;
+                            break;
                         }
+
+                        //Armour cuts enemy damage to half
+                        if (currentDungeon.getItem("armour") != null) {
+                            enemyAD = enemyAD/2;
+                        }
+
+                        //Shield cuts enemy damage to half
+                        //If player has shield and armour, 75% of damage is negated.
+                        if (current.getItem("shield") != null) {
+                            // enemyAD = enemyAD/2;
+                            // currentDungeon.getShield().subtractDurability(currentDungeon.inventory);
+                            current.getShield().effect(enemyAD, current.inventory);
+                        }
+
+                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
+                        enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
+
+                        //Bow allows player to attack twice
+                        if (current.getItem("bow") != null) { 
+                            // enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                            // currentDungeon.getBow().subtractDurability(currentDungeon.inventory);
+                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
+                        }
+                        
                     }
                     return current;
                 }
