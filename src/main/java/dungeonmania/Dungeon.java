@@ -220,8 +220,8 @@ public class Dungeon {
                     walls.add(m);
                 }
             }
-            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity) {
-                if (e instanceof Wall || e instanceof MovingEntity) {
+            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
+                if (e instanceof Wall || e instanceof MovingEntity || e instanceof Spawner) {
                     walls.add(e);
                 } else {
                     if (!(((Door)e).getType().equals("door_unlocked"))) {

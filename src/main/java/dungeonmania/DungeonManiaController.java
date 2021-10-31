@@ -339,11 +339,11 @@ public class DungeonManiaController {
                             currentDungeon.getBuildableFromInventory("shield").subtractDurability(currentDungeon.inventory);
                         }
                         current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
-                        enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                        enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
 
                         //Has an ally Mercenary
                         if (currentDungeon.getPlayer().haveAlly()) {
-                            enemy.setHealth(((enemyHP - playerHP * playerAD) / 5));
+                            enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
                         }
 
                         //Bow allows player to attack twice
