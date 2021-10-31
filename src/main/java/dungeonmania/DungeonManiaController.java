@@ -149,6 +149,9 @@ public class DungeonManiaController {
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             currentDungeon = enemyInteraction(currentDungeon);
         }
+        //mercenary moves again if battling
+        currentDungeon.MercenaryBattleMovement(currentDungeon);
+        currentDungeon.getPlayer().setBattling(false);
         //spawn zombies
         List<Spawner> spawners = new ArrayList<>();
         Entity spawner = null;
@@ -359,7 +362,6 @@ public class DungeonManiaController {
                         }
 
                     }
-                    currentDungeon.getPlayer().setBattling(false);
                     return current;
                 }
             }

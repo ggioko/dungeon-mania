@@ -94,6 +94,7 @@ public class InteractTest {
         controller.newGame("interact", "standard");
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
         controller.currentDungeon.inventory.add(new Item("sword_test", "sword"));
         assertDoesNotThrow(() -> {
             controller.interact("zombie_toast_spawner14");
