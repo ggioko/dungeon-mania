@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.items.Item;
 
 public class Bow extends Buildable {
@@ -13,8 +14,11 @@ public class Bow extends Buildable {
     private static final int woodNeeded = 1;
     private static final int arrowNeeded = 3;
 
+    private int durability;
+
     public Bow(String id, String type) {
-        super(id, type, 20);
+        super(id, type);
+        this.durability = 20;
     }
 
     @Override
@@ -56,4 +60,21 @@ public class Bow extends Buildable {
 
         return returnMap;
     }    
+
+    @Override
+    public void subtractDurability(List<Item> inventory) {
+        this.durability -= 1;
+        if (this.durability == 0) {
+            inventory.remove(this);
+        }
+    }
+
+    public int getDurability() {
+        return durability;
+    }
+
+    public void effect(MovingEntity e, double enemyHP, double playerHP, double playerAD, List<Item> inventory) {
+        e.setHealth(enemyHP - ((playerHP * playerAD) / 5));
+        this.subtractDurability(inventory);
+    }
 }
