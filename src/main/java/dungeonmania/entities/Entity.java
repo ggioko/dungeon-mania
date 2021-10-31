@@ -81,6 +81,10 @@ public class Entity {
         this.id = id;
     }
 
+    public String getId() {
+        return this.id;
+    }
+
     public boolean isCollectable() {
         List<String> collectables = new ArrayList<String>();
         collectables.addAll(Arrays.asList("armour", "arrow","bomb", "health_potion", "invincibility_potion", "invisibility_potion", "key_1", "key_2", "sword", "treasure", "wood"));

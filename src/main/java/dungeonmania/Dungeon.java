@@ -327,11 +327,18 @@ public class Dungeon {
         }
     }
 
-    public Buildable getBuildableFromInventory(String type) {
+    public Shield getShield() {
         for (Item i : inventory) {
             if (i.getType().equals("shield")) {
                 return (Shield) i;
-            } else if (i.getType().equals("bow")) {
+            }
+        }
+        return null;
+    }
+
+    public Bow getBow() {
+        for (Item i : inventory) {
+            if (i.getType().equals("bow")) {
                 return (Bow) i;
             } 
         }
