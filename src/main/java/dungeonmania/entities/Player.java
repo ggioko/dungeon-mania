@@ -11,14 +11,34 @@ public class Player extends Entity {
     
     double health;
     double attack;
+    boolean invincibilityPotionEffect;
+    boolean invisibilityPotionEffect;
 
     public Player(JSONObject entity) {
         super(entity);
         this.health = 10;
         this.attack = 1;
+        this.invincibilityPotionEffect = false;
+        this.invisibilityPotionEffect = false;
     }
     
     //getters
+
+    public boolean isInvisibilityPotionEffect() {
+        return invisibilityPotionEffect;
+    }
+
+    public void setInvisibilityPotionEffect(boolean invisibilityPotionEffect) {
+        this.invisibilityPotionEffect = invisibilityPotionEffect;
+    }
+
+    public boolean isInvincibilityPotionEffect() {
+        return invincibilityPotionEffect;
+    }
+
+    public void setInvincibilityPotionEffect(boolean invincibilityPotionEffect) {
+        this.invincibilityPotionEffect = invincibilityPotionEffect;
+    }
 
     public double getHealth() {
         return this.health;
