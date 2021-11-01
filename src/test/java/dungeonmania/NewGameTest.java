@@ -11,12 +11,13 @@ public class NewGameTest {
         // Test when illegal game mode is specified
         DungeonManiaController controller = new DungeonManiaController();
         assertThrows(IllegalArgumentException.class, () -> {controller.newGame("advanced", "GameModeDoesntExist");});
+
     }
 
     @Test
     public void testIllegalGameName() {
         DungeonManiaController controller = new DungeonManiaController();
         // Test when illegal game name is specified
-        assertThrows(IllegalAccessException.class, () -> {controller.newGame("Game1", "Peacful");});
+        assertThrows(IllegalArgumentException.class, () -> {controller.newGame("Game1", "Peacful");});
     }
 }

@@ -78,6 +78,20 @@ public class DungeonManiaController {
     public DungeonResponse newGame(String dungeonName, String gameMode) throws IllegalArgumentException {
         //create list of entity response based on json from dungeon
         JSONObject obj;
+        
+        // If gamemode doesnt exist
+        if (!gameMode.equalsIgnoreCase("standard") && !gameMode.equalsIgnoreCase("peaceful") && !gameMode.equalsIgnoreCase("hard")) {
+            throw new IllegalArgumentException();
+        }
+
+        // If dungeon name doesnt exist
+        ArrayList<String> dungeonNames = new ArrayList<String>();
+        dungeonNames = setDungeonNames(dungeonName);
+
+        if (!checkIfDungeonExists(dungeonName, dungeonNames)) {
+            throw new IllegalArgumentException();
+        }
+        
         try {
             obj = new JSONObject(FileLoader.loadResourceFile("/dungeons" + "/" + dungeonName + ".json"));
         } catch (JSONException e) {
@@ -142,6 +156,31 @@ public class DungeonManiaController {
         return new ArrayList<>();
     }
 
+    public boolean checkIfDungeonExists(String dungeonName, ArrayList<String> dungeonNames) {
+        boolean exists = false;
+        for (String name : dungeonNames) {
+            if (name.equals(dungeonName)) {
+                exists = true;
+            }
+        }
+        return exists;
+    }
+
+    public ArrayList<String> setDungeonNames(String dungeonName) {
+        ArrayList<String> dungeonNames = new ArrayList<String>();
+        dungeonNames.add("advanced-2");
+        dungeonNames.add("boulders");
+        dungeonNames.add("advanced");
+        dungeonNames.add("crafting");
+        dungeonNames.add("doors");
+        dungeonNames.add("exist");
+        dungeonNames.add("exit");
+        dungeonNames.add("interact");
+        dungeonNames.add("portals");
+        dungeonNames.add("potions");
+        dungeonNames.add("maze");
+        return dungeonNames;
+    }
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         //gets the item that is used
         
