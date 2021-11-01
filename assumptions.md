@@ -21,4 +21,3 @@ Duabilities for gear : random durabilities from 10-30 hits
 ### Potion Assumptions
 - Invincibility potion time : 10 ticks
 - Invisibility potion time : 10 ticks
-- 
