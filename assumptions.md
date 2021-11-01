@@ -22,6 +22,7 @@
 - Mercenaries drop armour directly into the inventory of the player
 - Mercenaries drop armour with a chance of 1/10
 - All enemies can drop 'The One Ring' with a chance of 1/50
+- Every map has a maximum of two keys
 
 ### Interact Method Assumptions
 - Treasure is gold and only one gold coin is required to bribe the player
