@@ -341,7 +341,6 @@ public class DungeonManiaController {
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
                             currentDungeon.removeEntity(entityId);
-                            System.out.println(entityId);
                         }
                     }
                 }
@@ -431,8 +430,15 @@ public class DungeonManiaController {
                         
 
                         if (playerHP <= 0) {
+                            //one ring
+                            if (currentDungeon.getItem("one_ring") != null) {
+                                current.getPlayer().setHealth(10);
+                                currentDungeon.removeItem("one_ring");
+                            }
                             //game over
-                            return null;
+                            else {
+                                return null;
+                            }
                         } else if (enemyHP <= 0) {
                             //enemy is dead
                             current.enemyDeath(enemy);
