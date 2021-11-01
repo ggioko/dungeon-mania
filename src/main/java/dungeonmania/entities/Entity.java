@@ -70,6 +70,10 @@ public class Entity {
         this.isInteractable = isInteractable;
     }
 
+    public boolean isInteractable() {
+        return this.isInteractable;
+    }
+
     public void move(Position pos, List<Entity> walls) {
         return;
     }

@@ -28,7 +28,6 @@ public class Spider extends MovingEntity {
         this.attack = 1; 
         this.spawned = true;
         this.pathnum = 0;
-        this.ids = 0;
         //TODO Auto-generated constructor stub
     }
 
