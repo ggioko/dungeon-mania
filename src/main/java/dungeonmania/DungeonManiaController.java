@@ -341,7 +341,6 @@ public class DungeonManiaController {
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
                             currentDungeon.removeEntity(entityId);
-                            System.out.println(entityId);
                         }
                     }
                 }
@@ -435,7 +434,6 @@ public class DungeonManiaController {
                             if (currentDungeon.getItem("one_ring") != null) {
                                 current.getPlayer().setHealth(10);
                                 currentDungeon.removeItem("one_ring");
-                                battleOver = true;
                             }
                             //game over
                             else {
