@@ -392,12 +392,14 @@ public class DungeonManiaController {
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
                             Armour.durability -= 1;
+                            Armour.isBroken(current.inventory);
                             // decrease armour durability by 1 // TODO
                         }
 
                         if (currentDungeon.getItem("sword") != null) {
                             enemy.setHealth(enemyHP - 1);
                             Sword.durability -= 1;
+                            Sword.isBroken(current.inventory);
                             // decrease sword durability by 1 // TODO
                         }
                         
