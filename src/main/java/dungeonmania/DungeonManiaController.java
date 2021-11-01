@@ -349,6 +349,7 @@ public class DungeonManiaController {
                         double enemyHP = enemy.getHealth();
                         double playerAD = current.player.getAttack();
                         double enemyAD = enemy.getAttack();
+                        
                         //Armour cuts enemy damage to half
                         if (currentDungeon.getItem("armour") != null) {
                             enemyAD = enemyAD/2;
@@ -365,7 +366,12 @@ public class DungeonManiaController {
                         //Shield cuts enemy damage to half
                         //If player has shield and armour, 75% of damage is negated.
                         if (current.getItem("shield") != null) {
-                            current.getShield().effect(enemyAD, current.inventory);
+                            enemyAD = current.getShield().effect(enemyAD, current.inventory);
+                        }
+                       
+                        //Bow allows player to attack twice
+                        if (current.getItem("bow") != null) { 
+                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
                         }
                         
                         //Player and Enemy damage each other
@@ -378,10 +384,6 @@ public class DungeonManiaController {
                         }
 
                         
-                        //Bow allows player to attack twice
-                        if (current.getItem("bow") != null) { 
-                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
-                        }
                         
 
                         if (currentDungeon.player.isInvincibilityPotionEffect() == true) {
@@ -397,6 +399,7 @@ public class DungeonManiaController {
                             current.enemyDeath(enemy);
                             battleOver = true;
                         }
+                    
 
                     }
                     return current;
