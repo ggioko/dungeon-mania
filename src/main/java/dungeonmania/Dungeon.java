@@ -328,6 +328,13 @@ public class Dungeon {
                 inventory.add(new Item("armour", "armour"));
             }
         }
+
+        if (enemy instanceof MovingEntity) {
+            int num = (int)Math.floor(Math.random()*(50-1+1)+1);
+            if (num == 2) {
+                inventory.add(new Item("one_ring", "one_ring"));
+            }
+        }
     }
 
     public Shield getShield() {
