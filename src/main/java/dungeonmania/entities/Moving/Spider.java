@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Spider extends MovingEntity {
-
+    
     boolean spawned;
     int pathnum;
-    static int ids;
+    static int ids = 0;
     List<Direction> directions = new ArrayList<Direction>(
         Arrays.asList(Direction.LEFT, Direction.DOWN, Direction.DOWN, Direction.RIGHT, Direction.RIGHT, Direction.UP, Direction.UP, Direction.LEFT)
     );
@@ -28,7 +28,6 @@ public class Spider extends MovingEntity {
         this.attack = 1; 
         this.spawned = true;
         this.pathnum = 0;
-        this.ids = 0;
         //TODO Auto-generated constructor stub
     }
 
