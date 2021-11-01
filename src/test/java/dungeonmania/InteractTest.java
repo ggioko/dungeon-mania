@@ -93,13 +93,27 @@ public class InteractTest {
         // test for if player breaks spawner
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
+        
+        assertThrows(InvalidActionException.class, () -> {
+            controller.interact("zombie_toast_spawner14");
+        });
+
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
-        //controller.currentDungeon.inventory.add(new Item("sword_test", "sword"));
-        assertTrue(controller.currentDungeon.getEntity("zombie_toast_spawner41") != null);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.DOWN);
+
+        for (Item i : controller.currentDungeon.inventory){
+            System.out.println(i.getType());
+        }
+
         assertDoesNotThrow(() -> {
             controller.interact("zombie_toast_spawner41");
         });
-        assertTrue(controller.currentDungeon.getEntity("zombie_toast_spawner41") == null);
+
+        assertTrue(controller.currentDungeon.getEntity("zombie_toast_spawner14") == null);
+
     }
 }

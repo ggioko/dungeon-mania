@@ -101,8 +101,6 @@ public class Dungeon {
                 this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("armour")) {
                 this.entities.add(new Armour((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("sword")) {
-                this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("health_potion")) {
                 this.entities.add(new HealthPotion((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("wood")) {
@@ -326,6 +324,13 @@ public class Dungeon {
             int num = (int)Math.floor(Math.random()*(5-1+1)+1);
             if (num == 2) {
                 inventory.add(new Item("armour", "armour"));
+            }
+        }
+
+        if (enemy instanceof MovingEntity) {
+            int num = (int)Math.floor(Math.random()*(50-1+1)+1);
+            if (num == 2) {
+                inventory.add(new Item("one_ring", "one_ring"));
             }
         }
     }
