@@ -20,53 +20,59 @@ public class CharacterTest {
     public void testItemUsed() {
         // test for invalid items
         DungeonManiaController controller = new DungeonManiaController();
-        controller.newGame("advanced", "standard");
-        controller.interact("bomb134");
-        controller.interact("invincibility_potion1110");
+        controller.newGame("characterTest", "standard");
+        //pickup health potion and bomb
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.UP);
         assertThrows(IllegalArgumentException.class, () -> {
-            controller.tick("bomb1", Direction.NONE);
+            controller.tick("sword22", Direction.NONE);
         });
-        assertDoesNotThrow(() -> {
-            controller.tick("bomb134", Direction.NONE);
-            controller.tick("invincibility_potion1110", Direction.NONE);
-        });
-  
-    }
 
+        assertDoesNotThrow(() -> {
+            controller.tick("bomb12", Direction.NONE);
+            controller.tick("health_potion21", Direction.NONE);
+        });
+    }
     @Test
     public void testItemNotInInventory() {
         // test for not in inv
         DungeonManiaController controller = new DungeonManiaController();
-        controller.newGame("advanced", "standard");
+        controller.newGame("characterTest", "standard");
         //move to collect potion
-        
+
         assertThrows(InvalidActionException.class, () -> {
             controller.tick("bomb134", Direction.NONE);
         });
-        assertDoesNotThrow(() -> {
-            controller.tick("invincibility_potion1110", Direction.NONE);
-        });
-  
     }
 
     @Test
     public void testMovement() {
         // test for not in inv
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse start = controller.newGame("advanced", "standard");
-        DungeonResponse end = start;
+        controller.newGame("advanced", "standard");
         //player sshould nto have moved because of walls
-        end = controller.tick(null, Direction.UP);
-        assertTrue(start.equals(end));
-        end = controller.tick(null, Direction.LEFT);
-        assertTrue(start.equals(end));
+        controller.tick(null, Direction.UP);
+        int x = controller.currentDungeon.player.getPosition().getX();
+        int y = controller.currentDungeon.player.getPosition().getY();
+        assertTrue(x == 1 && y == 1);
+        controller.tick(null, Direction.LEFT);
+        x = controller.currentDungeon.player.getPosition().getX();
+        y = controller.currentDungeon.player.getPosition().getY();
+        assertTrue(x == 1 && y == 1);
         //player should move
-        end = controller.tick(null, Direction.RIGHT);
-        assertFalse(start.equals(end));
-        end = controller.tick(null, Direction.LEFT);
-        assertTrue(start.equals(end));
-        end = controller.tick(null, Direction.DOWN);
-        assertFalse(start.equals(end));
-  
+        controller.tick(null, Direction.RIGHT);
+        x = controller.currentDungeon.player.getPosition().getX();
+        y = controller.currentDungeon.player.getPosition().getY();
+        assertTrue(x == 2 && y == 1);
+        controller.tick(null, Direction.LEFT);
+        x = controller.currentDungeon.player.getPosition().getX();
+        y = controller.currentDungeon.player.getPosition().getY();
+        assertTrue(x == 1 && y == 1);
+        controller.tick(null, Direction.DOWN);
+        x = controller.currentDungeon.player.getPosition().getX();
+        y = controller.currentDungeon.player.getPosition().getY();
+        assertTrue(x == 1 && y == 2);
+
     }
 }
