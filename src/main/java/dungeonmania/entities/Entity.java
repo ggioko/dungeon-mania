@@ -50,6 +50,10 @@ public class Entity {
 
     //getters
 
+    public String getId() {
+        return this.id;
+    }
+
     public Position getPosition() {
         return this.position;
     }
@@ -80,10 +84,6 @@ public class Entity {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getId() {
-        return this.id;
     }
 
     public boolean isCollectable() {

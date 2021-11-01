@@ -12,7 +12,7 @@ import java.util.List;
 import dungeonmania.entities.Entity;
 
 public class Spawner extends StaticEntity {
-
+    
     int ticks;
     int currentTick;
     static int ids;

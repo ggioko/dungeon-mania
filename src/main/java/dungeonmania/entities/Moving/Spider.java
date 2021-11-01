@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Spider extends MovingEntity {
-
+    
     boolean spawned;
     int pathnum;
-    static int ids;
+    static int ids = 0;
     List<Direction> directions = new ArrayList<Direction>(
         Arrays.asList(Direction.LEFT, Direction.DOWN, Direction.DOWN, Direction.RIGHT, Direction.RIGHT, Direction.UP, Direction.UP, Direction.LEFT)
     );
