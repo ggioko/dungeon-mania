@@ -98,19 +98,13 @@ public class InteractTest {
             controller.interact("zombie_toast_spawner14");
         });
 
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.LEFT);
-        controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
-
-        for (Item i : controller.currentDungeon.inventory){
-            System.out.println(i.getType());
-        }
+        controller.tick(null, Direction.DOWN);
+        controller.currentDungeon.inventory.add(new Item("sword_test", "sword"));
 
         assertDoesNotThrow(() -> {
-            controller.interact("zombie_toast_spawner41");
+            controller.interact("zombie_toast_spawner14");
         });
 
         assertTrue(controller.currentDungeon.getEntity("zombie_toast_spawner14") == null);
