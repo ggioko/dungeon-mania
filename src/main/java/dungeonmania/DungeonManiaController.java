@@ -179,11 +179,22 @@ public class DungeonManiaController {
         dungeonNames.add("portals");
         dungeonNames.add("potions");
         dungeonNames.add("maze");
+        dungeonNames.add("characterTest");
         return dungeonNames;
     }
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        //gets the item that is used
-        
+        if (itemUsed != null) {
+            Item item = currentDungeon.getItemUsed(itemUsed);
+            if (currentDungeon.getItemUsed(itemUsed) == null) {
+                throw new InvalidActionException("No item in inventory");
+            }
+            else if (item.getType().equals("bomb") || item.getType().equals("health_potion") || item.getType().equals("invisibility_potion") 
+                    || item.getType().equals("invinsibility_potion")) {
+            }
+            else throw new IllegalArgumentException("itemUsed is not a valid item");
+        }
+
+        //gets the item that is used 
         if (ticknum >= 10) {
             currentDungeon = Spider.spawn(currentDungeon);
             this.ticknum = 0;

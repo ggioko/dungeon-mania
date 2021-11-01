@@ -208,6 +208,15 @@ public class Dungeon {
         return this.inventory;
     }
 
+    public Item getItemUsed(String stringId) {
+        for (Item item : this.inventory) {
+            if (item.getId().equals(stringId)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public void pathing(Direction direction) {
         //make a list of walls
         List<Entity> walls = new ArrayList<Entity>();
