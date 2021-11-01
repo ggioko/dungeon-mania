@@ -19,6 +19,8 @@ import org.junit.jupiter.api.Test;
 import dungeonmania.entities.Entity;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.items.Item;
+import dungeonmania.items.buildable.Bow;
+import dungeonmania.items.buildable.Shield;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.ItemResponse;
 
@@ -139,16 +141,56 @@ public class BuildableEntityTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.NONE);
+        controller.tick(null, Direction.NONE);
         
-        for (Entity e : controller.currentDungeon.getEntities()) {
-            if (e.getType().equals("mercenary") || e.getType().equals("player")) {
-                System.out.println(e.getType()+": "+e.getPosition());
-            }
-        }
-
-        System.out.println();
-        // shield durability == 0
+        // shield durability == 0 && not in inventory
         assertNull(controller.currentDungeon.getItem("shield"));
+        
+        controller.tick(null, Direction.NONE);
+        controller.tick(null, Direction.NONE);
+        controller.tick(null, Direction.NONE);
+        controller.tick(null, Direction.NONE);
+
+        // bow durability == 0 && not in inventory
+        assertNull(controller.currentDungeon.getItem("bow")); 
+        
+    }
+
+    @Test
+    public void testShieldEffect() {
+        // Test if shield halves incoming damage
+        DungeonManiaController controller1 = new DungeonManiaController();
+        DungeonManiaController controller2 = new DungeonManiaController();
+
+        controller1.newGame("crafting", "standard");
+        controller2.newGame("crafting", "standard");
+
+        controller1.tick(null, Direction.UP);
+        controller1.tick(null, Direction.LEFT);
+        controller1.tick(null, Direction.LEFT);
+
+        assertDoesNotThrow(() -> {
+            controller1.build("shield");
+        });
+
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+
+        assertTrue(controller1.currentDungeon.player.getHealth() > controller2.currentDungeon.player.getHealth());
 
     }
 }
