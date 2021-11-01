@@ -299,7 +299,6 @@ public class DungeonManiaController {
 
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
-        System.out.println(itemUsed);
 
         
         // ITEM PICKUP
