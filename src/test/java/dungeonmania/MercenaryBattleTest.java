@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.items.*;
+import dungeonmania.entities.*;
 
 
 public class MercenaryBattleTest {

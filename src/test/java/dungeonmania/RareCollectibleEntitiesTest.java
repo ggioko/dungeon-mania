@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import dungeonmania.items.*;
+import dungeonmania.entities.*;
 import dungeonmania.util.*;
 
 public class RareCollectibleEntitiesTest {
@@ -12,7 +12,7 @@ public class RareCollectibleEntitiesTest {
     public void testTheOneRing() { // Test if character respawns with full health after getting killed
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
-        controller.currentDungeon.inventory.add(new Item("one_ring_test", "one_ring"));
+        controller.currentDungeon.inventory.add(new Entity("one_ring_test", "one_ring"));
         controller.currentDungeon.getPlayer().setHealth(0.01);
         controller.tick(null, Direction.DOWN);
         //player runs into hostile entity

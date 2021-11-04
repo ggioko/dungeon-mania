@@ -2,6 +2,7 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.entities.collectable.Treasure;
+import dungeonmania.entities.collectable.buildable.Buildable;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -9,7 +10,6 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Spawner;
-import dungeonmania.entities.buildable.Buildable;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
@@ -17,6 +17,7 @@ import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
@@ -197,20 +198,12 @@ public class DungeonManiaController {
         }
         this.ticknum++;
 
-        currentDungeon.getItem(itemUsed);
-        
-        
         // ENEMY PATHING
         currentDungeon.pathing(movementDirection);
         
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
-            System.out.println(currentDungeon.getPlayer().getHealth());
-            // GAME OVER
-            if (currentDungeon.getPlayer().getHealth() <= 0) {
-                return null;
-            }
         }
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
@@ -225,7 +218,6 @@ public class DungeonManiaController {
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
         }
-        
         
         // SIMPLE AND COMPLEX GOALS
         boolean treasureComplete = true;
@@ -348,8 +340,9 @@ public class DungeonManiaController {
                     throw new InvalidActionException("No weapon in inventory");
                 }
                 else {
-                    for (Entity item : currentDungeon.inventory) {
-                        if (item.getType().equals("sword") || item.getType().equals("bow")) {      
+                    for (Entity i : currentDungeon.inventory) {
+                        if (i.getType().equals("sword") || i.getType().equals("bow")) {   
+                            CollectableEntity item = (CollectableEntity) i;
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
                             currentDungeon.removeEntity(entityId);

@@ -6,24 +6,21 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
-import dungeonmania.entities.buildable.Bow;
-import dungeonmania.entities.buildable.Buildable;
-import dungeonmania.entities.buildable.Shield;
 import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.collectable.OneRing;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Portal;
-import dungeonmania.entities.Static.Spawner;
-import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
-import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
+import dungeonmania.entities.collectable.buildable.Bow;
+import dungeonmania.entities.collectable.buildable.Buildable;
+import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
 import dungeonmania.response.models.AnimationQueue;
@@ -254,9 +251,7 @@ public class Dungeon {
         }
         List<ItemResponse> itemList = new ArrayList<ItemResponse>();
         for (Entity i : this.inventory) {
-            CollectableEntity item = (CollectableEntity) i;
-            itemList.add(item.createItemResponse());
-        
+            itemList.add(new ItemResponse(i.getId(), i.getType()));
         }
         if (!inventory.isEmpty()) {
             if (Buildable.getBuildable("bow").isBuildable(inventory)) {

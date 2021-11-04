@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
-import dungeonmania.items.*;
+import dungeonmania.entities.*;
+import dungeonmania.entities.collectable.Sword;
 
 public class InteractTest {
     @Test
@@ -80,7 +81,7 @@ public class InteractTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
 
-        controller.currentDungeon.inventory.add(new Item("treasure_test", "treasure"));
+        controller.currentDungeon.inventory.add(new Entity("treasure_test", "treasure"));
         assertDoesNotThrow(() -> {
             controller.interact("mercenary33");
         });
@@ -101,7 +102,7 @@ public class InteractTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
-        controller.currentDungeon.inventory.add(new Item("sword_test", "sword"));
+        controller.currentDungeon.inventory.add(new Sword("sword_test", "sword"));
 
         assertDoesNotThrow(() -> {
             controller.interact("zombie_toast_spawner14");

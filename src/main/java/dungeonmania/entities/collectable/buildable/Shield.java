@@ -1,4 +1,4 @@
-package dungeonmania.entities.buildable;
+package dungeonmania.entities.collectable.buildable;
 
 import java.util.Arrays;
 import java.util.HashMap;

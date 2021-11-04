@@ -1,12 +1,13 @@
-package dungeonmania.entities.buildable;
+package dungeonmania.entities.collectable.buildable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import dungeonmania.entities.Entity;
+import dungeonmania.entities.collectable.CollectableEntity;
+import dungeonmania.entities.*;
 
-public abstract class Buildable extends Entity {
+public abstract class Buildable extends CollectableEntity {
 
     public Buildable(String id, String type) {
         super(id, type);
