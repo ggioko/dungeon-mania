@@ -29,13 +29,4 @@ public abstract class Buildable extends CollectableEntity {
         return buildable;
     }
 
-    // public void setDurability(int durability) {
-    //     this.durability = durability;
-    // }
-
-    // public int getDurability() {
-    //     return this.durability;
-    // }
-
-
 }
