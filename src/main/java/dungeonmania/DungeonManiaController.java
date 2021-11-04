@@ -188,7 +188,7 @@ public class DungeonManiaController {
             if (currentDungeon.getItemUsed(itemUsed) == null) {
                 throw new InvalidActionException("No item in inventory");
             }
-            else if (item.getType().equals("bomb") || item.getType().equals("health_potion") || item.getType().equals("invisibility_potion") 
+            else if (item.getType().equals("bomb") || item.getType().equals("health_potion") || item.getType().equals("invincibility_potion") 
                     || item.getType().equals("invinsibility_potion")) {
             }
             else throw new IllegalArgumentException("itemUsed is not a valid item");
