@@ -101,8 +101,6 @@ public class Dungeon {
                 this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("armour")) {
                 this.entities.add(new Armour((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("sword")) {
-                this.entities.add(new Sword((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("health_potion")) {
                 this.entities.add(new HealthPotion((JSONObject)entity));
             } else if (((JSONObject)entity).getString("type").equals("wood")) {
@@ -210,6 +208,15 @@ public class Dungeon {
         return this.inventory;
     }
 
+    public Item getItemUsed(String stringId) {
+        for (Item item : this.inventory) {
+            if (item.getId().equals(stringId)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public void pathing(Direction direction) {
         //make a list of walls
         List<Entity> walls = new ArrayList<Entity>();
@@ -217,12 +224,11 @@ public class Dungeon {
             if (e instanceof Mercenary){
                 Mercenary m = (Mercenary) e;
                 if (m.isBribed()) {
-                    walls.add(this.player);
                     walls.add(m);
                 }
             }
-            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity) {
-                if (e instanceof Wall || e instanceof MovingEntity) {
+            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
+                if (e instanceof Wall || e instanceof MovingEntity || e instanceof Spawner) {
                     walls.add(e);
                 } else {
                     if (!(((Door)e).getType().equals("door_unlocked"))) {
@@ -234,6 +240,9 @@ public class Dungeon {
         for (Entity e : this.entities) {
             if (e instanceof Player) {
                 e.move(this.player.getPosition().translateBy(direction), walls);
+            } if (e instanceof Mercenary) {
+                walls.add(this.player);
+                e.move(this.player.getPosition(), walls);
             } else {
                 e.move(this.player.getPosition(), walls);
             }
@@ -321,7 +330,17 @@ public class Dungeon {
         //remove enemy from entities and give player loot
         this.entities.remove(enemy);
         if (enemy instanceof Mercenary) {
-            
+            int num = (int)Math.floor(Math.random()*(10-1+1)+1);
+            if (num == 2) {
+                inventory.add(new Item("armour", "armour"));
+            }
+        }
+
+        if (enemy instanceof MovingEntity) {
+            int num = (int)Math.floor(Math.random()*(50-1+1)+1);
+            if (num == 2) {
+                inventory.add(new Item("one_ring", "one_ring"));
+            }
         }
     }
 
@@ -343,6 +362,33 @@ public class Dungeon {
         return null;
     }
 
-
-
+    public void MercenaryBattleMovement(Dungeon current) {
+        List<Entity> walls = new ArrayList<Entity>();
+        for (Entity e : this.entities) {
+            if (e instanceof Mercenary){
+                Mercenary m = (Mercenary) e;
+                if (m.isBribed()) {
+                    walls.add(m);
+                }
+            }
+            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity) {
+                if (e instanceof Wall || e instanceof MovingEntity) {
+                    walls.add(e);
+                } else {
+                    if (!(((Door)e).getType().equals("door_unlocked"))) {
+                        walls.add(e);
+                    }
+                }
+            }
+        }
+        for (Entity entity: this.entities) {
+            if (entity instanceof Mercenary) {
+                Mercenary mercenary = (Mercenary) entity;
+                if (mercenary.isInBattleRadius(current.getPlayer().getPosition()) && current.getPlayer().isBattling()) {
+                    walls.add(this.player);
+                    mercenary.move(this.player.getPosition(), walls);
+                }
+            }
+        }
+    }
 }

@@ -21,6 +21,9 @@ public class Item {
     public String getType() {
         return this.type;
     }
+    public String getId() {
+        return this.id;
+    }
 
     public int getDurability() {
         return this.durability;

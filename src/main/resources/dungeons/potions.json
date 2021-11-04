@@ -30,12 +30,12 @@
     {
       "x": 3,
       "y": 1,
-      "type": "wood"
+      "type": "invisibility_potion"
     },
     {
       "x": 2,
       "y": 1,
-      "type": "wood"
+      "type": "invincibility_potion"
     },
     {
       "x": 1,
