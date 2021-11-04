@@ -188,8 +188,8 @@ public class DungeonManiaController {
             if (currentDungeon.getItemUsed(itemUsed) == null) {
                 throw new InvalidActionException("No item in inventory");
             }
-            else if (item.getType().equals("bomb") || item.getType().equals("health_potion") || item.getType().equals("invisibility_potion") 
-                    || item.getType().equals("invinsibility_potion")) {
+            else if (item.getType().equals("bomb") || item.getType().equals("health_potion") || item.getType().equals("invincibility_potion") 
+                    || item.getType().equals("invisibility_potion")) {
             }
             else throw new IllegalArgumentException("itemUsed is not a valid item");
         }
@@ -206,6 +206,7 @@ public class DungeonManiaController {
         
         // ENEMY PATHING
         currentDungeon.pathing(movementDirection);
+        
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon = enemyInteraction(currentDungeon, itemUsed);
@@ -249,7 +250,7 @@ public class DungeonManiaController {
             }
             if (e instanceof Portal) {
                 if (e.getPosition().equals(currentDungeon.player.getPosition()) && !teleported) {
-                    currentDungeon.player.setPosition(((Portal)e).getCoords());
+                    currentDungeon.player.setPosition(((Portal)e).getCoords().translateBy(movementDirection));
                     teleported = true;
                 }
             }
@@ -318,6 +319,7 @@ public class DungeonManiaController {
     }
     
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        System.out.println(entityId);
         if (currentDungeon.getEntity(entityId) == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
