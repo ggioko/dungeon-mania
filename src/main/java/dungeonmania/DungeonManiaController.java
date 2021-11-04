@@ -320,7 +320,6 @@ public class DungeonManiaController {
     }
     
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
-        System.out.println(entityId);
         if (currentDungeon.getEntity(entityId) == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
