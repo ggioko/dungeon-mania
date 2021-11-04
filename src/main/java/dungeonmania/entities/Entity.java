@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import dungeonmania.items.Item;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
+import dungeonmania.entities.Moving.Mercenary;
+import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.StaticEntity;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
@@ -33,10 +35,10 @@ public class Entity {
         }
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
         this.id = entity.getString("type") + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
-        if (this.type.equals("wall")) {
-            this.isInteractable = false;
-        } else {
+        if (this instanceof Mercenary || this instanceof Spawner) {
             this.isInteractable = true;
+        } else {
+            this.isInteractable = false;
         }
     }
 

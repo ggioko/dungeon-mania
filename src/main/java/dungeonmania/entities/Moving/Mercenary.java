@@ -24,7 +24,6 @@ public class Mercenary extends MovingEntity{
         this.health = 5;
         this.attack = 1;
         this.bribed = false;
-        this.setInteractable(true);
     }
 
     @Override
