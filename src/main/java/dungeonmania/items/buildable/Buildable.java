@@ -28,13 +28,4 @@ public abstract class Buildable extends Item {
         return buildable;
     }
 
-    // public void setDurability(int durability) {
-    //     this.durability = durability;
-    // }
-
-    // public int getDurability() {
-    //     return this.durability;
-    // }
-
-
 }
