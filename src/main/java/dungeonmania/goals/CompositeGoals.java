@@ -23,7 +23,6 @@ public class CompositeGoals implements Goal {
             answer = "(:" + children.get(0).goalsString() + " " + this.getName() + " :" + children.get(1).goalsString() + ")";
 
         } else {
-            System.out.println("IN");
             if (children.get(1) instanceof CompositeGoals && children.get(0) instanceof CompositeGoals) {
                 answer = "(" + children.get(0).goalsString() + " " + this.getName() + " " + children.get(1).goalsString() + ")";
             }else if (children.get(1) instanceof CompositeGoals) {
