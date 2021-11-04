@@ -146,6 +146,7 @@ public class DungeonManiaController {
         currentDungeon.getItem(itemUsed);
         //enemy pathing
         currentDungeon.pathing(movementDirection);
+        
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             currentDungeon = enemyInteraction(currentDungeon);
         }
@@ -194,7 +195,7 @@ public class DungeonManiaController {
             }
             if (e instanceof Portal) {
                 if (e.getPosition().equals(currentDungeon.player.getPosition()) && !teleported) {
-                    currentDungeon.player.setPosition(((Portal)e).getCoords());
+                    currentDungeon.player.setPosition(((Portal)e).getCoords().translateBy(movementDirection));
                     teleported = true;
                 }
             }
@@ -236,6 +237,7 @@ public class DungeonManiaController {
     }
     
     public DungeonResponse interact(String entityId) throws IllegalArgumentException, InvalidActionException {
+        System.out.println(entityId);
         if (currentDungeon.getEntity(entityId) == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         }
@@ -268,8 +270,7 @@ public class DungeonManiaController {
                         if (item.getType().equals("sword") || item.getType().equals("bow")) {      
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
-                            currentDungeon.removeEntity(entityId);
-                            return currentDungeon.createResponse();
+                            currentDungeon.entities.remove(spawner);
                         }
                     }
                 }
