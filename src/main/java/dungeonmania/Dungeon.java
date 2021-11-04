@@ -72,28 +72,6 @@ public class Dungeon {
         this.goalTree = new CompositeGoals(entities.getJSONObject("goal-condition").getString("goal"), false);
         this.goalTree.add(setGoals(entities.getJSONObject("goal-condition")));
         this.goals = getGoals();
-        // new CompositeGoals(entities.getJSONObject("goal-condition"), false);
-
-
-        // this.goals = getGoals(entities.getJSONObject("goal-condition"));
-        // try {
-        //     this.goals = ":" + entities.getJSONObject("goal-condition").getString("goal");
-        //     if (this.goals.equals(":AND") || this.goals.equals(":OR")) {
-        //         this.goals = "";
-        //         for (Object o : entities.getJSONObject("goal-condition").getJSONArray("subgoals")) {
-        //             this.goals += ":" + ((JSONObject)o).getString("goal") + " ";
-        //             this.goals += entities.getJSONObject("goal-condition").getString("goal") + " ";
-        //         }
-        //         this.goals = "("+this.goals.substring(0,this.goals.length()-5)+")";
-        //         this.goaltype = entities.getJSONObject("goal-condition").getString("goal");
-        //     }
-        //     this.complete = false;
-        //     this.goalsToComplete = Arrays.asList(this.goals.replace(":","").replace(" ", "").split(this.goaltype));
-        //     this.goalsCompleted = new ArrayList<>();
-        // } catch (Exception e) {
-        //     //TODO: handle exception
-        //     this.nogoals = true;
-        // }
         
     }
 
