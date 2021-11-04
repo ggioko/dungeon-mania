@@ -6,11 +6,6 @@
             "type": "player"
         },
         {
-            "x": 0,
-            "y": 0,
-            "type": "wall"
-        },
-        {
             "x": 1,
             "y": 0,
             "type": "portal",
@@ -18,13 +13,19 @@
         },
         {
             "x": 4,
-            "y": 0,
+            "y": 1,
             "type": "portal",
             "colour": "BLUE"
         },
         {
             "x": 6,
             "y": 0,
+            "type": "portal",
+            "colour": "RED"
+        },
+        {
+            "x": -3,
+            "y": -1,
             "type": "portal",
             "colour": "RED"
         }
