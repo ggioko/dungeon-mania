@@ -3,23 +3,13 @@ package dungeonmania;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
-import dungeonmania.entities.collectable.Key;
-import dungeonmania.entities.Static.Boulder;
-import dungeonmania.entities.Static.FloorSwitch;
-import dungeonmania.entities.Static.Portal;
-import dungeonmania.entities.Static.Spawner;
-import dungeonmania.entities.Static.Wall;
-import dungeonmania.entities.collectable.Armour;
-import dungeonmania.entities.collectable.CollectableEntity;
-import dungeonmania.entities.collectable.HealthPotion;
-import dungeonmania.entities.collectable.InvincibilityPotion;
-import dungeonmania.entities.collectable.InvisibilityPotion;
-import dungeonmania.entities.collectable.Sword;
-import dungeonmania.entities.collectable.Treasure;
-import dungeonmania.entities.collectable.Wood;
+import dungeonmania.goals.CompositeGoals;
+import dungeonmania.goals.Goal;
+import dungeonmania.goals.GoalLeaf;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
 import dungeonmania.items.Item;
@@ -29,17 +19,15 @@ import dungeonmania.items.buildable.Bow;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
-import dungeonmania.util.Position;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.sound.sampled.Port;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
@@ -50,6 +38,7 @@ public class Dungeon {
     List<Item> inventory;
     List<String> buildables;
     String goals;
+    Goal goalTree;
     List<AnimationQueue> animations;
     Player player;
     String gameMode;
@@ -67,96 +56,47 @@ public class Dungeon {
         this.gameMode = gameMode;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
-            if (((JSONObject)entity).getString("type").equals("player")) {
-                this.player = new Player((JSONObject)entity);
-                this.entities.add(this.player);
-            } else if (((JSONObject)entity).getString("type").equals("mercenary")) {
-                this.entities.add(new Mercenary((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("spider")) {
-                this.entities.add(new Spider((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("zombie_toast")) {
-                this.entities.add(new Zombie((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("wall")) {
-                this.entities.add(new Wall((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("zombie_toast_spawner")) {
-                if (gameMode == "hard") {
-                    this.entities.add(new Spawner((JSONObject)entity, 15));
-                } else {
-                    this.entities.add(new Spawner((JSONObject)entity, 20));
-                }
-            } else if (((JSONObject)entity).getString("type").equals("treasure")) {
-                this.entities.add(new Treasure((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("door")) {
-                Door door = new Door((JSONObject)entity);
-                if (doorcreated) {
-                    door.setType("door_2");
-                } else {
-                    door.setType("door_1");
-                    doorcreated = true;
-                }
-                this.entities.add(door);
-            } else if (((JSONObject)entity).getString("type").equals("key")) {
-                this.entities.add(new Key((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("sword")) {
-                this.entities.add(new Sword((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("armour")) {
-                this.entities.add(new Armour((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("health_potion")) {
-                this.entities.add(new HealthPotion((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("wood")) {
-                this.entities.add(new Wood((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("invincibility_potion")) {
-                this.entities.add(new InvincibilityPotion((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("invisibility_potion")) {
-                this.entities.add(new InvisibilityPotion((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("boulder")) {
-                this.entities.add(new Boulder((JSONObject)entity));
-            } else if (((JSONObject)entity).getString("type").equals("portal")) {
-                Position coords = new Position(0,0);
-                for (Object o : entities.getJSONArray("entities")){
-                    try {
-                        if (((JSONObject)o).getString("colour").equals(((JSONObject)entity).getString("colour"))) {
-                            if (((((JSONObject)o).getInt("x") != (((JSONObject)entity).getInt("x"))) || (((JSONObject)o).getInt("y") != (((JSONObject)entity).getInt("y"))))) {
-                                coords = new Position(((JSONObject)o).getInt("x"), ((JSONObject)o).getInt("y"));
-                            }
-                        }
-                    } catch (Exception e) {
-                        //TODO: handle exception
-                    }
-                }
-                Portal portal = new Portal((JSONObject)entity, coords);
-                portal.setType("portal_" + ((JSONObject)entity).getString("colour"));
-                this.entities.add(portal);
-            } else if (((JSONObject)entity).getString("type").equals("switch")) {
-                this.entities.add(new FloorSwitch((JSONObject)entity));
-            } else {
-                this.entities.add(new Entity((JSONObject)entity));
+            
+            Object e = EntityFactory.getEntity((JSONObject)entity, gameMode, doorcreated, entities);
+            
+            if (e instanceof Player) {
+                this.player = (Player)e;
             }
+
+            this.entities.add((Entity)e);
         }
+
         this.inventory = new ArrayList<Item>();
         this.buildables = new ArrayList<String>();
-        try {
-            this.goals = ":" + entities.getJSONObject("goal-condition").getString("goal");
-            if (this.goals.equals(":AND") || this.goals.equals(":OR")) {
-                this.goals = "";
-                for (Object o : entities.getJSONObject("goal-condition").getJSONArray("subgoals")) {
-                    this.goals += ":" + ((JSONObject)o).getString("goal") + " ";
-                    this.goals += entities.getJSONObject("goal-condition").getString("goal") + " ";
-                }
-                this.goals = this.goals.substring(0,this.goals.length()-5);
-                this.goaltype = entities.getJSONObject("goal-condition").getString("goal");
-            }
-            this.complete = false;
-            this.goalsToComplete = Arrays.asList(this.goals.replace(":","").replace(" ", "").split(this.goaltype));
-            this.goalsCompleted = new ArrayList<>();
-        } catch (Exception e) {
-            //TODO: handle exception
-            this.nogoals = true;
-        }
+
+        this.goalTree = new CompositeGoals(entities.getJSONObject("goal-condition").getString("goal"), false);
+        this.goalTree.add(setGoals(entities.getJSONObject("goal-condition")));
+        this.goals = getGoals();
         
     }
 
     //getters
+    private Goal setGoals(JSONObject goals) {
+        CompositeGoals r = new CompositeGoals(goals.getString("goal"), false);
+        if (goals.equals(null)) {
+            return null;
+        }
+
+        for (Object o : goals.getJSONArray("subgoals")) {
+            if (((JSONObject)o).has("subgoals")) {
+                r.add(setGoals((JSONObject)o));
+            } else {
+                Goal newGoal = new GoalLeaf(((JSONObject)o).getString("goal"), false);
+                r.add(newGoal);
+            }
+        }
+        return r;
+    }
+
+    private String getGoals() {
+        return goalTree.goalsString();
+    }
+
 
     public Item getItem(String type) {
         for (Item i : this.inventory) {
