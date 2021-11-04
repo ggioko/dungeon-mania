@@ -2,8 +2,6 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.entities.collectable.Treasure;
-import dungeonmania.items.buildable.Buildable;
-import dungeonmania.items.Item;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -11,21 +9,18 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Spawner;
-import dungeonmania.items.*;
+import dungeonmania.entities.buildable.Buildable;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
-import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Sword;
-import dungeonmania.entities.collectable.Treasure;
-
 
 import java.io.File;
 import java.io.FileWriter;
@@ -185,7 +180,7 @@ public class DungeonManiaController {
     }
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         if (itemUsed != null) {
-            Item item = currentDungeon.getItemUsed(itemUsed);
+            Entity item = currentDungeon.getItemUsed(itemUsed);
             if (currentDungeon.getItemUsed(itemUsed) == null) {
                 throw new InvalidActionException("No item in inventory");
             }
@@ -210,7 +205,12 @@ public class DungeonManiaController {
         
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
-            currentDungeon = enemyInteraction(currentDungeon, itemUsed);
+            currentDungeon.battle(currentDungeon);
+            System.out.println(currentDungeon.getPlayer().getHealth());
+            // GAME OVER
+            if (currentDungeon.getPlayer().getHealth() <= 0) {
+                return null;
+            }
         }
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
@@ -348,7 +348,7 @@ public class DungeonManiaController {
                     throw new InvalidActionException("No weapon in inventory");
                 }
                 else {
-                    for (Item item : currentDungeon.inventory) {
+                    for (Entity item : currentDungeon.inventory) {
                         if (item.getType().equals("sword") || item.getType().equals("bow")) {      
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
@@ -376,96 +376,5 @@ public class DungeonManiaController {
 
         return currentDungeon.createResponse();
 
-    }
-
-    public Dungeon enemyInteraction(Dungeon current, String itemUsed) {
-        for (Entity e : current.entities) {
-            //for all moving entities aka enemies
-            if (e instanceof MovingEntity) {
-                if (e instanceof Mercenary) {
-                    Mercenary mercenary = (Mercenary) e;
-                    if (mercenary.isBribed()) {
-                        continue;
-                    }
-                }
-                MovingEntity enemy = (MovingEntity) e;
-                //if the entity is on the same ssquare as character
-                if (e.getPosition().equals(current.player.getPosition())) {
-                    boolean battleOver = false;
-                    currentDungeon.getPlayer().setBattling(true);
-                    while (!battleOver) {
-                        //change health values
-                        double playerHP = current.player.getHealth();
-                        double enemyHP = enemy.getHealth();
-                        double playerAD = current.player.getAttack();
-                        double enemyAD = enemy.getAttack();
-                        
-                        //Armour cuts enemy damage to half
-                        if (currentDungeon.getItem("armour") != null) {
-                            enemyAD = enemyAD/2;
-                            Armour.durability -= 1;
-                            Armour.isBroken(current.inventory);
-                            // decrease armour durability by 1 // TODO
-                        }
-
-                        if (currentDungeon.getItem("sword") != null) {
-                            enemy.setHealth(enemyHP - 1);
-                            Sword.durability -= 1;
-                            Sword.isBroken(current.inventory);
-                            // decrease sword durability by 1 // TODO
-                        }
-                        
-                        //Shield cuts enemy damage to half
-                        //If player has shield and armour, 75% of damage is negated.
-                        if (current.getItem("shield") != null) {
-                            enemyAD = current.getShield().effect(enemyAD, current.inventory);
-                        }
-                       
-                        //Bow allows player to attack twice
-                        if (current.getItem("bow") != null) { 
-                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
-                        }
-                        
-                        //Player and Enemy damage each other
-                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
-                        enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
-
-                        //Has an ally Mercenary
-                        if (currentDungeon.getPlayer().haveAlly()) {
-                            enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
-                        }
-
-                        
-                        
-
-                        if (currentDungeon.player.isInvincibilityPotionEffect() == true) {
-                            battleOver = true;
-                        }
-                        
-
-                        if (playerHP <= 0) {
-                            //one ring
-                            if (currentDungeon.getItem("one_ring") != null) {
-                                current.getPlayer().setHealth(10);
-                                currentDungeon.removeItem("one_ring");
-                            }
-                            //game over
-                            else {
-                                return null;
-                            }
-                        } else if (enemyHP <= 0) {
-                            //enemy is dead
-                            current.enemyDeath(enemy);
-                            battleOver = true;
-                        }
-                    
-
-                    }
-                    return current;
-                }
-            }
-            
-        }
-        return current;
     }
 }

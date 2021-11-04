@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import dungeonmania.entities.Entity;
 
-public class FloorSwitch extends StaticEntity {
+public class FloorSwitch extends Entity {
 
     private boolean triggered;
 

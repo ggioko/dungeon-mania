@@ -6,7 +6,11 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.buildable.Bow;
+import dungeonmania.entities.buildable.Buildable;
+import dungeonmania.entities.buildable.Shield;
 import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.OneRing;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Portal;
@@ -22,10 +26,6 @@ import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Moving.*;
-import dungeonmania.items.Item;
-import dungeonmania.items.buildable.Buildable;
-import dungeonmania.items.buildable.Shield;
-import dungeonmania.items.buildable.Bow;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -33,9 +33,7 @@ import dungeonmania.util.Position;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.sound.sampled.Port;
@@ -47,7 +45,7 @@ public class Dungeon {
     String dungeonId;
     String dungeonName;
     List<Entity> entities;
-    List<Item> inventory;
+    List<Entity> inventory;
     List<String> buildables;
     String goals;
     List<AnimationQueue> animations;
@@ -133,7 +131,7 @@ public class Dungeon {
                 this.entities.add(new Entity((JSONObject)entity));
             }
         }
-        this.inventory = new ArrayList<Item>();
+        this.inventory = new ArrayList<Entity>();
         this.buildables = new ArrayList<String>();
         try {
             this.goals = ":" + entities.getJSONObject("goal-condition").getString("goal");
@@ -158,8 +156,8 @@ public class Dungeon {
 
     //getters
 
-    public Item getItem(String type) {
-        for (Item i : this.inventory) {
+    public Entity getItem(String type) {
+        for (Entity i : this.inventory) {
             if (i.getType().equals(type)) {
                 return i;
             }
@@ -196,7 +194,7 @@ public class Dungeon {
         this.entities = entities;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<Entity> items) {
         this.inventory = items;
     }
 
@@ -204,12 +202,12 @@ public class Dungeon {
         this.player = player;
     }
 
-    public List<Item> getItems() {
+    public List<Entity> getItems() {
         return this.inventory;
     }
 
-    public Item getItemUsed(String stringId) {
-        for (Item item : this.inventory) {
+    public Entity getItemUsed(String stringId) {
+        for (Entity item : this.inventory) {
             if (item.getId().equals(stringId)) {
                 return item;
             }
@@ -255,8 +253,9 @@ public class Dungeon {
             entityList.add(e.createResponse());
         }
         List<ItemResponse> itemList = new ArrayList<ItemResponse>();
-        for (Item i : this.inventory) {
-            itemList.add(i.creatResponse());
+        for (Entity i : this.inventory) {
+            CollectableEntity item = (CollectableEntity) i;
+            itemList.add(item.createItemResponse());
         
         }
         if (!inventory.isEmpty()) {
@@ -279,7 +278,7 @@ public class Dungeon {
             if (entityResponse.getPosition().equals(player.getPosition()) && anEntity.isCollectable()) {
                 if ((entityResponse.getType().equals("key_1") || entityResponse.getType().equals("key_2")) && hasKey()) {
                 } else {
-                    inventory.add(new Item(entityResponse.getId(), entityResponse.getType()));
+                    inventory.add(anEntity);
                     it.remove();
                 }
             }
@@ -287,7 +286,7 @@ public class Dungeon {
     }
 
     public boolean hasKey() {
-        for (Item i : inventory) {
+        for (Entity i : inventory) {
             if (i.getType().equals("key_1") || i.getType().equals("key_2")) {
                 return true;
             }
@@ -296,8 +295,8 @@ public class Dungeon {
      }
 
     public void removeItemFromInventory(String type) {
-        for (Iterator<Item> it = inventory.iterator(); it.hasNext();) {
-            Item anItem = it.next();
+        for (Iterator<Entity> it = inventory.iterator(); it.hasNext();) {
+            Entity anItem = it.next();
             if (anItem.getType().equals(type)) {
                 it.remove();
                 break;
@@ -306,8 +305,8 @@ public class Dungeon {
     }
 
     public void removeItem(String type) {
-        for (Iterator<Item> item = inventory.iterator(); item.hasNext();) {
-            Item value = item.next();
+        for (Iterator<Entity> item = inventory.iterator(); item.hasNext();) {
+            Entity value = item.next();
             if (value.getType().equals(type)) item.remove();
         }
     }
@@ -332,20 +331,20 @@ public class Dungeon {
         if (enemy instanceof Mercenary) {
             int num = (int)Math.floor(Math.random()*(10-1+1)+1);
             if (num == 2) {
-                inventory.add(new Item("armour", "armour"));
+                inventory.add(new Armour("armour_drop", "armour"));
             }
         }
 
         if (enemy instanceof MovingEntity) {
             int num = (int)Math.floor(Math.random()*(50-1+1)+1);
             if (num == 2) {
-                inventory.add(new Item("one_ring", "one_ring"));
+                inventory.add(new OneRing("one_ring_drop", "one_ring"));
             }
         }
     }
 
     public Shield getShield() {
-        for (Item i : inventory) {
+        for (Entity i : inventory) {
             if (i.getType().equals("shield")) {
                 return (Shield) i;
             }
@@ -354,7 +353,7 @@ public class Dungeon {
     }
 
     public Bow getBow() {
-        for (Item i : inventory) {
+        for (Entity i : inventory) {
             if (i.getType().equals("bow")) {
                 return (Bow) i;
             } 
@@ -390,5 +389,90 @@ public class Dungeon {
                 }
             }
         }
+    }
+
+    public Dungeon battle(Dungeon current) {
+        for (Entity e : current.entities) {
+            //for all moving entities aka enemies
+            if (e instanceof MovingEntity) {
+                if (e instanceof Mercenary) {
+                    Mercenary mercenary = (Mercenary) e;
+                    if (mercenary.isBribed()) {
+                        continue;
+                    }
+                }
+                MovingEntity enemy = (MovingEntity) e;
+                //if the entity is on the same ssquare as character
+                if (e.getPosition().equals(current.player.getPosition())) {
+                    boolean battleOver = false;
+                    this.getPlayer().setBattling(true);
+                    while (!battleOver) {
+                        //change health values
+                        double playerHP = current.player.getHealth();
+                        double enemyHP = enemy.getHealth();
+                        double playerAD = current.player.getAttack();
+                        double enemyAD = enemy.getAttack();
+                        
+                        //Armour cuts enemy damage to half
+                        if (this.getItem("armour") != null) {
+                            enemyAD = enemyAD/2;
+                            Armour.durability -= 1;
+                            Armour.isBroken(current.inventory);
+                            // decrease armour durability by 1 // TODO
+                        }
+
+                        if (this.getItem("sword") != null) {
+                            enemy.setHealth(enemyHP - 1);
+                            Sword.durability -= 1;
+                            Sword.isBroken(current.inventory);
+                            // decrease sword durability by 1 // TODO
+                        }
+                        
+                        //Shield cuts enemy damage to half
+                        //If player has shield and armour, 75% of damage is negated.
+                        if (current.getItem("shield") != null) {
+                            enemyAD = current.getShield().effect(enemyAD, current.inventory);
+                        }
+                       
+                        //Bow allows player to attack twice
+                        if (current.getItem("bow") != null) { 
+                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, this.inventory);
+                        }
+                        
+                        //Player and Enemy damage each other
+                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
+                        enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
+
+                        //Has an ally Mercenary
+                        if (this.getPlayer().haveAlly()) {
+                            enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
+                        }
+
+                        if (this.player.isInvincibilityPotionEffect() == true) {
+                            battleOver = true;
+                        }
+                        
+                        if (playerHP <= 0) {
+                            //one ring
+                            if (this.getItem("one_ring") != null) {
+                                current.getPlayer().setHealth(10);
+                                this.removeItem("one_ring");
+                            }
+                            //game over
+                            else {
+                                return null;
+                            }
+                        } else if (enemyHP <= 0) {
+                            //enemy is dead
+                            current.enemyDeath(enemy);
+                            battleOver = true;
+                        }
+                    }
+                    return current;
+                }
+            }
+            
+        }
+        return current;
     }
 }

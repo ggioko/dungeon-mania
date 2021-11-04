@@ -1,12 +1,11 @@
-package dungeonmania.items.buildable;
+package dungeonmania.entities.buildable;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-import dungeonmania.items.Item;
+import dungeonmania.entities.Entity;
 
 public class Shield extends Buildable {
 
@@ -23,10 +22,10 @@ public class Shield extends Buildable {
     }
 
     @Override
-    public HashMap<String, Integer> getRelevantMaterialCount(List<Item> inventory) {
+    public HashMap<String, Integer> getRelevantMaterialCount(List<Entity> inventory) {
         HashMap<String, Integer> materialCount = new HashMap<>();
 
-        for (Item item : inventory) {
+        for (Entity item : inventory) {
             if (recipe.contains(item.getType()) && materialCount.containsKey(item.getType())) {
                 materialCount.put(item.getType(), materialCount.get(item.getType()) + 1);
             } else if (recipe.contains(item.getType()) && !materialCount.containsKey(item.getType())) {
@@ -37,7 +36,7 @@ public class Shield extends Buildable {
     }
 
     @Override
-    public boolean isBuildable(List<Item> inventory) {
+    public boolean isBuildable(List<Entity> inventory) {
 
         HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
 
@@ -59,7 +58,7 @@ public class Shield extends Buildable {
     }
 
     @Override
-    public Map<String, Integer> materialNeeded(List<Item> inventory) {
+    public Map<String, Integer> materialNeeded(List<Entity> inventory) {
         
         HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
         Map<String, Integer> returnMap = new HashMap<>();
@@ -84,7 +83,7 @@ public class Shield extends Buildable {
     }
 
     @Override
-    public void subtractDurability(List<Item> inventory) {
+    public void subtractDurability(List<Entity> inventory) {
         this.durability -= 1;
         if (this.durability == 0) {
             inventory.remove(this);
@@ -95,7 +94,7 @@ public class Shield extends Buildable {
         return durability;
     }
 
-    public double effect(double damage, List<Item> inventory) {
+    public double effect(double damage, List<Entity> inventory) {
         this.subtractDurability(inventory);
         return damage/2;
     }

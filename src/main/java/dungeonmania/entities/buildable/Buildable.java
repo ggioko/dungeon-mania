@@ -1,21 +1,21 @@
-package dungeonmania.items.buildable;
+package dungeonmania.entities.buildable;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import dungeonmania.items.Item;
+import dungeonmania.entities.Entity;
 
-public abstract class Buildable extends Item {
+public abstract class Buildable extends Entity {
 
     public Buildable(String id, String type) {
         super(id, type);
     }
 
-    public abstract boolean isBuildable(List<Item> inventory);
-    public abstract Map<String, Integer> materialNeeded(List<Item> inventory);
-    public abstract HashMap<String, Integer> getRelevantMaterialCount(List<Item> inventory);
-    public abstract void subtractDurability(List<Item> inventory);
+    public abstract boolean isBuildable(List<Entity> inventory);
+    public abstract Map<String, Integer> materialNeeded(List<Entity> inventory);
+    public abstract HashMap<String, Integer> getRelevantMaterialCount(List<Entity> inventory);
+    public abstract void subtractDurability(List<Entity> inventory);
     public abstract int getDurability();
 
     public static Buildable getBuildable(String type) {

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Player;
-import dungeonmania.items.Item;
+import dungeonmania.entities.Entity;
 
 public class InvisibilityPotion extends CollectableEntity {
 
@@ -16,8 +16,8 @@ public class InvisibilityPotion extends CollectableEntity {
         this.setDurability(durability);
     }
     
-    public static Dungeon addEffects(Dungeon currentDungeon, String itemUsed, Player player, List<Item> inventory) {
-        Item invisibility = null;
+    public static Dungeon addEffects(Dungeon currentDungeon, String itemUsed, Player player, List<Entity> inventory) {
+        Entity invisibility = null;
         
         if (itemUsed != null) {
             if (itemUsed.contains("invisibility_potion")) {

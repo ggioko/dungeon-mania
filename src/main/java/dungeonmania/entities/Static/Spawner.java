@@ -1,4 +1,5 @@
 package dungeonmania.entities.Static;
+import dungeonmania.entities.Entity;
 
 import org.json.JSONObject;
 
@@ -11,7 +12,7 @@ import dungeonmania.util.Position;
 import java.util.List;
 import dungeonmania.entities.Entity;
 
-public class Spawner extends StaticEntity {
+public class Spawner extends Entity {
     
     int ticks;
     int currentTick;
