@@ -180,6 +180,7 @@ public class DungeonManiaController {
         dungeonNames.add("potions");
         dungeonNames.add("maze");
         dungeonNames.add("characterTest");
+        dungeonNames.add("interactTest");
         return dungeonNames;
     }
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
