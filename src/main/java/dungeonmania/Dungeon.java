@@ -7,18 +7,9 @@ import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
-import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.collectable.OneRing;
-import dungeonmania.entities.Static.Boulder;
-import dungeonmania.entities.Static.FloorSwitch;
-import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.collectable.Armour;
-import dungeonmania.entities.collectable.HealthPotion;
-import dungeonmania.entities.collectable.InvincibilityPotion;
-import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Sword;
-import dungeonmania.entities.collectable.Treasure;
-import dungeonmania.entities.collectable.Wood;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.Buildable;
 import dungeonmania.entities.collectable.buildable.Shield;
@@ -79,9 +70,12 @@ public class Dungeon {
         this.buildables = new ArrayList<String>();
 
         if (entities.has("goal-condition")) {
-            this.goalTree = new CompositeGoals(entities.getJSONObject("goal-condition").getString("goal"), false);
             if (entities.getJSONObject("goal-condition").has("subgoals")) {
+                // this.goalTree = new CompositeGoals(entities.getJSONObject("goal-condition").getString("goal"), false);
+                this.goalTree = new CompositeGoals("Goal", false);
                 this.goalTree.add(setGoals(entities.getJSONObject("goal-condition")));        
+            } else {
+                this.goalTree = new GoalLeaf(entities.getJSONObject("goal-condition").getString("goal"), false);
             }
             this.goals = getGoals();
         } else {
@@ -207,8 +201,10 @@ public class Dungeon {
             if (Buildable.getBuildable("shield").isBuildable(inventory)) {
                 if (!buildables.contains("shield")) {buildables.add("shield");}
             } else {buildables.remove("shield");}
+        } 
+        if (this.goalTree != null) {
+            this.goals = getGoals();
         }
-            
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals);
     }
 
@@ -404,7 +400,13 @@ public class Dungeon {
     public List<Entity> getWalls() {
         List<Entity> walls = new ArrayList<Entity>();
         for (Entity e : this.entities) {
-            if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
+            if (e instanceof Mercenary){
+                Mercenary m = (Mercenary) e;
+                if (m.isBribed()) {
+                    walls.add(m);
+                }
+            }
+            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
                 if (e instanceof Wall || e instanceof MovingEntity || e instanceof Spawner) {
                     walls.add(e);
                 } else {

@@ -1,6 +1,10 @@
 package dungeonmania.goals;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.Player;
 
 public class CompositeGoals implements Goal {
 
@@ -17,38 +21,25 @@ public class CompositeGoals implements Goal {
     @Override
     public String goalsString() {
         String answer = null;
-        if (children.size() == 0) {
-            return ":" + this.name;
-        }
         if (children.size() == 1) {
-            return children.get(0).goalsString();
-        } else if (children.get(0) instanceof GoalLeaf && children.get(1) instanceof GoalLeaf) {
-            answer = "(:" + children.get(0).goalsString() + " " + this.getName() + " :" + children.get(1).goalsString() + ")";
-
+            if (!children.get(0).isComplete()) {
+                return children.get(0).goalsString();
+            }
         } else {
-            if (children.get(1) instanceof CompositeGoals && children.get(0) instanceof CompositeGoals) {
+            if (!children.get(0).isComplete() && !children.get(1).isComplete()) {
                 answer = "(" + children.get(0).goalsString() + " " + this.getName() + " " + children.get(1).goalsString() + ")";
-            }else if (children.get(1) instanceof CompositeGoals) {
-                answer = "(:" + children.get(0).goalsString() + " " + this.getName() + " " + children.get(1).goalsString() + ")";
-            } else if (children.get(0) instanceof CompositeGoals) {
-                answer = "(" + children.get(0).goalsString() + " " + this.getName() + " :" + children.get(1).goalsString() + ")";
+            } else if (!children.get(0).isComplete() && children.get(1).isComplete()) {
+                return children.get(0).goalsString();
+            } else if (children.get(0).isComplete() && !children.get(1).isComplete()) {
+                return children.get(1).goalsString();
             }
         }
         return answer;
     }
 
     @Override
-    public String nameString() {
-		String answer = "[" + this.getName()  + " "; 
-		for(Goal c : children) {
-			answer = answer + " " + c.nameString();
-		}	
-		answer = answer + "]";
-		return answer;
-	}
-
-    private String getName() {
-        return name;
+    public String getName() {
+        return this.name;
     }
 
     @Override
@@ -83,11 +74,29 @@ public class CompositeGoals implements Goal {
                     this.complete = false;
                 }
             }
+        } if (this.name.equals("Goal")) {
+            if (children.get(0).isComplete()) {
+                this.complete = true;
+            } else {
+                this.complete = false;
+            }
         }
     }
 
-    public void checkGoalState() {
-        
+    public void checkGoalState(List<Entity> entities, Player player) {
+        for (Goal g : children) {
+            if (g instanceof CompositeGoals) {
+                // System.out.println(g.getName()+": "+g.isComplete());
+                ((CompositeGoals)g).checkGoalState(entities, player);
+                ((CompositeGoals)g).checkComplete();
+            } else {
+                // System.out.println(g.getName()+": "+g.isComplete());
+                if (((GoalLeaf)g).checkComplete(entities, player)) {
+                    ((GoalLeaf)g).setComplete();
+                } else {
+                    ((GoalLeaf)g).setIncomplete();
+                }
+            }
+        }
     }
-    
 }

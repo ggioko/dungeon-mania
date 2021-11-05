@@ -2,7 +2,7 @@ package dungeonmania.goals;
 
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Static.Boulder;
+import dungeonmania.entities.Static.Exit;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.collectable.Treasure;
 
@@ -19,7 +19,7 @@ public class GoalLeaf implements Goal {
 
     @Override
     public String goalsString() {
-        return this.name;
+        return ":"+this.name;
     }
 
     @Override
@@ -40,64 +40,33 @@ public class GoalLeaf implements Goal {
         this.complete = false;
     }
 
-    @Override
-    public String nameString() {
-        return this.name;
-    }
-
     public boolean checkComplete(List<Entity> entities, Player player) {
         if (this.name.equals("treasure")) {
             if (Treasure.treasureOnMap(entities)) {
                 return false;
-            } else {
-                return true;
-            }
+            } else return true;
         } else if (this.name.equals("enemies")) {
             if (Entity.enemiesOnMap(entities)) {
                 return false;
-            } else {
+            } else return true;
+        } else if (this.name.equals("exit")) {
+            if (Exit.playerOnExit(entities, player)) {
                 return true;
-            }
+            } else return false;
+        } else if (this.name.equals("boulders")) {
+            if (FloorSwitch.allSwitchTriggered(entities)) {
+                return true;
+            } else return false;
         }
         return false;
     }
 
-    // public void checkComplete(List<Entity> entities, Player player) {
-    //     if (this.name.equals("exit")) {
-    //         for (Entity e : entities) {
-    //             if (e.getType().equals("exit") && e.getPosition().equals(player.getPosition())) {
-    //                 this.complete = true;
-    //                 break;
-    //             } else {
-    //                 this.complete = false;
-    //             }
-    //         }
-    //     } else if (this.name.equals("treasure")) {
-    //         for (Entity e : entities) {
-    //             if (e.getType().equals("treasure")) {
-    //                 this.complete = false;
-    //                 break;
-    //             }
-    //         }
-    //     } else if (this.name.equals("enemies")) {
-    //         for (Entity e : entities) {
-    //             if (e.getType().equals("mercenary") || e.getType().equals("spider") || e.getType().equals("zombie_toast")) {
-    //                 this.complete = false;
-    //                 break;
-    //             }
-    //         }
-    //     } else if (this.name.equals("boulders")) {
-    //         for (Entity e : entities) {
-    //             if (e.getType().equals("wtich")) {
-    //                 if (!((FloorSwitch)e).getTriggered()) {
-    //                     this.complete = false;
-    //                     break;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    @Override
+    public void checkGoalState(List<Entity> entities, Player player) {        
+    }
 
-    
-
+    @Override
+    public String getName() {
+        return this.name;
+    }
 }  

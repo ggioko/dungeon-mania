@@ -7,6 +7,26 @@
         "x": 3,
         "y": 2,
         "type": "player"
+      },
+      {
+        "x": 3,
+        "y": 0,
+        "type": "exit"
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "type": "treasure"
+      },
+      {
+        "x": 4,
+        "y": 2,
+        "type": "boulder"
+      },
+      {
+        "x": 5,
+        "y": 1,
+        "type": "switch"
       }
     ],
     "goal-condition": {
