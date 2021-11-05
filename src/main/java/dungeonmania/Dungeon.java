@@ -349,8 +349,8 @@ public class Dungeon {
                         }
                         
                         //Player and Enemy damage each other
-                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
-                        enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
+                        current.player.takeDamage(enemyHP, enemyAD);
+                        enemy.takeDamage(playerHP, playerAD);
 
                         //Has an ally Mercenary
                         if (this.getPlayer().haveAlly()) {

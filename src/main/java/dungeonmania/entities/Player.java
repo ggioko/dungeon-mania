@@ -88,6 +88,10 @@ public class Player extends Entity {
         this.battling = battling;
     }
 
+    public void takeDamage(double enemyHP, double enemyAD) {
+        this.setHealth(this.health - ((enemyHP * enemyAD) / 10));
+    }
+
     public boolean isBattling () {
         return this.battling;
     }

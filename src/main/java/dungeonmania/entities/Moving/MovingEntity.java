@@ -41,6 +41,9 @@ public class MovingEntity extends Entity {
         return;
     }
 
+    public void takeDamage(double playerHP, double playerAD) {
+        this.setHealth(this.health - ((playerHP * playerAD) / 5));
+    }
    
     
 }
