@@ -171,24 +171,8 @@ public class Dungeon {
 
     public void pathing(Direction direction) {
         //make a list of walls
-        List<Entity> walls = new ArrayList<Entity>();
-        for (Entity e : this.entities) {
-            if (e instanceof Mercenary){
-                Mercenary m = (Mercenary) e;
-                if (m.isBribed()) {
-                    walls.add(m);
-                }
-            }
-            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
-                if (e instanceof Wall || e instanceof MovingEntity || e instanceof Spawner) {
-                    walls.add(e);
-                } else {
-                    if (!(((Door)e).getType().equals("door_unlocked"))) {
-                        walls.add(e);
-                    }
-                }
-            }
-        }
+        List<Entity> walls = getWalls();
+
         for (Entity e : this.entities) {
             if (e instanceof Player) {
                 e.move(this.player.getPosition().translateBy(direction), walls);
@@ -315,24 +299,7 @@ public class Dungeon {
     }
 
     public void MercenaryBattleMovement(Dungeon current) {
-        List<Entity> walls = new ArrayList<Entity>();
-        for (Entity e : this.entities) {
-            if (e instanceof Mercenary){
-                Mercenary m = (Mercenary) e;
-                if (m.isBribed()) {
-                    walls.add(m);
-                }
-            }
-            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity) {
-                if (e instanceof Wall || e instanceof MovingEntity) {
-                    walls.add(e);
-                } else {
-                    if (!(((Door)e).getType().equals("door_unlocked"))) {
-                        walls.add(e);
-                    }
-                }
-            }
-        }
+        List<Entity> walls = getWalls();
         for (Entity entity: this.entities) {
             if (entity instanceof Mercenary) {
                 Mercenary mercenary = (Mercenary) entity;
@@ -428,5 +395,21 @@ public class Dungeon {
             
         }
         return current;
+    }
+
+    public List<Entity> getWalls() {
+        List<Entity> walls = new ArrayList<Entity>();
+        for (Entity e : this.entities) {
+            if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
+                if (e instanceof Wall || e instanceof MovingEntity || e instanceof Spawner) {
+                    walls.add(e);
+                } else {
+                    if (!(((Door)e).getType().equals("door_unlocked"))) {
+                        walls.add(e);
+                    }
+                }
+            }
+        }
+        return walls;
     }
 }
