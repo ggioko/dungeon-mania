@@ -185,7 +185,6 @@ public class DungeonManiaController {
         return dungeonNames;
     }
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        System.out.println(currentDungeon.goalTree.goalsString());
         if (itemUsed != null) {
             Item item = currentDungeon.getItemUsed(itemUsed);
             if (currentDungeon.getItemUsed(itemUsed) == null) {

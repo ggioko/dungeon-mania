@@ -11,6 +11,8 @@ import dungeonmania.items.Item;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 import dungeonmania.entities.Moving.Mercenary;
+import dungeonmania.entities.Moving.Spider;
+import dungeonmania.entities.Moving.Zombie;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.StaticEntity;
 import dungeonmania.entities.Static.Wall;
@@ -48,6 +50,15 @@ public class Entity {
 
     public Item createItem() {
         return new Item(this.id, this.type);
+    }
+
+    public static boolean enemiesOnMap(List<Entity> entities) {
+        for (Entity e : entities) {
+            if (e instanceof Mercenary || e instanceof Spider || e instanceof Zombie) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //getters
