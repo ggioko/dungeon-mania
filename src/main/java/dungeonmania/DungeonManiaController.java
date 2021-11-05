@@ -7,6 +7,7 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
 import dungeonmania.util.Position;
+import spark.utils.IOUtils;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Spawner;
@@ -21,11 +22,15 @@ import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
+import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.collectable.Sword;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -111,9 +116,14 @@ public class DungeonManiaController {
         //width, height, entities
         for (Entity e : currentDungeon.entities) {
             //x, y, type
-            entities.put(new JSONObject("{x:" + e.getPosition().getX() + ",y:" + e.getPosition().getY() + ",type:" + e.getType() + "}"));
+            if ((e instanceof Door) || (e instanceof Key)) {
+                entities.put(new JSONObject("{x:" + e.getPosition().getX() + ",y:" + e.getPosition().getY() + ",type:" + e.getType() +  ",key:" + e.getKey() + "}"));
+            } else {
+                entities.put(new JSONObject("{x:" + e.getPosition().getX() + ",y:" + e.getPosition().getY() + ",type:" + e.getType() + "}"));
+            }
         }
         saveGame.put("entities", entities);
+        saveGame.put("gamemode", currentDungeon.gameMode);
         //turn into file
         FileWriter filewriter;
         try {
@@ -145,11 +155,39 @@ public class DungeonManiaController {
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
         //should be the same as new game
-        return null;
+        //create list of entity response based on json from dungeon
+        JSONObject obj;
+        try {
+            InputStream is = new FileInputStream("src" + File.separator + "main" + File.separator + "java" + File.separator + "dungeonmania" + File.separator + "saves" + File.separator + name + ".json");
+            obj = new JSONObject(IOUtils.toString(is));
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+        String gameMode = obj.getString("gamemode");
+        // If gamemode doesnt exist
+        if (!gameMode.equalsIgnoreCase("standard") && !gameMode.equalsIgnoreCase("peaceful") && !gameMode.equalsIgnoreCase("hard")) {
+            throw new IllegalArgumentException();
+        }
+        
+        Dungeon newDungeon = new Dungeon(name, obj, gameMode);
+        currentDungeon = newDungeon;
+        return newDungeon.createResponse();
     }
 
     public List<String> allGames() {
-        return new ArrayList<>();
+        File folder = new File("src/main/java/dungeonmania/saves");
+        File[] listOfFiles = folder.listFiles();
+        List<String> result = new ArrayList<String>();
+        for (File f : listOfFiles) {
+            result.add(f.getName().replace(".json", ""));
+        }
+        return result;
     }
 
     public boolean checkIfDungeonExists(String dungeonName, ArrayList<String> dungeonNames) {
