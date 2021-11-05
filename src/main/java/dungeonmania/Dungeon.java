@@ -23,6 +23,7 @@ import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import java.util.Iterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -203,7 +204,12 @@ public class Dungeon {
         if (this.goalTree != null) {
             this.goals = getGoals();
         }
-        return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals);
+        List<AnimationQueue> animations = new ArrayList<>();
+        animations.add(new AnimationQueue("PostTick", this.player.getId(), Arrays.asList(
+            "healthbar tint 0x00ff00", "healthbar set "+ this.player.getHealth()/10 + " over 1.5s"
+        ), false, -1));
+        animations.add(new AnimationQueue("PostTick", "player", Arrays.asList("healthbar shake, over 0.5s, ease Sin"), false, 0.5));
+        return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals, animations);
     }
 
     public void itemPickup() {
