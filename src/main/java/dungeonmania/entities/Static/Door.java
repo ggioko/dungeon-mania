@@ -43,4 +43,8 @@ public class Door extends Entity {
         current.setEntities(entities);
         return current;
     }
+
+    public Integer getKey(){
+        return this.key;
+    }
 }

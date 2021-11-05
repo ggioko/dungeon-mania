@@ -12,4 +12,9 @@ public class Key extends CollectableEntity {
         this.setDurability(durability);
         this.key = entity.getInt("key");
     }
+    
+    public Integer getKey(){
+        return this.key;
+    }
+
 }

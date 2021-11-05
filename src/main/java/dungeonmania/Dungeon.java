@@ -57,9 +57,8 @@ public class Dungeon {
         this.gameMode = gameMode;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
-            
             Object e = EntityFactory.getEntity((JSONObject)entity, gameMode, doorcreated, entities);
-            
+
             if (e instanceof Player) {
                 this.player = (Player)e;
             }
