@@ -387,9 +387,15 @@ public class Dungeon {
     }
 
     public List<Entity> getWalls() {
-        List<Entity> walls = new ArrayList<Entity>();
+        List<Entity> walls = new ArrayList<Entity>();       
         for (Entity e : this.entities) {
-            if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
+            if (e instanceof Mercenary){
+                Mercenary m = (Mercenary) e;
+                if (m.isBribed()) {
+                    walls.add(m);
+                }
+            }
+            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
                 if (e instanceof Wall || e instanceof MovingEntity || e instanceof Spawner) {
                     walls.add(e);
                 } else {
