@@ -26,5 +26,9 @@ public class FloorSwitch extends Entity {
             }
         }
     }
+
+    public boolean getTriggered() {
+        return this.triggered;
+    }
     
 }

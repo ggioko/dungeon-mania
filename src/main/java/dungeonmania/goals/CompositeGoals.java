@@ -17,6 +17,9 @@ public class CompositeGoals implements Goal {
     @Override
     public String goalsString() {
         String answer = null;
+        if (children.size() == 0) {
+            return ":" + this.name;
+        }
         if (children.size() == 1) {
             return children.get(0).goalsString();
         } else if (children.get(0) instanceof GoalLeaf && children.get(1) instanceof GoalLeaf) {
@@ -27,13 +30,22 @@ public class CompositeGoals implements Goal {
                 answer = "(" + children.get(0).goalsString() + " " + this.getName() + " " + children.get(1).goalsString() + ")";
             }else if (children.get(1) instanceof CompositeGoals) {
                 answer = "(:" + children.get(0).goalsString() + " " + this.getName() + " " + children.get(1).goalsString() + ")";
-                System.out.println(answer);
             } else if (children.get(0) instanceof CompositeGoals) {
                 answer = "(" + children.get(0).goalsString() + " " + this.getName() + " :" + children.get(1).goalsString() + ")";
             }
         }
         return answer;
     }
+
+    @Override
+    public String nameString() {
+		String answer = "[" + this.getName()  + " "; 
+		for(Goal c : children) {
+			answer = answer + " " + c.nameString();
+		}	
+		answer = answer + "]";
+		return answer;
+	}
 
     private String getName() {
         return name;
