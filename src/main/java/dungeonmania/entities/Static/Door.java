@@ -7,7 +7,6 @@ import org.json.JSONObject;
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
-import dungeonmania.entities.collectable.Key;
 import dungeonmania.util.Direction;
 
 public class Door extends Entity {

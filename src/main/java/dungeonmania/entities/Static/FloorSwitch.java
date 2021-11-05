@@ -30,5 +30,16 @@ public class FloorSwitch extends Entity {
     public boolean getTriggered() {
         return this.triggered;
     }
+
+    public static boolean allSwitchTriggered(List<Entity> entities) {
+        for (Entity e : entities) {
+            if (e.getType().equals("switch")){
+                if (!((FloorSwitch)e).getTriggered()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     
 }

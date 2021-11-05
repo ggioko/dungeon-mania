@@ -1,36 +1,30 @@
 package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.entities.collectable.Treasure;
-import dungeonmania.entities.collectable.buildable.Buildable;
+import dungeonmania.goals.CompositeGoals;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
-import dungeonmania.util.Position;
 import spark.utils.IOUtils;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Spawner;
-import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
-import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
-import dungeonmania.entities.collectable.Sword;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -218,6 +212,7 @@ public class DungeonManiaController {
         dungeonNames.add("interactTest");
         return dungeonNames;
     }
+    
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         if (itemUsed != null) {
             Entity item = currentDungeon.getItemUsed(itemUsed);
@@ -262,16 +257,8 @@ public class DungeonManiaController {
         }
         
         // SIMPLE AND COMPLEX GOALS
-        boolean treasureComplete = true;
-        boolean enemiesComplete = true;
         boolean teleported = false;
         for (Entity e : currentDungeon.entities) {
-            if (e instanceof Treasure) {
-                treasureComplete = false;
-            }
-            if (e instanceof MovingEntity || e instanceof Spawner) {
-                enemiesComplete = false;
-            }
             //boulder movement and floor switch
             if (e instanceof Boulder) {
                 currentDungeon.player = ((Boulder)e).move(movementDirection, currentDungeon.player, currentDungeon.entities);
@@ -319,6 +306,10 @@ public class DungeonManiaController {
         
         // ITEM PICKUP
         currentDungeon.itemPickup();
+        if (currentDungeon.goalTree != null && !currentDungeon.goalTree.isComplete()) {
+            currentDungeon.goalTree.checkGoalState(currentDungeon.entities, currentDungeon.player);
+            ((CompositeGoals) currentDungeon.goalTree).checkComplete();
+        }
         return currentDungeon.createResponse();
     }
     

@@ -3,7 +3,6 @@ package dungeonmania.entities;
 import org.json.JSONObject;
 
 import dungeonmania.entities.Moving.Mercenary;
-import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Position;
 import java.util.List;
 

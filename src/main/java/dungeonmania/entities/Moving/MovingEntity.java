@@ -1,9 +1,7 @@
 package dungeonmania.entities.Moving;
 
 import dungeonmania.entities.Entity;
-import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
-import dungeonmania.entities.Static.Wall;
 import java.util.List;
 
 import org.json.JSONObject;

@@ -1,6 +1,5 @@
 package dungeonmania.entities;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,15 +9,9 @@ import org.json.JSONObject;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 import dungeonmania.entities.Moving.Mercenary;
+import dungeonmania.entities.Moving.Spider;
+import dungeonmania.entities.Moving.Zombie;
 import dungeonmania.entities.Static.Spawner;
-import dungeonmania.entities.Static.*;
-import dungeonmania.entities.Static.Wall;
-import dungeonmania.entities.collectable.Armour;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.time.LocalTime;
 
 public class Entity {
     private String id;
@@ -48,6 +41,15 @@ public class Entity {
 
     public EntityResponse createResponse() {
         return new EntityResponse(this.id, this.type, this.position, this.isInteractable);
+    }
+
+    public static boolean enemiesOnMap(List<Entity> entities) {
+        for (Entity e : entities) {
+            if (e instanceof Mercenary || e instanceof Spider || e instanceof Zombie) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //getters
