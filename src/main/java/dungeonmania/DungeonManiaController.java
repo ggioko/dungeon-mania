@@ -193,7 +193,7 @@ public class DungeonManiaController {
         }
 
         //gets the item that is used 
-        if (ticknum >= 10) {
+        if (ticknum >= 27) {
             currentDungeon = Spider.spawn(currentDungeon);
             this.ticknum = 0;
         }

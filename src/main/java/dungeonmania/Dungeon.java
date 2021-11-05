@@ -30,7 +30,6 @@ import dungeonmania.entities.Moving.*;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +47,8 @@ public class Dungeon {
     List<Entity> entities;
     List<Entity> inventory;
     List<String> buildables;
-    String goals;
     Goal goalTree;
+    String goals;
     List<AnimationQueue> animations;
     Player player;
     String gameMode;
@@ -79,10 +78,13 @@ public class Dungeon {
         this.inventory = new ArrayList<Entity>();
         this.buildables = new ArrayList<String>();
 
-        this.goalTree = new CompositeGoals(entities.getJSONObject("goal-condition").getString("goal"), false);
-        this.goalTree.add(setGoals(entities.getJSONObject("goal-condition")));
-        this.goals = getGoals();
-        
+        if (entities.has("goal-condition")) {
+            this.goalTree = new CompositeGoals(entities.getJSONObject("goal-condition").getString("goal"), false);
+            this.goalTree.add(setGoals(entities.getJSONObject("goal-condition")));        
+            this.goals = getGoals();
+        } else {
+            this.goals = null;
+        }
     }
 
     //getters
