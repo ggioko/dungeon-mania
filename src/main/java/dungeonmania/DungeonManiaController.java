@@ -114,6 +114,7 @@ public class DungeonManiaController {
             entities.put(new JSONObject("{x:" + e.getPosition().getX() + ",y:" + e.getPosition().getY() + ",type:" + e.getType() + "}"));
         }
         saveGame.put("entities", entities);
+        saveGame.put("gamemode", currentDungeon.gameMode);
         //turn into file
         FileWriter filewriter;
         try {
@@ -145,10 +146,40 @@ public class DungeonManiaController {
 
     public DungeonResponse loadGame(String name) throws IllegalArgumentException {
         //should be the same as new game
-        return null;
+        //create list of entity response based on json from dungeon
+        JSONObject obj;
+        try {
+            obj = new JSONObject(new File("src" + File.separator + "main" + File.separator + "java" + File.separator + "dungeonmania" + File.separator + "saves" + File.separator + name + ".json"));
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+        String gameMode = obj.getString("gamemode");
+        // If gamemode doesnt exist
+        if (!gameMode.equalsIgnoreCase("standard") && !gameMode.equalsIgnoreCase("peaceful") && !gameMode.equalsIgnoreCase("hard")) {
+            throw new IllegalArgumentException();
+        }
+
+        // If dungeon name doesnt exist
+        ArrayList<String> dungeonNames = new ArrayList<String>();
+        dungeonNames = setDungeonNames(name);
+
+        if (!checkIfDungeonExists(name, dungeonNames)) {
+            throw new IllegalArgumentException();
+        }
+        
+        Dungeon newDungeon = new Dungeon(name, obj, gameMode);
+        currentDungeon = newDungeon;
+        return newDungeon.createResponse();
     }
 
     public List<String> allGames() {
+        
         return new ArrayList<>();
     }
 
