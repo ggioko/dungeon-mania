@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.spi.CurrencyNameProvider;
 
 import javax.sound.sampled.Port;
 
@@ -284,24 +285,6 @@ public class Dungeon {
         }
     }
 
-    public Shield getShield() {
-        for (Entity i : inventory) {
-            if (i.getType().equals("shield")) {
-                return (Shield) i;
-            }
-        }
-        return null;
-    }
-
-    public Bow getBow() {
-        for (Entity i : inventory) {
-            if (i.getType().equals("bow")) {
-                return (Bow) i;
-            } 
-        }
-        return null;
-    }
-
     public void MercenaryBattleMovement(Dungeon current) {
         List<Entity> walls = getWalls();
         for (Entity entity: this.entities) {
@@ -356,12 +339,14 @@ public class Dungeon {
                         //Shield cuts enemy damage to half
                         //If player has shield and armour, 75% of damage is negated.
                         if (current.getItem("shield") != null) {
-                            enemyAD = current.getShield().effect(enemyAD, current.inventory);
+                            Shield shield = (Shield) current.getItem("shield");
+                            enemyAD = shield.effect(enemyAD, current.inventory);
                         }
                        
                         //Bow allows player to attack twice
-                        if (current.getItem("bow") != null) { 
-                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, this.inventory);
+                        if (current.getItem("bow") != null) {
+                            Bow bow = (Bow) current.getItem("bow");
+                            bow.effect(enemy, enemyHP, playerHP, playerAD, this.inventory);
                         }
                         
                         //Player and Enemy damage each other

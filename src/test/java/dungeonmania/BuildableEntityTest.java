@@ -130,6 +130,8 @@ public class BuildableEntityTest {
             controller.build("bow");
         });
 
+        Bow bow = (Bow) controller.currentDungeon.getItem("bow");
+        bow.setDurability(1);
         
         // look for and fight enemies        
         controller.tick(null, Direction.RIGHT);
@@ -146,11 +148,6 @@ public class BuildableEntityTest {
         
         // shield durability == 0 && not in inventory
         assertNull(controller.currentDungeon.getItem("shield"));
-        
-        controller.tick(null, Direction.NONE);
-        controller.tick(null, Direction.NONE);
-        controller.tick(null, Direction.NONE);
-        controller.tick(null, Direction.NONE);
 
         // bow durability == 0 && not in inventory
         assertNull(controller.currentDungeon.getItem("bow")); 
