@@ -14,11 +14,9 @@ public class Bow extends Buildable {
     private static final int woodNeeded = 1;
     private static final int arrowNeeded = 3;
 
-    private int durability;
-
     public Bow(String id, String type) {
         super(id, type);
-        this.durability = 20;
+        this.setDurability(20);
     }
 
     @Override
@@ -63,14 +61,11 @@ public class Bow extends Buildable {
 
     @Override
     public void subtractDurability(List<Entity> inventory) {
-        this.durability -= 1;
-        if (this.durability == 0) {
+        
+        this.setDurability(this.getDurability() - 1);
+        if (this.getDurability() == 0) {
             inventory.remove(this);
         }
-    }
-
-    public int getDurability() {
-        return durability;
     }
 
     public void effect(MovingEntity e, double enemyHP, double playerHP, double playerAD, List<Entity> inventory) {

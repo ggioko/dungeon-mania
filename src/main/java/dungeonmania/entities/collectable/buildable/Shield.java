@@ -14,11 +14,9 @@ public class Shield extends Buildable {
     private static final int treasureNeeded = 1;
     private static final List<String> recipe = Arrays.asList("wood", "treasure", "key_1", "key_2");
 
-    private int durability;
-
     public Shield(String id, String type) {
         super(id, type);
-        this.durability = 10;
+        this.setDurability(10);
     }
 
     @Override
@@ -84,14 +82,10 @@ public class Shield extends Buildable {
 
     @Override
     public void subtractDurability(List<Entity> inventory) {
-        this.durability -= 1;
-        if (this.durability == 0) {
+        this.setDurability(this.getDurability() - 1);
+        if (this.getDurability() == 0) {
             inventory.remove(this);
         }
-    }
-
-    public int getDurability() {
-        return durability;
     }
 
     public double effect(double damage, List<Entity> inventory) {
