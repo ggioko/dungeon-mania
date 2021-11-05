@@ -16,7 +16,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.items.Item;
+import dungeonmania.entities.*;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.ItemResponse;
 

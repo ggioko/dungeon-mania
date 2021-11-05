@@ -9,7 +9,7 @@ import dungeonmania.entities.Player;
 import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.util.Direction;
 
-public class Boulder extends StaticEntity {
+public class Boulder extends Entity {
 
     public Boulder(JSONObject entity) {
         super(entity);

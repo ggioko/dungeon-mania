@@ -2,8 +2,7 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.entities.collectable.Treasure;
-import dungeonmania.items.buildable.Buildable;
-import dungeonmania.items.Item;
+import dungeonmania.entities.collectable.buildable.Buildable;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
@@ -11,21 +10,18 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Spawner;
-import dungeonmania.items.*;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
-import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Sword;
-import dungeonmania.entities.collectable.Treasure;
-
 
 import java.io.File;
 import java.io.FileWriter;
@@ -187,7 +183,7 @@ public class DungeonManiaController {
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         System.out.println(currentDungeon.goalTree.goalsString());
         if (itemUsed != null) {
-            Item item = currentDungeon.getItemUsed(itemUsed);
+            Entity item = currentDungeon.getItemUsed(itemUsed);
             if (currentDungeon.getItemUsed(itemUsed) == null) {
                 throw new InvalidActionException("No item in inventory");
             }
@@ -196,23 +192,24 @@ public class DungeonManiaController {
             }
             else throw new IllegalArgumentException("itemUsed is not a valid item");
         }
+        System.out.println(currentDungeon.player.getHealth());
 
         //gets the item that is used 
-        if (ticknum >= 27) {
+        if (ticknum >= 25) {
             currentDungeon = Spider.spawn(currentDungeon);
             this.ticknum = 0;
         }
         this.ticknum++;
 
-        currentDungeon.getItem(itemUsed);
-        
-        
         // ENEMY PATHING
         currentDungeon.pathing(movementDirection);
         
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
-            currentDungeon = enemyInteraction(currentDungeon, itemUsed);
+            currentDungeon.battle(currentDungeon);
+            if (currentDungeon.battle(currentDungeon) == null) {
+                currentDungeon = null;
+            }
         }
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
@@ -227,7 +224,12 @@ public class DungeonManiaController {
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
         }
-        
+
+        for (Entity e: currentDungeon.entities) {
+            if (e instanceof Mercenary) {
+                System.out.println("Position of " + e.getId() + "is " + e.getPosition());
+            }
+        }
         
         // SIMPLE AND COMPLEX GOALS
         boolean treasureComplete = true;
@@ -258,37 +260,6 @@ public class DungeonManiaController {
                 }
             }
         }
-        // if (!currentDungeon.nogoals) {
-        //     //add treasure to completed goals if it is completed
-        //     if (treasureComplete) {
-        //         currentDungeon.goalsCompleted.add("treasure");
-        //     }
-        //     //add enemies to completed if it is completed
-        //     if (enemiesComplete) {
-        //         currentDungeon.goalsCompleted.add("enemies");
-        //     }
-        //     if (currentDungeon.goaltype.equals("AND")) {
-        //         if (currentDungeon.goalsCompleted.containsAll(currentDungeon.goalsToComplete)) {
-        //             //game won
-        //             currentDungeon.complete = true;
-        //             currentDungeon.goals = "";
-        //         }
-        //     } else if (currentDungeon.goaltype.equals("OR")) {
-        //         for (String s : currentDungeon.goalsCompleted) {
-        //             if (currentDungeon.goalsToComplete.contains(s)) {
-        //                 //game won
-        //                 currentDungeon.complete = true;
-        //                 currentDungeon.goals = "";
-        //             }
-        //         }
-        //     } else {
-        //         if (currentDungeon.goalsCompleted.contains(currentDungeon.goals.replace(":", "").replace(" ", ""))) {
-        //             // Game won
-        //             currentDungeon.complete = true;
-        //             currentDungeon.goals = "";
-        //         }
-        //     }               
-        // }
         
 
         // POTION LOGIC
@@ -314,7 +285,7 @@ public class DungeonManiaController {
 
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
-
+        
         
         // ITEM PICKUP
         currentDungeon.itemPickup();
@@ -350,8 +321,9 @@ public class DungeonManiaController {
                     throw new InvalidActionException("No weapon in inventory");
                 }
                 else {
-                    for (Item item : currentDungeon.inventory) {
-                        if (item.getType().equals("sword") || item.getType().equals("bow")) {      
+                    for (Entity i : currentDungeon.inventory) {
+                        if (i.getType().equals("sword") || i.getType().equals("bow")) {   
+                            CollectableEntity item = (CollectableEntity) i;
                             int newDurability = item.getDurability() - 1;
                             item.setDurability(newDurability);
                             currentDungeon.removeEntity(entityId);
@@ -378,96 +350,5 @@ public class DungeonManiaController {
 
         return currentDungeon.createResponse();
 
-    }
-
-    public Dungeon enemyInteraction(Dungeon current, String itemUsed) {
-        for (Entity e : current.entities) {
-            //for all moving entities aka enemies
-            if (e instanceof MovingEntity) {
-                if (e instanceof Mercenary) {
-                    Mercenary mercenary = (Mercenary) e;
-                    if (mercenary.isBribed()) {
-                        continue;
-                    }
-                }
-                MovingEntity enemy = (MovingEntity) e;
-                //if the entity is on the same ssquare as character
-                if (e.getPosition().equals(current.player.getPosition())) {
-                    boolean battleOver = false;
-                    currentDungeon.getPlayer().setBattling(true);
-                    while (!battleOver) {
-                        //change health values
-                        double playerHP = current.player.getHealth();
-                        double enemyHP = enemy.getHealth();
-                        double playerAD = current.player.getAttack();
-                        double enemyAD = enemy.getAttack();
-                        
-                        //Armour cuts enemy damage to half
-                        if (currentDungeon.getItem("armour") != null) {
-                            enemyAD = enemyAD/2;
-                            Armour.durability -= 1;
-                            Armour.isBroken(current.inventory);
-                            // decrease armour durability by 1 // TODO
-                        }
-
-                        if (currentDungeon.getItem("sword") != null) {
-                            enemy.setHealth(enemyHP - 1);
-                            Sword.durability -= 1;
-                            Sword.isBroken(current.inventory);
-                            // decrease sword durability by 1 // TODO
-                        }
-                        
-                        //Shield cuts enemy damage to half
-                        //If player has shield and armour, 75% of damage is negated.
-                        if (current.getItem("shield") != null) {
-                            enemyAD = current.getShield().effect(enemyAD, current.inventory);
-                        }
-                       
-                        //Bow allows player to attack twice
-                        if (current.getItem("bow") != null) { 
-                            current.getBow().effect(enemy, enemyHP, playerHP, playerAD, currentDungeon.inventory);
-                        }
-                        
-                        //Player and Enemy damage each other
-                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
-                        enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
-
-                        //Has an ally Mercenary
-                        if (currentDungeon.getPlayer().haveAlly()) {
-                            enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
-                        }
-
-                        
-                        
-
-                        if (currentDungeon.player.isInvincibilityPotionEffect() == true) {
-                            battleOver = true;
-                        }
-                        
-
-                        if (playerHP <= 0) {
-                            //one ring
-                            if (currentDungeon.getItem("one_ring") != null) {
-                                current.getPlayer().setHealth(10);
-                                currentDungeon.removeItem("one_ring");
-                            }
-                            //game over
-                            else {
-                                return null;
-                            }
-                        } else if (enemyHP <= 0) {
-                            //enemy is dead
-                            current.enemyDeath(enemy);
-                            battleOver = true;
-                        }
-                    
-
-                    }
-                    return current;
-                }
-            }
-            
-        }
-        return current;
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import dungeonmania.items.Item;
+import dungeonmania.entities.Entity;
 
 public class Armour extends CollectableEntity {
     public static int durability = (int)Math.floor(Math.random()*(15-4+1)+4);
@@ -14,10 +14,13 @@ public class Armour extends CollectableEntity {
         // this.setDurability(durability);
     }
 
-    public static void isBroken(List<Item> inventory) {
+    public Armour(String id, String type) {
+        super(id, type);
+    }
+    public static void isBroken(List<Entity> inventory) {
         if (durability <= 0) {
-            for (Iterator<Item> it = inventory.iterator(); it.hasNext();){
-                Item anItem = it.next();
+            for (Iterator<Entity> it = inventory.iterator(); it.hasNext();){
+                Entity anItem = it.next();
                 if(anItem.getType().equals("armour")) {
                     it.remove();
                 }

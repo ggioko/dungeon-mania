@@ -1,8 +1,9 @@
 package dungeonmania.entities.Static;
+import dungeonmania.entities.Entity;
 
 import org.json.JSONObject;
 
-public class Wall extends StaticEntity {
+public class Wall extends Entity {
 
     public Wall(JSONObject entity) {
         super(entity);

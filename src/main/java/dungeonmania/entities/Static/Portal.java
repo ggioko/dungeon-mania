@@ -1,10 +1,11 @@
 package dungeonmania.entities.Static;
+import dungeonmania.entities.Entity;
 
 import org.json.JSONObject;
 
 import dungeonmania.util.Position;
 
-public class Portal extends StaticEntity {
+public class Portal extends Entity {
 
     Position coords;
 
