@@ -2,6 +2,7 @@ package dungeonmania;
 
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.CompositeGoals;
+import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
 import dungeonmania.util.FileLoader;
