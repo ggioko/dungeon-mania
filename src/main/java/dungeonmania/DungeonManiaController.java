@@ -191,9 +191,10 @@ public class DungeonManiaController {
             }
             else throw new IllegalArgumentException("itemUsed is not a valid item");
         }
+        System.out.println(currentDungeon.player.getHealth());
 
         //gets the item that is used 
-        if (ticknum >= 27) {
+        if (ticknum >= 25) {
             currentDungeon = Spider.spawn(currentDungeon);
             this.ticknum = 0;
         }
@@ -205,6 +206,9 @@ public class DungeonManiaController {
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
+            if (currentDungeon.battle(currentDungeon) == null) {
+                currentDungeon = null;
+            }
         }
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
@@ -249,37 +253,6 @@ public class DungeonManiaController {
                 }
             }
         }
-        // if (!currentDungeon.nogoals) {
-        //     //add treasure to completed goals if it is completed
-        //     if (treasureComplete) {
-        //         currentDungeon.goalsCompleted.add("treasure");
-        //     }
-        //     //add enemies to completed if it is completed
-        //     if (enemiesComplete) {
-        //         currentDungeon.goalsCompleted.add("enemies");
-        //     }
-        //     if (currentDungeon.goaltype.equals("AND")) {
-        //         if (currentDungeon.goalsCompleted.containsAll(currentDungeon.goalsToComplete)) {
-        //             //game won
-        //             currentDungeon.complete = true;
-        //             currentDungeon.goals = "";
-        //         }
-        //     } else if (currentDungeon.goaltype.equals("OR")) {
-        //         for (String s : currentDungeon.goalsCompleted) {
-        //             if (currentDungeon.goalsToComplete.contains(s)) {
-        //                 //game won
-        //                 currentDungeon.complete = true;
-        //                 currentDungeon.goals = "";
-        //             }
-        //         }
-        //     } else {
-        //         if (currentDungeon.goalsCompleted.contains(currentDungeon.goals.replace(":", "").replace(" ", ""))) {
-        //             // Game won
-        //             currentDungeon.complete = true;
-        //             currentDungeon.goals = "";
-        //         }
-        //     }               
-        // }
         
 
         // POTION LOGIC
@@ -305,7 +278,7 @@ public class DungeonManiaController {
 
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
-
+        
         
         // ITEM PICKUP
         currentDungeon.itemPickup();
