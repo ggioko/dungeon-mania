@@ -26,5 +26,9 @@ public class FloorSwitch extends StaticEntity {
             }
         }
     }
+
+    public boolean getTriggered() {
+        return this.triggered;
+    }
     
 }
