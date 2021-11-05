@@ -1,20 +1,15 @@
 package dungeonmania.entities.Moving;
 
 import dungeonmania.util.Position;
-import dungeonmania.entities.Moving.MovingEntity;
 
 import org.json.JSONObject;
 
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Player;
-import dungeonmania.entities.Static.Wall;
 
 import dungeonmania.util.Direction;
-import dungeonmania.util.Position;
 import java.util.List;
 import java.lang.Math;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Mercenary extends MovingEntity{
     private boolean bribed;

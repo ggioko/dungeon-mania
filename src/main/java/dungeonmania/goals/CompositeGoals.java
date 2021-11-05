@@ -83,14 +83,13 @@ public class CompositeGoals implements Goal {
         }
     }
 
+    @Override
     public void checkGoalState(List<Entity> entities, Player player) {
         for (Goal g : children) {
             if (g instanceof CompositeGoals) {
-                // System.out.println(g.getName()+": "+g.isComplete());
                 ((CompositeGoals)g).checkGoalState(entities, player);
                 ((CompositeGoals)g).checkComplete();
             } else {
-                // System.out.println(g.getName()+": "+g.isComplete());
                 if (((GoalLeaf)g).checkComplete(entities, player)) {
                     ((GoalLeaf)g).setComplete();
                 } else {

@@ -4,11 +4,9 @@ import org.json.JSONObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import java.util.List;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.Arrays;
 

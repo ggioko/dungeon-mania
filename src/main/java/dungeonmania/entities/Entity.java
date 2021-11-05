@@ -1,6 +1,5 @@
 package dungeonmania.entities;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,14 +12,6 @@ import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Moving.Zombie;
 import dungeonmania.entities.Static.Spawner;
-import dungeonmania.entities.Static.*;
-import dungeonmania.entities.Static.Wall;
-import dungeonmania.entities.collectable.Armour;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.time.LocalTime;
 
 public class Entity {
     private String id;

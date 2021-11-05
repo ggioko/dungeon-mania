@@ -3,14 +3,11 @@ import dungeonmania.entities.Entity;
 
 import org.json.JSONObject;
 
-import dungeonmania.DungeonManiaController;
 import dungeonmania.entities.Moving.Zombie;
 import dungeonmania.Dungeon;
-import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Position;
 
 import java.util.List;
-import dungeonmania.entities.Entity;
 
 public class Spawner extends Entity {
     
