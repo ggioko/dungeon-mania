@@ -181,7 +181,6 @@ public class DungeonManiaController {
         return dungeonNames;
     }
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
-        System.out.println(currentDungeon.goalTree.goalsString());
         if (itemUsed != null) {
             Entity item = currentDungeon.getItemUsed(itemUsed);
             if (currentDungeon.getItemUsed(itemUsed) == null) {
@@ -192,7 +191,6 @@ public class DungeonManiaController {
             }
             else throw new IllegalArgumentException("itemUsed is not a valid item");
         }
-        System.out.println(currentDungeon.player.getHealth());
 
         //gets the item that is used 
         if (ticknum >= 25) {
@@ -223,12 +221,6 @@ public class DungeonManiaController {
         }
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
-        }
-
-        for (Entity e: currentDungeon.entities) {
-            if (e instanceof Mercenary) {
-                System.out.println("Position of " + e.getId() + "is " + e.getPosition());
-            }
         }
         
         // SIMPLE AND COMPLEX GOALS

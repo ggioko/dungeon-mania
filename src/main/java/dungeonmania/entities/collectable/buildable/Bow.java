@@ -61,8 +61,8 @@ public class Bow extends Buildable {
 
     @Override
     public void subtractDurability(List<Entity> inventory) {
-        
-        this.setDurability(this.getDurability() - 1);
+        int newDurability = this.getDurability() - 1;
+        this.setDurability(newDurability);
         if (this.getDurability() == 0) {
             inventory.remove(this);
         }
