@@ -194,6 +194,7 @@ public class Dungeon {
                 e.move(this.player.getPosition().translateBy(direction), walls);
             } if (e instanceof Mercenary) {
                 walls.add(this.player);
+                walls.add(e);
                 e.move(this.player.getPosition(), walls);
             } else {
                 e.move(this.player.getPosition(), walls);
@@ -337,6 +338,7 @@ public class Dungeon {
                 Mercenary mercenary = (Mercenary) entity;
                 if (mercenary.isInBattleRadius(current.getPlayer().getPosition()) && current.getPlayer().isBattling()) {
                     walls.add(this.player);
+                    walls.add(entity);
                     mercenary.move(this.player.getPosition(), walls);
                 }
             }

@@ -223,6 +223,12 @@ public class DungeonManiaController {
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
         }
+
+        for (Entity e: currentDungeon.entities) {
+            if (e instanceof Mercenary) {
+                System.out.println("Position of " + e.getId() + "is " + e.getPosition());
+            }
+        }
         
         // SIMPLE AND COMPLEX GOALS
         boolean treasureComplete = true;
