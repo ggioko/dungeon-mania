@@ -8,7 +8,15 @@
       "goal": "AND",
       "subgoals": [
         {
-          "goal": "exit"
+          "goal": "AND",
+          "subgoals": [
+            {
+              "goal" : "boulders"
+            },
+            {
+              "goal" : "exit"
+            }
+          ]
         },
         {
           "goal": "OR",

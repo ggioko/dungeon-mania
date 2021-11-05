@@ -32,4 +32,6 @@ public class GoalLeaf implements Goal {
         this.complete = false;
     }
 
+    
+
 }  

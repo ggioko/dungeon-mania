@@ -41,8 +41,7 @@ public class CompositeGoals implements Goal {
 
     @Override
     public boolean isComplete() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.complete;
     }
 
     @Override
@@ -51,5 +50,32 @@ public class CompositeGoals implements Goal {
         return true;
     }
 
+    public void checkComplete() {
+        if (this.name.equals("AND")) {
+            if (children.get(0).isComplete() && children.get(1).isComplete()) {
+                this.complete = true;
+            } else {
+                this.complete = false;
+            }
+        } else if (this.name.equals("OR")) {
+            if (children.size() == 1) {
+                if (children.get(0).isComplete()) {
+                    this.complete = true;
+                } else {
+                    this.complete = false;
+                }
+            } else {
+                if (children.get(0).isComplete() || children.get(1).isComplete()) {
+                    this.complete = true;
+                } else {
+                    this.complete = false;
+                }
+            }
+        }
+    }
+
+    public void checkGoalState() {
+        
+    }
     
 }
