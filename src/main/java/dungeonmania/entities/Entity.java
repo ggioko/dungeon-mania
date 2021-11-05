@@ -45,7 +45,7 @@ public class Entity {
 
     public static boolean enemiesOnMap(List<Entity> entities) {
         for (Entity e : entities) {
-            if (e instanceof Mercenary || e instanceof Spider || e instanceof Zombie) {
+            if (e instanceof Mercenary || e instanceof Spider || e instanceof Zombie || e instanceof Spawner) {
                 return true;
             }
         }

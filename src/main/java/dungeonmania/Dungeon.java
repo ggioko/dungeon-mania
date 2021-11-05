@@ -70,7 +70,6 @@ public class Dungeon {
 
         if (entities.has("goal-condition")) {
             if (entities.getJSONObject("goal-condition").has("subgoals")) {
-                // this.goalTree = new CompositeGoals(entities.getJSONObject("goal-condition").getString("goal"), false);
                 this.goalTree = new CompositeGoals("Goal", false);
                 this.goalTree.add(setGoals(entities.getJSONObject("goal-condition")));        
             } else {
