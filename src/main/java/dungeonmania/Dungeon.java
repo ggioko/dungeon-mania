@@ -320,37 +320,9 @@ public class Dungeon {
                         double playerAD = current.player.getAttack();
                         double enemyAD = enemy.getAttack();
                         
-                        //Armour cuts enemy damage to half
-                        if (this.getItem("armour") != null) {
-                            enemyAD = enemyAD/2;
-                            Armour.durability -= 1;
-                            Armour.isBroken(current.inventory);
-                            // decrease armour durability by 1 // TODO
-                        }
-
-                        if (this.getItem("sword") != null) {
-                            enemy.setHealth(enemyHP - 1);
-                            Sword.durability -= 1;
-                            Sword.isBroken(current.inventory);
-                            // decrease sword durability by 1 // TODO
-                        }
-                        
-                        //Shield cuts enemy damage to half
-                        //If player has shield and armour, 75% of damage is negated.
-                        if (current.getItem("shield") != null) {
-                            Shield shield = (Shield) current.getItem("shield");
-                            enemyAD = shield.effect(enemyAD, current.inventory);
-                        }
-                       
-                        //Bow allows player to attack twice
-                        if (current.getItem("bow") != null) {
-                            Bow bow = (Bow) current.getItem("bow");
-                            bow.effect(enemy, enemyHP, playerHP, playerAD, this.inventory);
-                        }
-                        
                         //Player and Enemy damage each other
-                        current.player.takeDamage(enemyHP, enemyAD);
-                        enemy.takeDamage(playerHP, playerAD);
+                        current.player.takeDamage(enemyHP, enemyAD, this, enemy);
+                        enemy.takeDamage(playerHP, playerAD, this);
 
                         //Has an ally Mercenary
                         if (this.getPlayer().haveAlly()) {

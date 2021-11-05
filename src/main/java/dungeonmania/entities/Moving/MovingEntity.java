@@ -1,6 +1,8 @@
 package dungeonmania.entities.Moving;
 
+import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.collectable.Sword;
 import dungeonmania.util.Position;
 import java.util.List;
 
@@ -41,7 +43,13 @@ public class MovingEntity extends Entity {
         return;
     }
 
-    public void takeDamage(double playerHP, double playerAD) {
+    public void takeDamage(double playerHP, double playerAD, Dungeon dungeon) {
+        if (dungeon.getItem("sword") != null) {
+            this.setHealth(this.health - 1);
+            Sword.durability -= 1;
+            Sword.isBroken(dungeon.getItems());
+            // decrease sword durability by 1 // TODO
+        }
         this.setHealth(this.health - ((playerHP * playerAD) / 5));
     }
    
