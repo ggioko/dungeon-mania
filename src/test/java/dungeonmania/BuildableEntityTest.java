@@ -17,10 +17,9 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.collectable.buildable.Bow;
+import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.exceptions.InvalidActionException;
-import dungeonmania.items.Item;
-import dungeonmania.items.buildable.Bow;
-import dungeonmania.items.buildable.Shield;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.ItemResponse;
 

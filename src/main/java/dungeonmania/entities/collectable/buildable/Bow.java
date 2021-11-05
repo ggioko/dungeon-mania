@@ -1,4 +1,4 @@
-package dungeonmania.items.buildable;
+package dungeonmania.entities.collectable.buildable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import dungeonmania.entities.Moving.MovingEntity;
-import dungeonmania.items.Item;
+import dungeonmania.entities.Entity;
 
 public class Bow extends Buildable {
 
@@ -14,18 +14,16 @@ public class Bow extends Buildable {
     private static final int woodNeeded = 1;
     private static final int arrowNeeded = 3;
 
-    private int durability;
-
     public Bow(String id, String type) {
         super(id, type);
-        this.durability = 20;
+        this.setDurability(20);
     }
 
     @Override
-    public HashMap<String, Integer> getRelevantMaterialCount(List<Item> inventory) {
+    public HashMap<String, Integer> getRelevantMaterialCount(List<Entity> inventory) {
         HashMap<String, Integer> materialCount = new HashMap<>();
 
-        for (Item item : inventory) {
+        for (Entity item : inventory) {
             if (recipe.contains(item.getType()) && materialCount.containsKey(item.getType())) {
                 materialCount.put(item.getType(), materialCount.get(item.getType()) + 1);
             } else if (recipe.contains(item.getType()) && !materialCount.containsKey(item.getType())) {
@@ -37,7 +35,7 @@ public class Bow extends Buildable {
     }
 
     @Override
-    public boolean isBuildable(List<Item> inventory) {
+    public boolean isBuildable(List<Entity> inventory) {
 
         HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
 
@@ -51,7 +49,7 @@ public class Bow extends Buildable {
     }
 
     @Override
-    public Map<String, Integer> materialNeeded(List<Item> inventory) {
+    public Map<String, Integer> materialNeeded(List<Entity> inventory) {
         
         Map<String, Integer> returnMap = Map.of(
             "wood", 1,
@@ -62,18 +60,15 @@ public class Bow extends Buildable {
     }    
 
     @Override
-    public void subtractDurability(List<Item> inventory) {
-        this.durability -= 1;
-        if (this.durability == 0) {
+    public void subtractDurability(List<Entity> inventory) {
+        
+        this.setDurability(this.getDurability() - 1);
+        if (this.getDurability() == 0) {
             inventory.remove(this);
         }
     }
 
-    public int getDurability() {
-        return durability;
-    }
-
-    public void effect(MovingEntity e, double enemyHP, double playerHP, double playerAD, List<Item> inventory) {
+    public void effect(MovingEntity e, double enemyHP, double playerHP, double playerAD, List<Entity> inventory) {
         e.setHealth(enemyHP - ((playerHP * playerAD) / 5));
         this.subtractDurability(inventory);
     }

@@ -8,4 +8,8 @@ public class OneRing extends Entity{
     public OneRing(JSONObject entity) {
         super(entity);
     }
+
+    public OneRing(String id, String type) {
+        super(id, type);
+    }
 }

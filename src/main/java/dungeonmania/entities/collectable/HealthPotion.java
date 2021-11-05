@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Player;
-import dungeonmania.items.Item;
+import dungeonmania.entities.Entity;
 
 public class HealthPotion extends CollectableEntity {
     public static int durability = 1;
@@ -14,8 +14,8 @@ public class HealthPotion extends CollectableEntity {
         super(entity);
     }
     
-    public static Dungeon addEffects(Dungeon currentDungeon, String itemUsed, Player player, List<Item> inventory) {
-        Item health = null;
+    public static Dungeon addEffects(Dungeon currentDungeon, String itemUsed, Player player, List<Entity> inventory) {
+        Entity health = null;
         if (itemUsed != null) {
             if (itemUsed.contains("health_potion")) {
                 health = currentDungeon.getItem("health_potion");

@@ -7,14 +7,13 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import dungeonmania.items.Item;
 import dungeonmania.response.models.EntityResponse;
 import dungeonmania.util.Position;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Moving.Zombie;
 import dungeonmania.entities.Static.Spawner;
-import dungeonmania.entities.Static.StaticEntity;
+import dungeonmania.entities.Static.*;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
 
@@ -44,12 +43,13 @@ public class Entity {
         }
     }
 
-    public EntityResponse createResponse() {
-        return new EntityResponse(this.id, this.type, this.position, this.isInteractable);
+    public Entity(String id, String type) {
+        this.id = id;
+        this.type = type;
     }
 
-    public Item createItem() {
-        return new Item(this.id, this.type);
+    public EntityResponse createResponse() {
+        return new EntityResponse(this.id, this.type, this.position, this.isInteractable);
     }
 
     public static boolean enemiesOnMap(List<Entity> entities) {
