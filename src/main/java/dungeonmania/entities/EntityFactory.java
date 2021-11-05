@@ -42,7 +42,7 @@ public class EntityFactory {
 			e = new InvincibilityPotion(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("invisibility_potion")) {
 			e = new InvisibilityPotion(entity);
-		} else if (entity.getString("type").equalsIgnoreCase("key")) {
+		} else if (entity.getString("type").contains("key")) {
 			e = new Key(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("one_ring")) {
 			e = new OneRing(entity);
@@ -64,7 +64,7 @@ public class EntityFactory {
             }
 		} else if (entity.getString("type").equalsIgnoreCase("boulder")) {
 			e = new Boulder(entity);
-		} else if (entity.getString("type").equalsIgnoreCase("door")) {
+		} else if (entity.getString("type").contains("door")) {
 			e = new Door(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("exit")) {
 			e = new Exit(entity);

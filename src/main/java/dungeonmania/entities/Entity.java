@@ -68,6 +68,10 @@ public class Entity {
         return this.type;
     }
 
+    public Integer getKey(){
+        return null;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
