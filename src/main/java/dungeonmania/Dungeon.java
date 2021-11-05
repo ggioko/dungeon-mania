@@ -70,7 +70,9 @@ public class Dungeon {
 
         if (entities.has("goal-condition")) {
             this.goalTree = new CompositeGoals(entities.getJSONObject("goal-condition").getString("goal"), false);
-            this.goalTree.add(setGoals(entities.getJSONObject("goal-condition")));        
+            if (entities.getJSONObject("goal-condition").has("subgoals")) {
+                this.goalTree.add(setGoals(entities.getJSONObject("goal-condition")));        
+            }
             this.goals = getGoals();
         } else {
             this.goals = null;
@@ -84,12 +86,14 @@ public class Dungeon {
             return null;
         }
 
-        for (Object o : goals.getJSONArray("subgoals")) {
-            if (((JSONObject)o).has("subgoals")) {
-                r.add(setGoals((JSONObject)o));
-            } else {
-                Goal newGoal = new GoalLeaf(((JSONObject)o).getString("goal"), false);
-                r.add(newGoal);
+        if (goals.has("subgoals")) {
+            for (Object o : goals.getJSONArray("subgoals")) {
+                if (((JSONObject)o).has("subgoals")) {
+                    r.add(setGoals((JSONObject)o));
+                } else {
+                    Goal newGoal = new GoalLeaf(((JSONObject)o).getString("goal"), false);
+                    r.add(newGoal);
+                }
             }
         }
         return r;
