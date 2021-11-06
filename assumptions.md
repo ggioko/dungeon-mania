@@ -34,3 +34,8 @@
 ### Potion Assumptions
 - Invincibility potion time : 10 ticks
 - Invisibility potion time : 10 ticks
+
+
+### Bomb Assumptions
+- Bomb has a detonation radius of 1
+- Bomb cannot be picked back up once placed

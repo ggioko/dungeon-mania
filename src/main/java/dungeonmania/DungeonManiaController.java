@@ -20,6 +20,7 @@ import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.Bomb;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -211,6 +212,7 @@ public class DungeonManiaController {
         dungeonNames.add("maze");
         dungeonNames.add("characterTest");
         dungeonNames.add("interactTest");
+        dungeonNames.add("bombTest");
         return dungeonNames;
     }
     
@@ -246,9 +248,10 @@ public class DungeonManiaController {
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
         currentDungeon.getPlayer().setBattling(false);
-        //spawn zombies
+
         List<Spawner> spawners = new ArrayList<>();
         for (Entity e : currentDungeon.entities) {
+            //spawn zombies
             if (e instanceof Spawner) {
                 spawners.add((Spawner)e);
             }
@@ -279,6 +282,23 @@ public class DungeonManiaController {
             }
         }
         
+        //BOMB LOGIC
+        if (itemUsed != null) {
+            if (currentDungeon.getItemUsed(itemUsed).getType().equals("bomb")) {
+                Bomb bomb = (Bomb) currentDungeon.getItemUsed(itemUsed);
+                bomb.placeBomb(currentDungeon);
+            }
+        }
+
+        for (Entity e : currentDungeon.getEntities()) {
+            // bomb explosion
+            if (e instanceof Bomb) {
+                Bomb b = (Bomb) e;
+                if (b.isActivated(currentDungeon) && b.isPlaced()) {
+                    b.explode(currentDungeon);
+                }
+            }
+        }
 
         // POTION LOGIC
         // Invincibility potion
