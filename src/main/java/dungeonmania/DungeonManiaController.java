@@ -211,6 +211,7 @@ public class DungeonManiaController {
         dungeonNames.add("maze");
         dungeonNames.add("characterTest");
         dungeonNames.add("interactTest");
+        dungeonNames.add("invincibility");
         return dungeonNames;
     }
     
@@ -277,6 +278,11 @@ public class DungeonManiaController {
                     teleported = true;
                 }
             }
+            if (e instanceof Mercenary && currentDungeon.player.isInvincibilityPotionEffect()) {
+                
+                Mercenary notInBattle = (Mercenary)e;
+                notInBattle.setInBattle(false);
+            }
         }
         
 
@@ -287,6 +293,7 @@ public class DungeonManiaController {
             this.invincibilityTicks = 0;
         }
         if (currentDungeon.player.isInvincibilityPotionEffect()) {
+            
             this.invincibilityTicks++;
         }
         currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
@@ -298,6 +305,7 @@ public class DungeonManiaController {
         }
         if (currentDungeon.player.isInvisibilityPotionEffect()) {
             this.invisibilityTicks++;
+            
         }
         currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 

@@ -90,6 +90,10 @@ public class Entity {
         return;
     }
 
+    public void moveAway(Position pos, List<Entity> walls) {
+        return;
+    }
+
     public void setId(String id) {
         this.id = id;
     }

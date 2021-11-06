@@ -176,7 +176,13 @@ public class Dungeon {
             } if (e instanceof Mercenary) {
                 walls.add(this.player);
                 walls.add(e);
-                e.move(this.player.getPosition(), walls);
+                Mercenary entity = (Mercenary)e;
+                if (entity.isInBattle()) {
+                    e.move(this.player.getPosition(), walls);
+                } else if (!entity.isInBattle()) {
+                    e.moveAway(this.player.getPosition(), walls);
+                    
+                }
             } else {
                 e.move(this.player.getPosition(), walls);
             }
@@ -328,9 +334,17 @@ public class Dungeon {
                         if (this.getPlayer().haveAlly()) {
                             enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
                         }
-
+                       
                         if (this.player.isInvincibilityPotionEffect() == true) {
                             battleOver = true;
+                            
+                            for (Entity entity : current.entities) {
+                                if (entity instanceof Mercenary) {
+                                    Mercenary notInBattle = (Mercenary)e;
+                                    notInBattle.setInBattle(false);
+                                }
+                            }
+                            
                         }
                         
                         if (playerHP <= 0) {

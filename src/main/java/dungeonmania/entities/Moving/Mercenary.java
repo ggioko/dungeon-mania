@@ -13,13 +13,17 @@ import java.util.ArrayList;
 
 public class Mercenary extends MovingEntity{
     private boolean bribed;
+    private boolean inBattle;
 
     public Mercenary(JSONObject entity) {
         super(entity);
         this.health = 5;
         this.attack = 1;
         this.bribed = false;
+        this.inBattle = true;
     }
+
+    
 
     @Override
     public void move(Position pos, List<Entity> walls) {
@@ -109,6 +113,49 @@ public class Mercenary extends MovingEntity{
             }
         } 
     }
+
+    @Override
+    public void moveAway(Position pos, List<Entity> walls) {
+        //move mercenary towards position pathfinding algorithm
+        int x1 = pos.getX();
+        int y1 = pos.getY();
+        int x2 = this.getPosition().getX();
+        int y2 = this.getPosition().getY();
+
+        //boolean moved = false;
+        if (Math.abs(x1) - Math.abs(x2) >= 0) {
+            for (Entity w : walls) {
+                if (!w.getPosition().equals(this.getPosition().translateBy(Direction.LEFT))) {
+                    this.setPosition(this.getPosition().translateBy(Direction.LEFT));
+                }
+            }
+        }
+        if (Math.abs(x1) - Math.abs(x2) < 0) {
+            for (Entity w : walls) {
+                if (!w.getPosition().equals(this.getPosition().translateBy(Direction.RIGHT))) {
+                    this.setPosition(this.getPosition().translateBy(Direction.RIGHT));
+                }
+            }
+        } 
+
+        if (Math.abs(y1) - Math.abs(y2) >= 0) {
+            for (Entity w : walls) {
+                if (!w.getPosition().equals(this.getPosition().translateBy(Direction.DOWN))) {
+                    this.setPosition(this.getPosition().translateBy(Direction.DOWN));
+                }
+            }
+            
+        }
+
+        if (Math.abs(y1) - Math.abs(y2) < 0) {
+            for (Entity w : walls) {
+                if (!w.getPosition().equals(this.getPosition().translateBy(Direction.UP))) {
+                    this.setPosition(this.getPosition().translateBy(Direction.UP));
+                }
+            }
+        }
+        
+    }
     
     public boolean isInBribableRange (Position playerPosition) {
         int x = this.getPosition().getX();
@@ -173,5 +220,13 @@ public class Mercenary extends MovingEntity{
 
     public boolean isBribed () {
         return this.bribed;
+    }
+
+    public boolean isInBattle() {
+        return inBattle;
+    }
+
+    public void setInBattle(boolean inBattle) {
+        this.inBattle = inBattle;
     }
 }
