@@ -225,6 +225,11 @@ public class DungeonManiaController {
             }
             else if (item.getType().equals("bomb") || item.getType().equals("health_potion") || item.getType().equals("invincibility_potion") 
                     || item.getType().equals("invisibility_potion")) {
+                    if (item.getType().equals("bomb")) {
+                        Bomb bomb = (Bomb) item;
+                        bomb.placeBomb(currentDungeon);
+                        currentDungeon.removeItem("bomb");
+                    }
             }
             else throw new IllegalArgumentException("itemUsed is not a valid item");
         }
@@ -321,14 +326,6 @@ public class DungeonManiaController {
         }
         
         //BOMB LOGIC
-        if (itemUsed != null) {
-            if (currentDungeon.getItemUsed(itemUsed).getType().equals("bomb")) {
-                Bomb bomb = (Bomb) currentDungeon.getItemUsed(itemUsed);
-                bomb.placeBomb(currentDungeon);
-                currentDungeon.removeItem("bomb");
-            }
-        }
-
         List<Bomb> bombs = new ArrayList<>();
         for (Entity e : currentDungeon.getEntities()) {
             // bomb explosion

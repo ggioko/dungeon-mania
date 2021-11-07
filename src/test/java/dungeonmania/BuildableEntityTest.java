@@ -132,6 +132,8 @@ public class BuildableEntityTest {
 
         Bow bow = (Bow) controller.currentDungeon.getItem("bow");
         bow.setDurability(1);
+        Shield shield = (Shield) controller.currentDungeon.getItem("shield");
+        shield.setDurability(1);
         
         // look for and fight enemies        
         controller.tick(null, Direction.RIGHT);
