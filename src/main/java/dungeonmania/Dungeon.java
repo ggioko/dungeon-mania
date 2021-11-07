@@ -305,6 +305,7 @@ public class Dungeon {
     }
 
     public Dungeon battle(Dungeon current) {
+        
         for (Entity e : current.entities) {
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {
@@ -326,8 +327,10 @@ public class Dungeon {
                         double playerAD = current.player.getAttack();
                         double enemyAD = enemy.getAttack();
                         
-                        //Player and Enemy damage each other
-                        current.player.takeDamage(enemyHP, enemyAD, this, enemy);
+                        // Player should take damage only if invincibility potion effect is off
+                        if (!this.player.isInvincibilityPotionEffect()) {
+                            current.player.takeDamage(enemyHP, enemyAD, this, enemy);
+                        }
                         enemy.takeDamage(playerHP, playerAD, this);
 
                         //Has an ally Mercenary
@@ -335,17 +338,7 @@ public class Dungeon {
                             enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
                         }
                        
-                        if (this.player.isInvincibilityPotionEffect() == true) {
-                            battleOver = true;
-                            
-                            for (Entity entity : current.entities) {
-                                if (entity instanceof Mercenary) {
-                                    Mercenary notInBattle = (Mercenary)e;
-                                    notInBattle.setInBattle(false);
-                                }
-                            }
-                            
-                        }
+                        
                         
                         if (playerHP <= 0) {
                             //one ring

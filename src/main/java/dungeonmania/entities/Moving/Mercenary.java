@@ -114,43 +114,94 @@ public class Mercenary extends MovingEntity{
         } 
     }
 
+
+    /**
+     * Move mercenary away depending on if invincibility potion effects are on or off
+     */
     @Override
     public void moveAway(Position pos, List<Entity> walls) {
-        //move mercenary towards position pathfinding algorithm
-        int x1 = pos.getX();
-        int y1 = pos.getY();
-        int x2 = this.getPosition().getX();
-        int y2 = this.getPosition().getY();
+        //move mercenary away algorithm
+        int xdiff = pos.getX() - this.getPosition().getX();
+        int ydiff = pos.getY() - this.getPosition().getY();
 
-        //boolean moved = false;
-        if (Math.abs(x1) - Math.abs(x2) >= 0) {
-            for (Entity w : walls) {
-                if (!w.getPosition().equals(this.getPosition().translateBy(Direction.LEFT))) {
-                    this.setPosition(this.getPosition().translateBy(Direction.LEFT));
+        boolean moved = false;
+        if (Math.abs(xdiff) > Math.abs(ydiff)) {
+            //x++
+            if (pos.getX() - this.getPosition().getX() > 0 ) {
+                boolean move = true;
+                for (Entity w : walls) {
+                    if (w.getPosition().equals(this.getPosition().translateBy(Direction.LEFT))) {
+                        move = false;
+                    }
                 }
-            }
-        }
-        if (Math.abs(x1) - Math.abs(x2) < 0) {
-            for (Entity w : walls) {
-                if (!w.getPosition().equals(this.getPosition().translateBy(Direction.RIGHT))) {
+                if (move) {
+                    this.setPosition(this.getPosition().translateBy(Direction.LEFT));
+                    moved = true;
+                }
+            } 
+            if (moved == false && pos.getX() - this.getPosition().getX() < 0 ) {
+                boolean move = true;
+                for (Entity w : walls) {
+                    if (w.getPosition().equals(this.getPosition().translateBy(Direction.RIGHT))) {
+                        move = false;
+                    }
+                }
+                if (move) {
                     this.setPosition(this.getPosition().translateBy(Direction.RIGHT));
+                    moved = true;
                 }
             }
         } 
-
-        if (Math.abs(y1) - Math.abs(y2) >= 0) {
-            for (Entity w : walls) {
-                if (!w.getPosition().equals(this.getPosition().translateBy(Direction.DOWN))) {
+        if (moved == false) {
+            //x++
+            if (pos.getY() - this.getPosition().getY() > 0 ) {
+                boolean move = true;
+                for (Entity w : walls) {
+                    if (w.getPosition().equals(this.getPosition().translateBy(Direction.UP))) {
+                        move = false;
+                    }
+                }
+                if (move) {
+                    this.setPosition(this.getPosition().translateBy(Direction.UP));
+                    moved = true;
+                }
+            } 
+            if (moved == false && pos.getY() - this.getPosition().getY() < 0 ) {
+                boolean move = true;
+                for (Entity w : walls) {
+                    if (w.getPosition().equals(this.getPosition().translateBy(Direction.DOWN))) {
+                        move = false;
+                    }
+                }
+                if (move) {
                     this.setPosition(this.getPosition().translateBy(Direction.DOWN));
+                    moved = true;
                 }
             }
-            
-        }
-
-        if (Math.abs(y1) - Math.abs(y2) < 0) {
-            for (Entity w : walls) {
-                if (!w.getPosition().equals(this.getPosition().translateBy(Direction.UP))) {
-                    this.setPosition(this.getPosition().translateBy(Direction.UP));
+            if (moved == false) {
+                if (pos.getX() - this.getPosition().getX() > 0 ) {
+                    boolean move = true;
+                    for (Entity w : walls) {
+                        if (w.getPosition().equals(this.getPosition().translateBy(Direction.LEFT))) {
+                            move = false;
+                        }
+                    }
+                    if (move) {
+                        this.setPosition(this.getPosition().translateBy(Direction.LEFT));
+                        moved = true;
+                    }
+                } 
+                if (moved == false && pos.getX() - this.getPosition().getX() < 0 ) {
+                    boolean move = true;
+                    for (Entity w : walls) {
+                        if (w.getPosition().equals(this.getPosition().translateBy(Direction.RIGHT))) {
+                            move = false;
+                        }
+                    }
+                    if (move) {
+                        this.setPosition(this.getPosition().translateBy(Direction.RIGHT));
+                        moved = true;
+                    }
                 }
             }
         }
