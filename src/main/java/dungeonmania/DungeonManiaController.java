@@ -287,17 +287,23 @@ public class DungeonManiaController {
             if (currentDungeon.getItemUsed(itemUsed).getType().equals("bomb")) {
                 Bomb bomb = (Bomb) currentDungeon.getItemUsed(itemUsed);
                 bomb.placeBomb(currentDungeon);
+                currentDungeon.removeItem("bomb");
             }
         }
 
+        List<Bomb> bombs = new ArrayList<>();
         for (Entity e : currentDungeon.getEntities()) {
             // bomb explosion
             if (e instanceof Bomb) {
                 Bomb b = (Bomb) e;
                 if (b.isActivated(currentDungeon) && b.isPlaced()) {
-                    b.explode(currentDungeon);
+                    bombs.add(b);
                 }
             }
+        }
+        for (Bomb bomb : bombs) {
+            bomb.explode(currentDungeon);
+            currentDungeon.removeEntity(bomb.getId());
         }
 
         // POTION LOGIC

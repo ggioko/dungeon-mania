@@ -78,7 +78,7 @@ public class PotionsTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         assertTrue(controller.currentDungeon.player.getHealth() != 10);
-        controller.tick("health_potion11", Direction.LEFT);
+        controller.tick("health_potion11", Direction.UP);
         assertTrue(controller.currentDungeon.player.getHealth() == 10);
 
         

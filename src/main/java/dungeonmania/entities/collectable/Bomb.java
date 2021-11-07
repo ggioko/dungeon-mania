@@ -53,12 +53,16 @@ public class Bomb extends CollectableEntity {
     }
 
     public Dungeon explode(Dungeon current) {
+        List<String> toRemove = new ArrayList<String>();
         for (Entity entity : current.getEntities()) {
             if (this.isInRange(entity.getPosition(), "explosion")) {
-                current.removeEntity(entity.getId());
+                toRemove.add(entity.getId());
             }
         }
-        current.removeEntity(this.getId());
+
+        for (String entityId : toRemove) {
+            current.removeEntity(entityId);
+        }
         return current;
     }
 
@@ -72,11 +76,13 @@ public class Bomb extends CollectableEntity {
         adjacentPositions.add(new Position(x  , y+1));
         adjacentPositions.add(new Position(x-1, y));
 
-        if (mode.equals("explosion")) {
-            adjacentPositions.add(new Position(x-1, y-1));
-            adjacentPositions.add(new Position(x+1, y-1));
-            adjacentPositions.add(new Position(x+1, y+1));
-            adjacentPositions.add(new Position(x-1, y+1));
+        if (mode != null) {
+            if (mode.equals("explosion")) {
+                adjacentPositions.add(new Position(x-1, y-1));
+                adjacentPositions.add(new Position(x+1, y-1));
+                adjacentPositions.add(new Position(x+1, y+1));
+                adjacentPositions.add(new Position(x-1, y+1));
+            }
         }
 
         for (Position i : adjacentPositions) {
