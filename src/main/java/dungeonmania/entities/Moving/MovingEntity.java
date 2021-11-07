@@ -43,6 +43,11 @@ public class MovingEntity extends Entity {
         return;
     }
 
+    @Override
+    public void moveAway(Position pos, List<Entity> walls) {
+        return;
+    }
+
     public void takeDamage(double playerHP, double playerAD, Dungeon dungeon) {
         if (dungeon.getItem("sword") != null) {
             this.setHealth(this.health - 1);

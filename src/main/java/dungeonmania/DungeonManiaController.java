@@ -211,6 +211,7 @@ public class DungeonManiaController {
         dungeonNames.add("maze");
         dungeonNames.add("characterTest");
         dungeonNames.add("interactTest");
+        dungeonNames.add("invincibility");
         return dungeonNames;
     }
     
@@ -232,6 +233,34 @@ public class DungeonManiaController {
             this.ticknum = 0;
         }
         this.ticknum++;
+
+        // POTION LOGIC
+        // Invincibility potion
+        if (invincibilityTicks >= 10) {
+            currentDungeon.player.setInvincibilityPotionEffect(false);
+
+            this.invincibilityTicks = 0;
+        }
+        if (currentDungeon.player.isInvincibilityPotionEffect()) {
+            
+            this.invincibilityTicks++;
+        }
+        currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
+        // Invisibility potion
+        if (invisibilityTicks >= 10) {
+            currentDungeon.player.setInvisibilityPotionEffect(false);
+            this.invisibilityTicks = 0;
+        }
+        if (currentDungeon.player.isInvisibilityPotionEffect()) {
+            this.invisibilityTicks++;
+            
+        }
+        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
+        // Health potion
+        currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
 
         // ENEMY PATHING
         currentDungeon.pathing(movementDirection);
@@ -277,32 +306,19 @@ public class DungeonManiaController {
                     teleported = true;
                 }
             }
+            if (e instanceof Mercenary) {
+                Mercenary notInBattle = (Mercenary)e;
+                if (currentDungeon.player.isInvincibilityPotionEffect()) {
+                    notInBattle.setInBattle(false);
+                } else {
+                    notInBattle.setInBattle(true);
+                }
+                
+            }
         }
         
 
-        // POTION LOGIC
-        // Invincibility potion
-        if (invincibilityTicks >= 10) {
-            currentDungeon.player.setInvincibilityPotionEffect(false);
-            this.invincibilityTicks = 0;
-        }
-        if (currentDungeon.player.isInvincibilityPotionEffect()) {
-            this.invincibilityTicks++;
-        }
-        currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
-
-        // Invisibility potion
-        if (invisibilityTicks >= 10) {
-            currentDungeon.player.setInvisibilityPotionEffect(false);
-            this.invisibilityTicks = 0;
-        }
-        if (currentDungeon.player.isInvisibilityPotionEffect()) {
-            this.invisibilityTicks++;
-        }
-        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
-
-        // Health potion
-        currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+        
         
         
         // ITEM PICKUP
