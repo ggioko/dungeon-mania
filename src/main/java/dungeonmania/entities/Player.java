@@ -2,7 +2,12 @@ package dungeonmania.entities;
 
 import org.json.JSONObject;
 
+import dungeonmania.Dungeon;
 import dungeonmania.entities.Moving.Mercenary;
+import dungeonmania.entities.Moving.MovingEntity;
+import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.buildable.Bow;
+import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.util.Position;
 import java.util.List;
 
@@ -86,6 +91,28 @@ public class Player extends Entity {
 
     public void setBattling (boolean battling) {
         this.battling = battling;
+    }
+
+    public void takeDamage(double enemyHP, double enemyAD, Dungeon dungeon, MovingEntity enemy) {
+        //Armour cuts enemy damage to half
+        if (dungeon.getItem("armour") != null) {
+            enemyAD = enemyAD/2;
+            Armour.durability -= 1;
+            Armour.isBroken(dungeon.getItems());
+            // decrease armour durability by 1 // TODO
+        }
+        //Shield cuts enemy damage to half
+        //If player has shield and armour, 75% of damage is negated.
+        if (dungeon.getItem("shield") != null) {
+            Shield shield = (Shield) dungeon.getItem("shield");
+            enemyAD = shield.effect(enemyAD, dungeon.getItems());
+        }
+        //Bow allows player to attack twice
+        if (dungeon.getItem("bow") != null) {
+            Bow bow = (Bow) dungeon.getItem("bow");
+            bow.effect(enemy, enemyHP, this.health, this.attack, dungeon.getItems());
+        }
+        this.setHealth(this.health - ((enemyHP * enemyAD) / 10));
     }
 
     public boolean isBattling () {

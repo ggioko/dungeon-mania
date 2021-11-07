@@ -177,7 +177,13 @@ public class Dungeon {
             } if (e instanceof Mercenary) {
                 walls.add(this.player);
                 walls.add(e);
-                e.move(this.player.getPosition(), walls);
+                Mercenary entity = (Mercenary)e;
+                if (entity.isInBattle()) {
+                    e.move(this.player.getPosition(), walls);
+                } else if (!entity.isInBattle()) {
+                    e.moveAway(this.player.getPosition(), walls);
+                    
+                }
             } else {
                 e.move(this.player.getPosition(), walls);
             }
@@ -300,6 +306,7 @@ public class Dungeon {
     }
 
     public Dungeon battle(Dungeon current) {
+        
         for (Entity e : current.entities) {
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {
@@ -321,46 +328,18 @@ public class Dungeon {
                         double playerAD = current.player.getAttack();
                         double enemyAD = enemy.getAttack();
                         
-                        //Armour cuts enemy damage to half
-                        if (this.getItem("armour") != null) {
-                            enemyAD = enemyAD/2;
-                            Armour.durability -= 1;
-                            Armour.isBroken(current.inventory);
-                            // decrease armour durability by 1 // TODO
+                        // Player should take damage only if invincibility potion effect is off
+                        if (!this.player.isInvincibilityPotionEffect()) {
+                            current.player.takeDamage(enemyHP, enemyAD, this, enemy);
                         }
-
-                        if (this.getItem("sword") != null) {
-                            enemy.setHealth(enemyHP - 1);
-                            Sword.durability -= 1;
-                            Sword.isBroken(current.inventory);
-                            // decrease sword durability by 1 // TODO
-                        }
-                        
-                        //Shield cuts enemy damage to half
-                        //If player has shield and armour, 75% of damage is negated.
-                        if (current.getItem("shield") != null) {
-                            Shield shield = (Shield) current.getItem("shield");
-                            enemyAD = shield.effect(enemyAD, current.inventory);
-                        }
-                       
-                        //Bow allows player to attack twice
-                        if (current.getItem("bow") != null) {
-                            Bow bow = (Bow) current.getItem("bow");
-                            bow.effect(enemy, enemyHP, playerHP, playerAD, this.inventory);
-                        }
-                        
-                        //Player and Enemy damage each other
-                        current.player.setHealth(playerHP - ((enemyHP * enemyAD) / 10));
-                        enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
+                        enemy.takeDamage(playerHP, playerAD, this);
 
                         //Has an ally Mercenary
                         if (this.getPlayer().haveAlly()) {
                             enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
                         }
-
-                        if (this.player.isInvincibilityPotionEffect() == true) {
-                            battleOver = true;
-                        }
+                       
+                        
                         
                         if (playerHP <= 0) {
                             //one ring

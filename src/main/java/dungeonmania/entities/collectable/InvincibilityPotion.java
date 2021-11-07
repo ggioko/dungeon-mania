@@ -22,6 +22,7 @@ public class InvincibilityPotion extends CollectableEntity {
         if (itemUsed != null) {
             if (itemUsed.contains("invincibility_potion")) {
                 invincibility = currentDungeon.getItem("invincibility_potion");
+                
                 player.setInvincibilityPotionEffect(true);
             }
             if (itemUsed.contains("invincibility_potion") && player.isInvincibilityPotionEffect() == true) {
@@ -30,7 +31,9 @@ public class InvincibilityPotion extends CollectableEntity {
         }
         currentDungeon.setItems(inventory);
         currentDungeon.setPlayer(player);
+        
         return currentDungeon;
+        
     }
     
 }
