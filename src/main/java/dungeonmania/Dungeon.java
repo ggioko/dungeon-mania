@@ -9,6 +9,7 @@ import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.OneRing;
 import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.Bomb;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.Buildable;
@@ -371,6 +372,12 @@ public class Dungeon {
                 Mercenary m = (Mercenary) e;
                 if (m.isBribed()) {
                     walls.add(m);
+                }
+            }
+            else if (e instanceof Bomb) {
+                Bomb b = (Bomb) e;
+                if (b.isPlaced()) {
+                    walls.add(e);
                 }
             }
             else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {

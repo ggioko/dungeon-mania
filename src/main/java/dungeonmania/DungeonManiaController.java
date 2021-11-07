@@ -20,6 +20,7 @@ import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.Bomb;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -211,6 +212,7 @@ public class DungeonManiaController {
         dungeonNames.add("maze");
         dungeonNames.add("characterTest");
         dungeonNames.add("interactTest");
+        dungeonNames.add("bombTest");
         dungeonNames.add("invincibility");
         return dungeonNames;
     }
@@ -223,6 +225,11 @@ public class DungeonManiaController {
             }
             else if (item.getType().equals("bomb") || item.getType().equals("health_potion") || item.getType().equals("invincibility_potion") 
                     || item.getType().equals("invisibility_potion")) {
+                    if (item.getType().equals("bomb")) {
+                        Bomb bomb = (Bomb) item;
+                        bomb.placeBomb(currentDungeon);
+                        currentDungeon.removeItem("bomb");
+                    }
             }
             else throw new IllegalArgumentException("itemUsed is not a valid item");
         }
@@ -275,9 +282,10 @@ public class DungeonManiaController {
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
         currentDungeon.getPlayer().setBattling(false);
-        //spawn zombies
+
         List<Spawner> spawners = new ArrayList<>();
         for (Entity e : currentDungeon.entities) {
+            //spawn zombies
             if (e instanceof Spawner) {
                 spawners.add((Spawner)e);
             }
@@ -317,6 +325,21 @@ public class DungeonManiaController {
             }
         }
         
+        //BOMB LOGIC
+        List<Bomb> bombs = new ArrayList<>();
+        for (Entity e : currentDungeon.getEntities()) {
+            // bomb explosion
+            if (e instanceof Bomb) {
+                Bomb b = (Bomb) e;
+                if (b.isActivated(currentDungeon) && b.isPlaced()) {
+                    bombs.add(b);
+                }
+            }
+        }
+        for (Bomb bomb : bombs) {
+            bomb.explode(currentDungeon);
+            currentDungeon.removeEntity(bomb.getId());
+        }
 
         
         

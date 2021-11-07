@@ -12,6 +12,7 @@ import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Moving.Zombie;
 import dungeonmania.entities.Static.Spawner;
+import dungeonmania.entities.collectable.Bomb;
 
 public class Entity {
     private String id;
@@ -100,7 +101,13 @@ public class Entity {
 
     public boolean isCollectable() {
         List<String> collectables = new ArrayList<String>();
-        collectables.addAll(Arrays.asList("armour", "arrow","bomb", "health_potion", "invincibility_potion", "invisibility_potion", "key_1", "key_2", "sword", "treasure", "wood"));
+        collectables.addAll(Arrays.asList("armour", "arrow", "health_potion", "invincibility_potion", "invisibility_potion", "key_1", "key_2", "sword", "treasure", "wood"));
+        if (this.type.equals("bomb")) {
+            Bomb b = (Bomb) this;
+            if (!b.isPlaced()) {
+                collectables.add("bomb");
+            }
+        }
         if (collectables.contains(this.type)) {
             return true;
         }
