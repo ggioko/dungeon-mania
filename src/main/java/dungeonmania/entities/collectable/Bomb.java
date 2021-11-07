@@ -5,6 +5,7 @@ import dungeonmania.util.Position;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
+import dungeonmania.entities.Player;
 import dungeonmania.Dungeon;
 
 import org.json.JSONObject;
@@ -55,7 +56,7 @@ public class Bomb extends CollectableEntity {
     public Dungeon explode(Dungeon current) {
         List<String> toRemove = new ArrayList<String>();
         for (Entity entity : current.getEntities()) {
-            if (this.isInRange(entity.getPosition(), "explosion")) {
+            if (this.isInRange(entity.getPosition(), "explosion") && !(entity instanceof Player)) {
                 toRemove.add(entity.getId());
             }
         }
