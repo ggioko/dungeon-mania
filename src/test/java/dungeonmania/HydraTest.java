@@ -26,7 +26,7 @@ public class HydraTest {
     @Test
     public void HydraSpawnTest() {
         DungeonManiaController controller = new DungeonManiaController();
-        controller.newGame("interact", "standard");
+        controller.newGame("interact", "hard");
         //wait 50 ticks for spawn
         for (int i = 0; i <=51; i++) {
             controller.tick(null, Direction.UP);
