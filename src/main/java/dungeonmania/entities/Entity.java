@@ -87,7 +87,7 @@ public class Entity {
         return this.isInteractable;
     }
 
-    public void move(Position pos, List<Entity> walls) {
+    public void move(Position pos, List<Entity> walls, int width, int height) {
         return;
     }
 
