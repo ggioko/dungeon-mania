@@ -15,6 +15,7 @@ import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Moving.Spider;
+import dungeonmania.entities.Moving.Zombie;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.collectable.CollectableEntity;
@@ -22,6 +23,7 @@ import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.buildable.Buildable;
 import dungeonmania.entities.collectable.Bomb;
 
 import java.io.File;
@@ -43,7 +45,7 @@ public class DungeonManiaController {
     int invincibilityTicks;
     int invisibilityTicks;
     int hydratick;
-    private final List<String> buildables = Arrays.asList("bow", "shield");
+
     public DungeonManiaController() {
         this.ticknum = 0;
         this.invincibilityTicks = 0;
@@ -439,13 +441,18 @@ public class DungeonManiaController {
     }
     
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        if (!buildables.contains(buildable)) {
+        if (!Buildable.BUILDABLES_LIST.contains(buildable)) {
             throw new IllegalArgumentException();
+        }
+        
+        if (Zombie.zombieExistOnMap(currentDungeon.entities) && buildable.equals("midnight_armour")) {
+            throw new InvalidActionException("Zombie Toasts Exist on Map");
         }
 
         if (!currentDungeon.buildables.contains(buildable)) {
             throw new InvalidActionException("Not Enough Materials");
         }
+
         currentDungeon.createBuildable(buildable);
 
         return currentDungeon.createResponse();

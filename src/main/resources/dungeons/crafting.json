@@ -49,6 +49,21 @@
         "key": 1
       },
       {
+        "x": 2,
+        "y": 3,
+        "type": "sun_stone"
+      },
+      {
+        "x": 2,
+        "y": 4,
+        "type": "armour"
+      },
+      {
+        "x": 11,
+        "y": 4,
+        "type": "zombie_toast"
+      },
+      {
         "x": 15,
         "y": 4,
         "type": "mercenary"

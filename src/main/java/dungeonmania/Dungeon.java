@@ -10,10 +10,8 @@ import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.OneRing;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.Bomb;
-import dungeonmania.entities.collectable.Sword;
-import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.Buildable;
-import dungeonmania.entities.collectable.buildable.Shield;
+import dungeonmania.entities.collectable.buildable.Midnight_Armour;
 import dungeonmania.goals.CompositeGoals;
 import dungeonmania.goals.Goal;
 import dungeonmania.goals.GoalLeaf;
@@ -47,11 +45,6 @@ public class Dungeon {
     List<AnimationQueue> animations;
     Player player;
     String gameMode;
-    boolean complete;
-    String goaltype;
-    List<String> goalsToComplete;
-    List<String> goalsCompleted;
-    boolean nogoals;
     Position entry;
 
 
@@ -220,9 +213,15 @@ public class Dungeon {
     }
 
     public void addOrRemoveBuildable(String item) {
-        if (Buildable.getBuildable(item).isBuildable(inventory)) {
-            if (!buildables.contains(item)) {buildables.add(item);}
-        } else {buildables.remove(item);}
+        if (item.equals("midnight_armour")) {
+            if (((Midnight_Armour) (Buildable.getBuildable(item))).isBuildable(inventory, entities)) {
+                if (!buildables.contains(item)) {buildables.add(item);}
+            } else {buildables.remove(item);}
+        } else {
+            if (Buildable.getBuildable(item).isBuildable(inventory)) {
+                if (!buildables.contains(item)) {buildables.add(item);}
+            } else {buildables.remove(item);}
+        }
     }
 
     public void itemPickup() {

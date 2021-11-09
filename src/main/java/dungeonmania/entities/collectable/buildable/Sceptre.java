@@ -9,11 +9,7 @@ import dungeonmania.entities.Entity;
 
 public class Sceptre extends Buildable {
 
-    private static final int woodNeeded = 1;
     private static final int arrowsNeeded = 2;
-    private static final int keyNeeded = 1;
-    private static final int treasureNeeded = 1;
-    private static final int sunStoneNeeded = 1;
     private static final List<String> recipe = Arrays.asList("wood", "arrow", "sun_stone", "treasure", "key_1", "key_2");
 
     public Sceptre(String id, String type) {
@@ -23,11 +19,18 @@ public class Sceptre extends Buildable {
     @Override
     public boolean isBuildable(List<Entity> inventory) {
         HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
+
         if (!materialCount.isEmpty()) {
-            if (materialCount.get("wood") >= woodNeeded || materialCount.get("arrow") >= arrowsNeeded) {
-                if (materialCount.get("key_1") >= keyNeeded || materialCount.get("key_2") >= keyNeeded || materialCount.get("treasure") >= treasureNeeded) {
-                    if (materialCount.get("sun_stone") >= sunStoneNeeded) {
+            if (materialCount.containsKey("sun_stone")) {
+                if (materialCount.containsKey("wood")) {
+                    if (materialCount.containsKey("treasure") || materialCount.containsKey("key_1") || materialCount.containsKey("key_2")) {
                         return true;
+                    }
+                } else if (materialCount.containsKey("arrow")) {
+                    if (materialCount.get("arrow") >= arrowsNeeded) {
+                        if (materialCount.containsKey("treasure") || materialCount.containsKey("key_1") || materialCount.containsKey("key_2")) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -39,17 +42,17 @@ public class Sceptre extends Buildable {
     public Map<String, Integer> materialNeeded(List<Entity> inventory) {
         HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
         Map<String, Integer> returnMap = new HashMap<>();
-        if (materialCount.get("wood") >= woodNeeded) {
+        if (materialCount.containsKey("wood")) {
             returnMap.put("wood", 1);
-        } else if (materialCount.get("arrow") >= arrowsNeeded) {
+        } else if (materialCount.containsKey("arrow")) {
             returnMap.put("arrow", 2);
         }
 
-        if (materialCount.get("treasure") >= treasureNeeded) {
+        if (materialCount.containsKey("treasure")) {
             returnMap.put("treasure", 1);
-        } else if (materialCount.get("key_1") >= keyNeeded) {
+        } else if (materialCount.containsKey("key_1")) {
             returnMap.put("key_1", 1);
-        } else if (materialCount.get("key_2") >= keyNeeded) {
+        } else if (materialCount.containsKey("key_2")) {
             returnMap.put("key_2", 1);
         }
 

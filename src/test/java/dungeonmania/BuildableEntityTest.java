@@ -43,6 +43,60 @@ public class BuildableEntityTest {
     }
 
     @Test
+    public void testCraftingSceptre() {
+        // test for crafting a sceptre
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("crafting", "standard");
+        
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.UP);
+
+        assertDoesNotThrow(() -> {
+            controller.build("sceptre");
+        });
+    }
+
+    @Test
+    public void testCraftingMidnightArmour_withoutZombie() {
+        // test for crafting a midnight armour
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("crafting", "standard");
+
+        
+        controller.currentDungeon.removeEntity("zombie_toast114");
+        
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+
+        assertDoesNotThrow(() -> {
+            controller.build("midnight_armour");
+        });
+    }
+
+    @Test
+    public void testCraftingMidnightArmour_withZombie() {
+        // test for crafting a midnight armour when zombie exists on map
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("crafting", "standard");
+        
+        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+
+        assertThrows(InvalidActionException.class, () -> {
+            controller.build("midnight_armour");
+        });
+    }
+
+    @Test
     public void testNotEnoughMatForBow() {
         // test for crafting a bow when you don't have enough material
         DungeonManiaController controller = new DungeonManiaController();

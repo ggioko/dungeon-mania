@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Moving.Zombie;
 
 public class Midnight_Armour extends Buildable {
 
-    private static final int sunStoneNeeded = 1;
-    private static final int armourNeeded = 1;
     private static final List<String> recipe = Arrays.asList("armour", "sun_stone");
 
 
@@ -24,9 +23,25 @@ public class Midnight_Armour extends Buildable {
         return false;
     }
 
+    public boolean isBuildable(List<Entity> inventory, List<Entity> entities) {
+        HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
+
+        if (!materialCount.isEmpty()) {
+            if (materialCount.containsKey("armour") && materialCount.containsKey("sun_stone") && !Zombie.zombieExistOnMap(entities)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public Map<String, Integer> materialNeeded(List<Entity> inventory) {
-        return null;
+        Map<String, Integer> returnMap = Map.of(
+            "armour", 1,
+            "sun_stone", 1
+        );
+
+        return returnMap;
     }
 
     @Override

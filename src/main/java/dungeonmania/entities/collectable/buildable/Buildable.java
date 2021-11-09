@@ -27,6 +27,10 @@ public abstract class Buildable extends CollectableEntity {
             buildable = new Shield("shield", "shield");
         } else if (type.equalsIgnoreCase("bow")) {
             buildable = new Bow("bow", "bow");
+        } else if (type.equalsIgnoreCase("sceptre")) {
+            buildable = new Sceptre("sceptre", "sceptre");
+        } else if (type.equalsIgnoreCase("midnight_armour")) {
+            buildable = new Midnight_Armour("midnight_armour", "midnight_armour");
         }
         return buildable;
     }

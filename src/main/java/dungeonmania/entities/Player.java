@@ -112,6 +112,8 @@ public class Player extends Entity {
             Bow bow = (Bow) dungeon.getItem("bow");
             bow.effect(enemy, enemyHP, this.health, this.attack, dungeon.getItems());
         }
+        
+
         this.setHealth(this.health - ((enemyHP * enemyAD) / 10));
     }
 
