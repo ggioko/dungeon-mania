@@ -287,9 +287,26 @@ public class DungeonManiaController {
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
+        currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
         // ENEMY PATHING
+        if (!currentDungeon.gameMode.equals("Peaceful")) {
+            // making sure that enemy interactions dont happen when on the peaceful game mode
+            currentDungeon.battle(currentDungeon);
+            if (currentDungeon.battle(currentDungeon) == null) {
+                currentDungeon = null;
+                return null;
+            }
+        }
         currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
-        
+        // ENEMY PATHING
+        if (!currentDungeon.gameMode.equals("Peaceful")) {
+            // making sure that enemy interactions dont happen when on the peaceful game mode
+            currentDungeon.battle(currentDungeon);
+            if (currentDungeon.battle(currentDungeon) == null) {
+                currentDungeon = null;
+                return null;
+            }
+        }
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
         currentDungeon.getPlayer().setBattling(false);
@@ -360,14 +377,6 @@ public class DungeonManiaController {
         if (currentDungeon.goalTree != null && !currentDungeon.goalTree.isComplete()) {
             currentDungeon.goalTree.checkGoalState(currentDungeon.entities, currentDungeon.player);
             ((CompositeGoals) currentDungeon.goalTree).checkComplete();
-        }
-        if (!currentDungeon.gameMode.equals("Peaceful")) {
-            // making sure that enemy interactions dont happen when on the peaceful game mode
-            currentDungeon.battle(currentDungeon);
-            if (currentDungeon.battle(currentDungeon) == null) {
-                currentDungeon = null;
-                return null;
-            }
         }
         return currentDungeon.createResponse();
     }

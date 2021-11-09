@@ -197,9 +197,7 @@ public class Dungeon {
         List<Entity> walls = getWalls();
 
         for (Entity e : this.entities) {
-            if (e instanceof Player) {
-                e.move(this.player.getPosition().translateBy(direction), walls, width, height);
-            } if (e instanceof Mercenary) {
+            if (e instanceof Mercenary) {
                 walls.add(this.player);
                 walls.add(e);
                 Mercenary entity = (Mercenary)e;
@@ -209,7 +207,7 @@ public class Dungeon {
                     e.moveAway(this.player.getPosition(), walls);
                     
                 }
-            } else {
+            } else if (!(e instanceof Player)) {
                 e.move(this.player.getPosition(), walls, width, height);
             }
         }

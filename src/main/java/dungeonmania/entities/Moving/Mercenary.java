@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Player;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Direction;
 import java.util.List;
@@ -42,8 +43,8 @@ public class Mercenary extends MovingEntity{
     @Override
     public void move(Position pos, List<Entity> walls, int width, int height) {
         List<Position> grid = new ArrayList<Position>();
-        for (int i = width; i>0; i--) {
-            for (int c = height;c>0; c--) {
+        for (int i = width; i>0-width; i--) {
+            for (int c = height;c>0-height; c--) {
                 grid.add(new Position(i, c));
             }
         }
@@ -52,7 +53,7 @@ public class Mercenary extends MovingEntity{
         Queue<Position> que = new LinkedList<Position>();
         List<Entity> temp = new ArrayList<Entity>();
         for (Entity e : walls) {
-            if (e instanceof Wall) {
+            if (!(this.equals(e)) && !(e instanceof Player)) {
                 temp.add(e);
             }
         }
@@ -94,10 +95,10 @@ public class Mercenary extends MovingEntity{
                 break;
             }
         }
-        if (prev.get(this.getPosition()) == null) {
-            return;
+        if (prev.get(this.getPosition()) != null) {
+            this.setPosition(prev.get(this.getPosition()));
         }
-        this.setPosition(prev.get(this.getPosition()));
+        
     }/*
     @Override
     public void move(Position pos, List<Entity> walls) {
