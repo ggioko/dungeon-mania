@@ -94,6 +94,9 @@ public class Mercenary extends MovingEntity{
                 break;
             }
         }
+        if (prev.get(this.getPosition()) == null) {
+            return;
+        }
         this.setPosition(prev.get(this.getPosition()));
     }/*
     @Override
