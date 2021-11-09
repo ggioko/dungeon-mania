@@ -5,9 +5,12 @@ import org.json.JSONObject;
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.MovingEntity;
+import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.util.Position;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player extends Entity {
@@ -64,6 +67,13 @@ public class Player extends Entity {
     public void move(Position pos, List<Entity> walls, int width, int height) {
         boolean move = true;
         boolean moveMercenary = false;
+        List<Entity> temp = new ArrayList<Entity>();
+        for (Entity e : walls) {
+            if (!(e instanceof MovingEntity)) {
+                temp.add(e);
+            }
+        }
+        walls = temp;
         for (Entity w : walls) {
             if (w.getPosition().equals(pos)) {
                 if (w instanceof Mercenary) {
