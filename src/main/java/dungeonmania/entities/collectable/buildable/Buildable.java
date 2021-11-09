@@ -1,5 +1,6 @@
 package dungeonmania.entities.collectable.buildable;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,8 @@ import dungeonmania.entities.collectable.CollectableEntity;
 import dungeonmania.entities.*;
 
 public abstract class Buildable extends CollectableEntity {
+
+    public static final List<String> BUILDABLES_LIST= Arrays.asList("bow", "shield", "sceptre", "midnight_armour");
 
     public Buildable(String id, String type) {
         super(id, type);

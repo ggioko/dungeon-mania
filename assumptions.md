@@ -18,6 +18,9 @@
 - Shield reduces incoming damage by 50 %
 - When player has shield AND armour, incoming damage is reduced by 75 %
 
+### Building Assumptions
+- When building a shield, if key and treasure exists in the inventory, the treasure will be used instead of the key.
+
 ### Drop Chance
 - Mercenaries drop armour directly into the inventory of the player
 - Mercenaries drop armour with a chance of 1/10

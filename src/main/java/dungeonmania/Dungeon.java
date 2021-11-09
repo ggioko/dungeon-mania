@@ -204,13 +204,9 @@ public class Dungeon {
             itemList.add(new ItemResponse(i.getId(), i.getType()));
         }
         if (!inventory.isEmpty()) {
-            if (Buildable.getBuildable("bow").isBuildable(inventory)) {
-                if (!buildables.contains("bow")) {buildables.add("bow");}
-            } else {buildables.remove("bow");}
-
-            if (Buildable.getBuildable("shield").isBuildable(inventory)) {
-                if (!buildables.contains("shield")) {buildables.add("shield");}
-            } else {buildables.remove("shield");}
+            for (String item : Buildable.BUILDABLES_LIST) {
+                addOrRemoveBuildable(item);
+            }
         } 
         if (this.goalTree != null) {
             this.goals = getGoals();
@@ -221,6 +217,12 @@ public class Dungeon {
         ), false, -1));
         animations.add(new AnimationQueue("PostTick", "player", Arrays.asList("healthbar shake, over 0.5s, ease Sin"), false, 0.5));
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals, animations);
+    }
+
+    public void addOrRemoveBuildable(String item) {
+        if (Buildable.getBuildable(item).isBuildable(inventory)) {
+            if (!buildables.contains(item)) {buildables.add(item);}
+        } else {buildables.remove(item);}
     }
 
     public void itemPickup() {
