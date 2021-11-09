@@ -333,18 +333,24 @@ public class Dungeon {
                         double playerAD = current.player.getAttack();
                         double enemyAD = enemy.getAttack();
                         
-                        // Player should take damage only if invincibility potion effect is off
-                        if (!this.player.isInvincibilityPotionEffect()) {
-                            current.player.takeDamage(enemyHP, enemyAD, this, enemy);
-                        }
                         enemy.takeDamage(playerHP, playerAD, this);
 
+                        if (enemyHP <= 0) {
+                            //enemy is dead
+                            current.enemyDeath(enemy);
+                            battleOver = true;
+                            return current;
+                        }
+                        
                         //Has an ally Mercenary
                         if (this.getPlayer().haveAlly()) {
                             enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
                         }
-                       
                         
+                        // Player should take damage only if invincibility potion effect is off
+                        if (!this.player.isInvincibilityPotionEffect()) {
+                            current.player.takeDamage(enemyHP, enemyAD, this, enemy);
+                        }
                         
                         if (playerHP <= 0) {
                             //one ring
@@ -356,11 +362,7 @@ public class Dungeon {
                             else {
                                 return null;
                             }
-                        } else if (enemyHP <= 0) {
-                            //enemy is dead
-                            current.enemyDeath(enemy);
-                            battleOver = true;
-                        }
+                        } 
                     }
                     return current;
                 }

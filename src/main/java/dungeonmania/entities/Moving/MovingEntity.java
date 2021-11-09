@@ -3,6 +3,7 @@ package dungeonmania.entities.Moving;
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.util.Position;
 import java.util.List;
 
@@ -55,6 +56,12 @@ public class MovingEntity extends Entity {
             Sword.isBroken(dungeon.getItems());
             // decrease sword durability by 1 // TODO
         }
+        //Bow allows player to attack twice
+        if (dungeon.getItem("bow") != null) {
+            Bow bow = (Bow) dungeon.getItem("bow");
+            bow.effect(this, this.health, playerHP, playerAD, dungeon.getItems());
+        }
+        
         this.setHealth(this.health - ((playerHP * playerAD) / 5));
     }
    

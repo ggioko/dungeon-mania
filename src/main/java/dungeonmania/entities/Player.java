@@ -6,7 +6,6 @@ import dungeonmania.Dungeon;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.collectable.Armour;
-import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.util.Position;
 import java.util.List;
@@ -107,12 +106,6 @@ public class Player extends Entity {
             Shield shield = (Shield) dungeon.getItem("shield");
             enemyAD = shield.effect(enemyAD, dungeon.getItems());
         }
-        //Bow allows player to attack twice
-        if (dungeon.getItem("bow") != null) {
-            Bow bow = (Bow) dungeon.getItem("bow");
-            bow.effect(enemy, enemyHP, this.health, this.attack, dungeon.getItems());
-        }
-        
 
         this.setHealth(this.health - ((enemyHP * enemyAD) / 10));
     }
