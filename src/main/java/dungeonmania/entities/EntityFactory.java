@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import org.json.JSONObject;
 
+import dungeonmania.entities.Moving.Assassin;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Moving.Zombie;
@@ -53,7 +54,14 @@ public class EntityFactory {
 		} else if (entity.getString("type").equalsIgnoreCase("wood")) {
 			e = new Wood(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("mercenary")) {
-			e = new Mercenary(entity);
+			if (Math.random() <= 0.3) {
+				e = new Assassin(entity);
+			} else {
+				e = new Mercenary(entity);
+			}
+		}
+		else if (entity.getString("type").equalsIgnoreCase("assassin")) {
+			e = new Assassin(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("spider")) {
 			e = new Spider(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("zombie_toast_spawner")) {
