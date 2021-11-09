@@ -3,6 +3,7 @@ package dungeonmania.entities;
 import org.json.JSONObject;
 
 import dungeonmania.entities.Moving.Assassin;
+import dungeonmania.entities.Moving.Hydra;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Moving.Zombie;
@@ -21,6 +22,7 @@ import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.collectable.OneRing;
+import dungeonmania.entities.collectable.SunStone;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
@@ -62,6 +64,8 @@ public class EntityFactory {
 		}
 		else if (entity.getString("type").equalsIgnoreCase("assassin")) {
 			e = new Assassin(entity);
+		} else if (entity.getString("type").equalsIgnoreCase("hydra")) {
+			e= new Hydra(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("spider")) {
 			e = new Spider(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("zombie_toast_spawner")) {
@@ -82,6 +86,8 @@ public class EntityFactory {
 			e = new Zombie(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("wall")) {
 			e = new Wall(entity);
+		} else if (entity.getString("type").equalsIgnoreCase("sun_stone")) {
+			e = new SunStone(entity);
 		}  else if (entity.getString("type").equalsIgnoreCase("player")) {
 			e = new Player(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("portal")) {
