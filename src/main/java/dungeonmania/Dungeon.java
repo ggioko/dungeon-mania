@@ -22,6 +22,8 @@ import dungeonmania.entities.Moving.*;
 import dungeonmania.response.models.AnimationQueue;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
+
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +52,7 @@ public class Dungeon {
     List<String> goalsToComplete;
     List<String> goalsCompleted;
     boolean nogoals;
+    Position entry;
 
 
     public Dungeon(String dungeonName, JSONObject entities, String gameMode) {
@@ -59,10 +62,11 @@ public class Dungeon {
         this.gameMode = gameMode;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
-            Object e = EntityFactory.getEntity((JSONObject)entity, gameMode, doorcreated, entities);
+            Entity e = EntityFactory.getEntity((JSONObject)entity, gameMode, doorcreated, entities);
 
             if (e instanceof Player) {
                 this.player = (Player)e;
+                this.entry = e.getPosition();
             }
 
             this.entities.add((Entity)e);

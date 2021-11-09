@@ -4,6 +4,7 @@ import dungeonmania.util.Position;
 
 import org.json.JSONObject;
 
+import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
 
 import dungeonmania.util.Direction;
@@ -15,6 +16,8 @@ public class Mercenary extends MovingEntity{
     private boolean bribed;
     private boolean inBattle;
 
+    static int ids;
+
     public Mercenary(JSONObject entity) {
         super(entity);
         this.health = 5;
@@ -22,8 +25,15 @@ public class Mercenary extends MovingEntity{
         this.bribed = false;
         this.inBattle = true;
     }
-
-    
+    public static Dungeon spawn(Dungeon currentDungeon, Position entry) {
+        Mercenary ass = new Mercenary(new JSONObject("{x:"+ entry.getX() + ",y:"+entry.getY()+",type:mercenary}"));
+        ass.setId("mercenary_" + ((Integer)ids).toString());
+        List<Entity> ents = currentDungeon.getEntities();
+        ents.add(ass);
+        currentDungeon.setEntities(ents);
+        ids++;
+        return currentDungeon;
+    }
 
     @Override
     public void move(Position pos, List<Entity> walls) {
