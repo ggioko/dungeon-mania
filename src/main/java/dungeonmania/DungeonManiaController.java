@@ -288,7 +288,7 @@ public class DungeonManiaController {
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         // ENEMY PATHING
-        currentDungeon.pathing(movementDirection);
+        currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
         
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);

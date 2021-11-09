@@ -18,7 +18,7 @@ public class Zombie extends MovingEntity {
     }
     
     @Override
-    public void move(Position pos, List<Entity> walls) {
+    public void move(Position pos, List<Entity> walls, int width, int height) {
         boolean move = true;
         List<Direction> directions = new ArrayList<Direction>();
         directions.add(Direction.UP);
