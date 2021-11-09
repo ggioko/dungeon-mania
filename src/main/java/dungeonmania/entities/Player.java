@@ -61,7 +61,7 @@ public class Player extends Entity {
         this.attack = attack;
     }
     @Override
-    public void move(Position pos, List<Entity> walls) {
+    public void move(Position pos, List<Entity> walls, int width, int height) {
         boolean move = true;
         boolean moveMercenary = false;
         for (Entity w : walls) {
@@ -81,7 +81,7 @@ public class Player extends Entity {
                 for (Entity entity : walls) {
                     if (entity instanceof Mercenary) {
                         Mercenary m = (Mercenary) entity;
-                        m.move(old, walls);
+                        m.move(old, walls, width, height);
                     }
                 }
             }

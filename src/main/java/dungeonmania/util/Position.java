@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import dungeonmania.entities.Entity;
+
 public final class Position {
     private final int x, y, layer;
 
@@ -107,6 +109,42 @@ public final class Position {
         adjacentPositions.add(new Position(x  , y+1));
         adjacentPositions.add(new Position(x-1, y+1));
         adjacentPositions.add(new Position(x-1, y));
+        return adjacentPositions;
+    }
+
+    public List<Position> getAdjacentPositionsWalls(List<Entity> walls) {
+        List<Position> adjacentPositions = new ArrayList<>();
+        boolean down = true;
+        boolean up = true;
+        boolean left = true;
+        boolean right = true;
+        for (Entity e : walls) {
+            if (e.getPosition().equals(new Position(x  , y-1))) {
+                down = false;
+            }
+            if (e.getPosition().equals(new Position(x+1, y))) {
+                right = false;
+            }
+            if (e.getPosition().equals(new Position(x  , y+1))) {
+                up = false;
+            }
+            if (e.getPosition().equals(new Position(x-1, y))) {
+                left = false;
+            }
+        }
+        if (down) {
+            adjacentPositions.add(new Position(x  , y-1));
+        }
+        if (right) {
+            adjacentPositions.add(new Position(x+1, y));
+        }
+        if (up) {
+            adjacentPositions.add(new Position(x  , y+1));
+        }
+        if (left) {
+            adjacentPositions.add(new Position(x-1, y));
+        }
+        
         return adjacentPositions;
     }
 }
