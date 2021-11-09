@@ -59,15 +59,6 @@ public class Bow extends Buildable {
         return returnMap;
     }    
 
-    @Override
-    public void subtractDurability(List<Entity> inventory) {
-        int newDurability = this.getDurability() - 1;
-        this.setDurability(newDurability);
-        if (this.getDurability() == 0) {
-            inventory.remove(this);
-        }
-    }
-
     public void effect(MovingEntity e, double enemyHP, double playerHP, double playerAD, List<Entity> inventory) {
         e.setHealth(enemyHP - ((playerHP * playerAD) / 5));
         this.subtractDurability(inventory);
