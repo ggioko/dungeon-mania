@@ -67,5 +67,13 @@ public class Midnight_Armour extends Buildable {
             return -1;
         }
     }
+
+    @Override
+    public void subtractDurability(List<Entity> inventory) {
+        this.setDurability(this.getDurability() - 1);
+        if (this.getDurability() == 0) {
+            inventory.remove(this);
+        }
+    }
     
 }

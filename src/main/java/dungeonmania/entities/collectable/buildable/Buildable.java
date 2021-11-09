@@ -20,12 +20,7 @@ public abstract class Buildable extends CollectableEntity {
     public abstract Map<String, Integer> materialNeeded(List<Entity> inventory);
     public abstract HashMap<String, Integer> getRelevantMaterialCount(List<Entity> inventory);
     
-    public void subtractDurability(List<Entity> inventory) {
-        this.setDurability(this.getDurability() - 1);
-        if (this.getDurability() == 0) {
-            inventory.remove(this);
-        }
-    }
+    public abstract void subtractDurability(List<Entity> inventory);
 
     public static Buildable getBuildable(String type) {
         Buildable buildable = null;

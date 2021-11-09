@@ -222,6 +222,7 @@ public class DungeonManiaController {
         dungeonNames.add("invincibility");
         dungeonNames.add("interactAssassin");
         dungeonNames.add("hydra");
+        dungeonNames.add("crafting_zombie");
         return dungeonNames;
     }
     

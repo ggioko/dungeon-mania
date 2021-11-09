@@ -85,4 +85,12 @@ public class Shield extends Buildable {
         return damage/2;
     }
 
+    @Override
+    public void subtractDurability(List<Entity> inventory) {
+        this.setDurability(this.getDurability() - 1);
+        if (this.getDurability() == 0) {
+            inventory.remove(this);
+        }
+    }
+
 }

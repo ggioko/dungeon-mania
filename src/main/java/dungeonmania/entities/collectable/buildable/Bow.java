@@ -63,4 +63,13 @@ public class Bow extends Buildable {
         e.setHealth(enemyHP - ((playerHP * playerAD) / 5));
         this.subtractDurability(inventory);
     }
+
+    @Override
+    public void subtractDurability(List<Entity> inventory) {
+        this.setDurability(this.getDurability() - 1);
+        if (this.getDurability() == 0) {
+            inventory.remove(this);
+        }
+    }
+
 }
