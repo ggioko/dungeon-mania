@@ -9,6 +9,7 @@ import dungeonmania.util.FileLoader;
 import spark.utils.IOUtils;
 import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.Assassin;
+import dungeonmania.entities.Moving.Hydra;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Boulder;
@@ -41,11 +42,13 @@ public class DungeonManiaController {
     int ticknum;
     int invincibilityTicks;
     int invisibilityTicks;
+    int hydratick;
     private final List<String> buildables = Arrays.asList("bow", "shield");
     public DungeonManiaController() {
         this.ticknum = 0;
         this.invincibilityTicks = 0;
         this.invisibilityTicks = 0;
+        this.hydratick = 0;
     }
 
     public String getSkin() {
@@ -216,6 +219,7 @@ public class DungeonManiaController {
         dungeonNames.add("bombTest");
         dungeonNames.add("invincibility");
         dungeonNames.add("interactAssassin");
+        dungeonNames.add("hydra");
         return dungeonNames;
     }
     
@@ -270,11 +274,18 @@ public class DungeonManiaController {
             this.invisibilityTicks++;
             
         }
+        //hydra spawning
+        if (currentDungeon.gameMode.equals("hard")) {
+            if (this.hydratick >= 50) {
+                Hydra.spawn(currentDungeon, currentDungeon.entry);
+                this.hydratick = 0;
+            }
+            this.hydratick++;
+        }
         currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
-
 
         // ENEMY PATHING
         currentDungeon.pathing(movementDirection);
@@ -355,6 +366,7 @@ public class DungeonManiaController {
             currentDungeon.battle(currentDungeon);
             if (currentDungeon.battle(currentDungeon) == null) {
                 currentDungeon = null;
+                return null;
             }
         }
         return currentDungeon.createResponse();
