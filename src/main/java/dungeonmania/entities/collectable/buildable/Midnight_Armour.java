@@ -58,8 +58,14 @@ public class Midnight_Armour extends Buildable {
         return materialCount;
     }
 
-    @Override
-    public void subtractDurability(List<Entity> inventory) {
+    public double effect(double enemyAD, List<Entity> inventory) {
+        if (enemyAD >= 0) {
+            this.subtractDurability(inventory);
+            return enemyAD/2;
+        } else {
+            this.subtractDurability(inventory);
+            return -1;
+        }
     }
     
 }

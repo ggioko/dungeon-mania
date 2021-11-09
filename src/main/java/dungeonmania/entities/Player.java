@@ -7,6 +7,7 @@ import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.MovingEntity;
 import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
+import dungeonmania.entities.collectable.buildable.Midnight_Armour;
 import dungeonmania.entities.collectable.buildable.Shield;
 import dungeonmania.util.Position;
 
@@ -115,6 +116,11 @@ public class Player extends Entity {
         if (dungeon.getItem("shield") != null) {
             Shield shield = (Shield) dungeon.getItem("shield");
             enemyAD = shield.effect(enemyAD, dungeon.getItems());
+        }
+
+        if (dungeon.getItem("midnight_armour") != null) {
+            Midnight_Armour m_armour = (Midnight_Armour) dungeon.getItem("midnight_armour");
+            enemyAD = m_armour.effect(enemyAD, dungeon.getItems());
         }
 
         this.setHealth(this.health - ((enemyHP * enemyAD) / 10));
