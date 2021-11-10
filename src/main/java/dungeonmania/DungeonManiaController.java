@@ -290,22 +290,23 @@ public class DungeonManiaController {
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
-        currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
         // ENEMY PATHING
+        currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
-            currentDungeon.battle(currentDungeon);
-            if (currentDungeon.battle(currentDungeon) == null) {
-                currentDungeon = null;
+            currentDungeon = currentDungeon.battle(currentDungeon);
+            if (currentDungeon == null) {
                 return null;
             }
         }
         currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
+
         // ENEMY PATHING
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
-            if (currentDungeon.battle(currentDungeon) == null) {
+            if (currentDungeon.player == null) {
+                System.out.println("DEAD");
                 currentDungeon = null;
                 return null;
             }

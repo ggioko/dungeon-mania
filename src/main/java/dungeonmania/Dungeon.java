@@ -379,7 +379,8 @@ public class Dungeon {
                             }
                             //game over
                             else {
-                                return null;
+                                this.player = null;
+                                return current;
                             }
                         } 
                     }
