@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Moving.Mercenary;
 
 public class Sceptre extends Buildable {
 
@@ -14,6 +15,7 @@ public class Sceptre extends Buildable {
 
     public Sceptre(String id, String type) {
         super(id, type);
+        this.setDurability(5);
     }
 
     @Override
@@ -75,7 +77,17 @@ public class Sceptre extends Buildable {
     }
 
     @Override
-    public void subtractDurability(List<Entity> inventory) {        
+    public void subtractDurability(List<Entity> inventory) {   
+        this.setDurability(this.getDurability() - 1);
+        if (this.getDurability() == 0) {
+            inventory.remove(this);
+        }     
+    }
+
+    public void effect(Mercenary m, List<Entity> inventory) {
+        m.setBrainWashed(true);
+        m.setInteractable(false);
+        subtractDurability(inventory);
     }
     
 }

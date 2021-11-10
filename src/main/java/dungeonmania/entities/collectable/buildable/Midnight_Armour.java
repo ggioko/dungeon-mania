@@ -12,10 +12,9 @@ public class Midnight_Armour extends Buildable {
 
     private static final List<String> recipe = Arrays.asList("armour", "sun_stone");
 
-
-
     public Midnight_Armour(String id, String type) {
         super(id, type);
+        this.setDurability(10);
     }
 
     @Override

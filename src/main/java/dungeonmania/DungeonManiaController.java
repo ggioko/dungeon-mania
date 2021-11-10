@@ -24,6 +24,7 @@ import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.collectable.buildable.Buildable;
+import dungeonmania.entities.collectable.buildable.Sceptre;
 import dungeonmania.entities.collectable.Bomb;
 
 import java.io.File;
@@ -227,6 +228,9 @@ public class DungeonManiaController {
     }
     
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
+        if (currentDungeon == null) {
+            throw new NullPointerException("YOU ARE DEAD!");
+        }
         if (itemUsed != null) {
             Entity item = currentDungeon.getItemUsed(itemUsed);
             if (currentDungeon.getItemUsed(itemUsed) == null) {
@@ -294,9 +298,10 @@ public class DungeonManiaController {
         currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
         if (!currentDungeon.gameMode.equals("Peaceful")) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
-            currentDungeon = currentDungeon.battle(currentDungeon);
-            if (currentDungeon == null) {
-                return null;
+            currentDungeon.battle(currentDungeon);
+            if (currentDungeon.player == null) {
+                currentDungeon = null;
+                throw new NullPointerException("YOU ARE DEAD!");
             }
         }
         currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
@@ -306,9 +311,8 @@ public class DungeonManiaController {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
             if (currentDungeon.player == null) {
-                System.out.println("DEAD");
                 currentDungeon = null;
-                return null;
+                throw new NullPointerException("YOU ARE DEAD!");
             }
         }
         //mercenary moves again if battling
@@ -373,7 +377,23 @@ public class DungeonManiaController {
             currentDungeon.removeEntity(bomb.getId());
         }
 
-        
+        // Enemies Brainwashed by Sceptre
+        for (Entity e : currentDungeon.entities) {
+            if (e instanceof Mercenary || e instanceof Assassin) {
+                Mercenary m = (Mercenary) e;
+                System.out.println(m.getId()+": "+m.getBrainWashTick());
+                if (m.isBrainWashed()) {
+                    if (m.getBrainWashTick() >= 10) {
+                        m.setBrainWashed(false);
+                        m.setInteractable(true);
+                        m.setBrainWashTick(0);
+                        currentDungeon.getPlayer().setAlly(false);
+                    } else {
+                        m.setBrainWashTick(m.getBrainWashTick() + 1);
+                    }
+                }
+            }
+        }
         
         
         // ITEM PICKUP
@@ -390,41 +410,51 @@ public class DungeonManiaController {
         if (currentDungeon.getEntity(entityId) == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         } else if (entity instanceof Mercenary) {
-            if (entity instanceof Assassin) {
-                Assassin assassin = (Assassin) currentDungeon.getEntity(entityId);
-
-                if (assassin.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
-                    if (currentDungeon.getItem("treasure") == null || currentDungeon.getItem("one_ring") == null) {
-                        throw new InvalidActionException("No treasure or ring in inventory");
+            if (!currentDungeon.existsBrainwashedEntity(currentDungeon.getEntities())) {
+                if (entity instanceof Assassin) {
+                    Assassin assassin = (Assassin) currentDungeon.getEntity(entityId);
+                    if (assassin.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
+                        if (currentDungeon.getItem("sceptre") != null) {
+                            ((Sceptre) (currentDungeon.getItem("sceptre"))).effect(assassin, currentDungeon.inventory);
+                            currentDungeon.getPlayer().setAlly(true);
+                        } else if (currentDungeon.getItem("treasure") == null || currentDungeon.getItem("one_ring") == null) {
+                            throw new InvalidActionException("No treasure or ring in inventory");
+                        }
+                        else {
+                            currentDungeon.removeItem("treasure");
+                            currentDungeon.removeItem("one_ring");
+                            assassin.setBribed(true);
+                            assassin.setInteractable(false);
+                            currentDungeon.getPlayer().setAlly(true);
+                        }
                     }
                     else {
-                        currentDungeon.removeItem("treasure");
-                        currentDungeon.removeItem("one_ring");
-                        assassin.setBribed(true);
-                        assassin.setInteractable(false);
-                        currentDungeon.getPlayer().setAlly(true);
+                        throw new InvalidActionException("Mercenary not in range");
                     }
-                }
-                else {
-                    throw new InvalidActionException("Mercenary not in range");
-                }
-            } else {
-                Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
-
-                if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
-                    if (currentDungeon.getItem("treasure") == null) {
-                        throw new InvalidActionException("No treasure in inventory");
+                } else {
+                    Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
+    
+                    if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
+                        if (currentDungeon.getItem("sceptre") != null) {
+                            ((Sceptre) (currentDungeon.getItem("sceptre"))).effect(mercenary, currentDungeon.inventory);
+                            currentDungeon.getPlayer().setAlly(true);
+                        } else if (currentDungeon.getItem("treasure") == null) {
+                            throw new InvalidActionException("No treasure in inventory");
+                        }
+                        else {
+                            currentDungeon.removeItem("treasure");
+                            mercenary.setBribed(true);
+                            mercenary.setInteractable(false);
+                            currentDungeon.getPlayer().setAlly(true);
+                        }
                     }
                     else {
-                        currentDungeon.removeItem("treasure");
-                        mercenary.setBribed(true);
-                        mercenary.setInteractable(false);
-                        currentDungeon.getPlayer().setAlly(true);
+                        throw new InvalidActionException("Mercenary not in range");
                     }
                 }
-                else {
-                    throw new InvalidActionException("Mercenary not in range");
-                }
+            }
+            else {
+                throw new InvalidActionException("You already have an ally!");
             }
         }
         else if (currentDungeon.getEntity(entityId).getType().equals("zombie_toast_spawner")) {

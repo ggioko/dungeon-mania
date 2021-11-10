@@ -67,9 +67,6 @@ public class BuildableEntityTest {
         DungeonManiaController controller = new DungeonManiaController();
 
         controller.newGame("crafting", "standard");
-
-        
-        controller.currentDungeon.removeEntity("zombie_toast114");
         
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.LEFT);
@@ -85,7 +82,7 @@ public class BuildableEntityTest {
         // test for crafting a midnight armour when zombie exists on map
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("crafting", "standard");
+        controller.newGame("crafting_zombie", "standard");
         
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.LEFT);
@@ -196,11 +193,6 @@ public class BuildableEntityTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
-        controller.tick(null, Direction.DOWN);
-        controller.tick(null, Direction.DOWN);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.NONE);
-        controller.tick(null, Direction.NONE);
         
         // shield durability == 0 && not in inventory
         assertNull(controller.currentDungeon.getItem("shield"));
@@ -215,7 +207,7 @@ public class BuildableEntityTest {
         // Test if shield halves incoming damage
         DungeonManiaController controller1 = new DungeonManiaController();
         DungeonManiaController controller2 = new DungeonManiaController();
-
+        
         controller1.newGame("crafting", "standard");
         controller2.newGame("crafting", "standard");
 
@@ -243,6 +235,39 @@ public class BuildableEntityTest {
         controller2.tick(null, Direction.RIGHT);
 
         assertTrue(controller1.currentDungeon.player.getHealth() > controller2.currentDungeon.player.getHealth());
+    }
 
+    @Test
+    public void testMidnight_ArmourDefenceEffect() {
+        DungeonManiaController controller1 = new DungeonManiaController();
+        DungeonManiaController controller2 = new DungeonManiaController();
+
+        controller1.newGame("crafting", "standard");
+        controller2.newGame("crafting", "standard");
+
+        controller1.tick(null, Direction.DOWN);
+        controller1.tick(null, Direction.LEFT);
+        controller1.tick(null, Direction.DOWN);
+
+        assertDoesNotThrow(() -> {
+            controller1.build("midnight_armour");
+        });
+
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+        controller1.tick(null, Direction.RIGHT);
+
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+        controller2.tick(null, Direction.RIGHT);
+
+        assertTrue(controller1.currentDungeon.player.getHealth() > controller2.currentDungeon.player.getHealth());
     }
 }

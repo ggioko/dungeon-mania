@@ -20,6 +20,8 @@ import java.util.LinkedList;
 public class Mercenary extends MovingEntity{
     private boolean bribed;
     private boolean inBattle;
+    private boolean brainWashed;
+    private int brainWashTick;
 
     static int ids;
 
@@ -28,7 +30,9 @@ public class Mercenary extends MovingEntity{
         this.health = 5;
         this.attack = 1;
         this.bribed = false;
+        this.brainWashed = false;
         this.inBattle = true;
+        this.brainWashTick = 0;
     }
     public static Dungeon spawn(Dungeon currentDungeon, Position entry) {
         Mercenary ass = new Mercenary(new JSONObject("{x:"+ entry.getX() + ",y:"+entry.getY()+",type:mercenary}"));
@@ -346,6 +350,22 @@ public class Mercenary extends MovingEntity{
 
     public boolean isBribed () {
         return this.bribed;
+    }
+
+    public void setBrainWashTick (int brainWashTick) {
+        this.brainWashTick = brainWashTick;
+    }
+
+    public int getBrainWashTick () {
+        return this.brainWashTick;
+    }
+
+    public void setBrainWashed (boolean brainWashed) {
+        this.brainWashed = brainWashed;
+    }
+
+    public boolean isBrainWashed () {
+        return this.brainWashed;
     }
 
     public boolean isInBattle() {

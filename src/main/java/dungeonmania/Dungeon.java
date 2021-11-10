@@ -336,7 +336,7 @@ public class Dungeon {
             if (e instanceof MovingEntity) {
                 if (e instanceof Mercenary) {
                     Mercenary mercenary = (Mercenary) e;
-                    if (mercenary.isBribed()) {
+                    if (mercenary.isBribed() || mercenary.isBrainWashed()) {
                         continue;
                     }
                 }
@@ -392,12 +392,24 @@ public class Dungeon {
         return current;
     }
 
+    public boolean existsBrainwashedEntity(List<Entity> entities) {
+        for (Entity e : entities) {
+            if (e instanceof Mercenary || e instanceof Assassin) {
+                Mercenary m = (Mercenary) e;
+                if (m.isBrainWashed()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public List<Entity> getWalls() {
         List<Entity> walls = new ArrayList<Entity>();       
         for (Entity e : this.entities) {
             if (e instanceof Mercenary){
                 Mercenary m = (Mercenary) e;
-                if (m.isBribed()) {
+                if (m.isBribed() || m.isBrainWashed()) {
                     walls.add(m);
                 }
             }
