@@ -381,7 +381,6 @@ public class DungeonManiaController {
         for (Entity e : currentDungeon.entities) {
             if (e instanceof Mercenary || e instanceof Assassin) {
                 Mercenary m = (Mercenary) e;
-                System.out.println(m.getId()+": "+m.getBrainWashTick());
                 if (m.isBrainWashed()) {
                     if (m.getBrainWashTick() >= 10) {
                         m.setBrainWashed(false);
