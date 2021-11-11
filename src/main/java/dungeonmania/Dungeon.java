@@ -202,7 +202,7 @@ public class Dungeon {
                 if (me.isInSwapTile(this.entities) && !me.isSlowed()) {
                     me.setSlowed(true);
                 }
-                if (e instanceof Mercenary) {
+                else if (e instanceof Mercenary) {
                     walls.add(this.player);
                     walls.add(e);
                     Mercenary entity = (Mercenary)e;
