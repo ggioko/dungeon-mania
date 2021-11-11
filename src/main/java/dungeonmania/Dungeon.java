@@ -53,6 +53,8 @@ public class Dungeon {
     List<String> goalsCompleted;
     boolean nogoals;
     Position entry;
+    int width;
+    int height;
 
 
     public Dungeon(String dungeonName, JSONObject entities, String gameMode) {
@@ -84,6 +86,25 @@ public class Dungeon {
             this.goals = getGoals();
         } else {
             this.goals = null;
+        }
+        //set width and height of dungeon
+        try {
+            this.width = entities.getInt("width");
+            this.height= entities.getInt("height");
+        } catch (Exception e) {
+            //set width and height if there are none
+            int greatestW = 0;
+            int greatestH = 0;
+            for (Entity entity : this.entities) {
+                if (entity.getPosition().getX() > greatestW) {
+                    greatestW = entity.getPosition().getX();
+                }
+                if (entity.getPosition().getY() > greatestH) {
+                    greatestH = entity.getPosition().getY();
+                }
+            }
+            this.width = greatestW;
+            this.height = greatestH;
         }
     }
 
@@ -171,32 +192,29 @@ public class Dungeon {
         return null;
     }
 
-    public void pathing(Direction direction) {
+    public void pathing(Direction direction, int width, int height) {
         //make a list of walls
         List<Entity> walls = getWalls();
 
         for (Entity e : this.entities) {
-
-            if (e instanceof Player) {
-                e.move(this.player.getPosition().translateBy(direction), walls);
-            }
             if (e instanceof MovingEntity) {
                 MovingEntity me = (MovingEntity) e;
                 if (me.isInSwapTile(this.entities) && !me.isSlowed()) {
                     me.setSlowed(true);
-                } else if (e instanceof Mercenary) {
+                }
+                if (e instanceof Mercenary) {
                     walls.add(this.player);
                     walls.add(e);
                     Mercenary entity = (Mercenary)e;
                     if (entity.isInBattle()) {
-                        e.move(this.player.getPosition(), walls);
+                        e.move(this.player.getPosition(), walls, width, height);
                         me.setSlowed(false);
                     } else if (!entity.isInBattle()) {
                         e.moveAway(this.player.getPosition(), walls);
-                        me.setSlowed(false);   
+                        me.setSlowed(false);
                     }
-                } else {
-                    e.move(this.player.getPosition(), walls);
+                } else if (!(e instanceof Player)) {
+                    e.move(this.player.getPosition(), walls, width, height);
                     me.setSlowed(false);
                 }
             }
@@ -312,7 +330,7 @@ public class Dungeon {
                 if (mercenary.isInBattleRadius(current.getPlayer().getPosition()) && current.getPlayer().isBattling()) {
                     walls.add(this.player);
                     walls.add(entity);
-                    mercenary.move(this.player.getPosition(), walls);
+                    mercenary.move(this.player.getPosition(), walls, this.width, this.height);
                 }
             }
         }

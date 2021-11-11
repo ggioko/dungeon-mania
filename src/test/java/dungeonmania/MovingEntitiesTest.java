@@ -12,6 +12,8 @@ import java.lang.IllegalArgumentException;
 
 import org.junit.jupiter.api.Test;
 
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.Player;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.response.models.DungeonResponse;
 
@@ -21,13 +23,12 @@ public class MovingEntitiesTest {
         // test for invalid items
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("advanced", "standard");
-        controller.interact("bomb134");
-        controller.interact("invincibility_potion1110");
-        assertThrows(IllegalArgumentException.class, () -> {
+        controller.currentDungeon.inventory.add(new Entity("bomb134", "bomb"));
+        controller.currentDungeon.inventory.add(new Entity("invincibility_potion1110", "invincibility_potion"));
+        assertThrows(InvalidActionException.class, () -> {
             controller.tick("bomb1", Direction.NONE);
         });
         assertDoesNotThrow(() -> {
-            controller.tick("bomb134", Direction.NONE);
             controller.tick("invincibility_potion1110", Direction.NONE);
         });
   
@@ -38,13 +39,13 @@ public class MovingEntitiesTest {
         // test for not in inv
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("advanced", "standard");
-        //move to collect potion
-        
+        //collect potion
+        controller.currentDungeon.inventory.add(new Entity("potion_test", "invincibility_potion"));
         assertThrows(InvalidActionException.class, () -> {
             controller.tick("bomb134", Direction.NONE);
         });
         assertDoesNotThrow(() -> {
-            controller.tick("invincibility_potion1110", Direction.NONE);
+            controller.tick("potion_test", Direction.NONE);
         });
   
     }
@@ -53,20 +54,20 @@ public class MovingEntitiesTest {
     public void testMovement() {
         // test for not in inv
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse start = controller.newGame("advanced", "standard");
-        DungeonResponse end = start;
+        controller.newGame("advanced", "standard");
+        Position start = controller.currentDungeon.player.getPosition();
         //player sshould nto have moved because of walls
-        end = controller.tick(null, Direction.UP);
-        assertTrue(start.equals(end));
-        end = controller.tick(null, Direction.LEFT);
-        assertTrue(start.equals(end));
+        controller.tick(null, Direction.UP);
+        assertTrue(start.equals(controller.currentDungeon.player.getPosition()));
+        controller.tick(null, Direction.LEFT);
+        assertTrue(start.equals(controller.currentDungeon.player.getPosition()));
         //player should move
-        end = controller.tick(null, Direction.RIGHT);
-        assertFalse(start.equals(end));
-        end = controller.tick(null, Direction.LEFT);
-        assertTrue(start.equals(end));
-        end = controller.tick(null, Direction.DOWN);
-        assertFalse(start.equals(end));
+        controller.tick(null, Direction.RIGHT);
+        assertFalse(start.equals(controller.currentDungeon.player.getPosition()));
+        controller.tick(null, Direction.LEFT);
+        assertTrue(start.equals(controller.currentDungeon.player.getPosition()));
+        controller.tick(null, Direction.DOWN);
+        assertFalse(start.equals(controller.currentDungeon.player.getPosition()));
   
     }
 }

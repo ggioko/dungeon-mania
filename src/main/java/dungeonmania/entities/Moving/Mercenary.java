@@ -6,11 +6,16 @@ import org.json.JSONObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
-
+import dungeonmania.entities.Player;
+import dungeonmania.entities.Static.Wall;
 import dungeonmania.util.Direction;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.lang.Math;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Mercenary extends MovingEntity{
     private boolean bribed;
@@ -35,6 +40,66 @@ public class Mercenary extends MovingEntity{
         return currentDungeon;
     }
 
+    @Override
+    public void move(Position pos, List<Entity> walls, int width, int height) {
+        List<Position> grid = new ArrayList<Position>();
+        for (int i = width; i>0-width; i--) {
+            for (int c = height;c>0-height; c--) {
+                grid.add(new Position(i, c));
+            }
+        }
+        Map<Position, Integer> dist = new HashMap<Position, Integer>();
+        Map<Position, Position> prev = new HashMap<Position, Position>();
+        Queue<Position> que = new LinkedList<Position>();
+        List<Entity> temp = new ArrayList<Entity>();
+        for (Entity e : walls) {
+            if (!(this.equals(e)) && !(e instanceof Player)) {
+                temp.add(e);
+            }
+        }
+        walls = temp;
+        for (Position p : grid) {
+            boolean wall = false;
+            for (Entity e : walls) {
+                if (p.equals(e.getPosition())){
+                    wall = true;
+                }
+            }
+            if (!wall) {
+                que.add(p);
+            }
+            dist.put(p,999);
+            prev.put(p, null);
+        }
+        dist.put(pos, 0);
+        Position u = this.getPosition();
+        while (!que.isEmpty()) {
+            for (Position v : u.getAdjacentPositionsWalls(walls)){ 
+                if (dist.get(v) != null) {
+                    if (dist.get(u) + 1 < dist.get(v)) {
+                        dist.put(v,dist.get(u)+1);
+                        prev.put(v, u);
+                    }
+                }
+            }
+            int distance = 999;
+            Position holder = u;
+            for (Position p : que) {
+                if (dist.get(p) < distance) {
+                    u = p;
+                    distance = dist.get(p);
+                }
+            }
+            que.remove(u);
+            if (u.equals(holder)) {
+                break;
+            }
+        }
+        if (prev.get(this.getPosition()) != null) {
+            this.setPosition(prev.get(this.getPosition()));
+        }
+        
+    }/*
     @Override
     public void move(Position pos, List<Entity> walls) {
         //move mercenary towards position pathfinding algorithm
@@ -123,7 +188,7 @@ public class Mercenary extends MovingEntity{
             }
         } 
     }
-
+    */
 
     /**
      * Move mercenary away depending on if invincibility potion effects are on or off

@@ -3,6 +3,7 @@ package dungeonmania.entities;
 import org.json.JSONObject;
 
 import dungeonmania.entities.Moving.Assassin;
+import dungeonmania.entities.Moving.Hydra;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.Spider;
 import dungeonmania.entities.Moving.Zombie;
@@ -63,6 +64,8 @@ public class EntityFactory {
 		}
 		else if (entity.getString("type").equalsIgnoreCase("assassin")) {
 			e = new Assassin(entity);
+		} else if (entity.getString("type").equalsIgnoreCase("hydra")) {
+			e= new Hydra(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("spider")) {
 			e = new Spider(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("zombie_toast_spawner")) {

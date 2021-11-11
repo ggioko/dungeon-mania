@@ -48,8 +48,6 @@ public class AssassinTest {
         // test for if player bribes mercenary
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interactAssassin", "standard");
-        controller.tick(null, Direction.DOWN);
-        controller.tick(null, Direction.DOWN);
         Entity gold = new Entity("treasure_test", "treasure");
         controller.currentDungeon.inventory.add(gold);
         //should not be able to bribe without ring
@@ -60,7 +58,7 @@ public class AssassinTest {
         assertFalse(controller.currentDungeon.inventory.isEmpty());
         //add the ring
         controller.currentDungeon.inventory.add(new Entity("ring_test", "one_ring"));
-        //remove gold
+        //remove    
         controller.currentDungeon.inventory.remove(gold);
         //should not be able to bribe without gold
         assertThrows(InvalidActionException.class ,() -> {

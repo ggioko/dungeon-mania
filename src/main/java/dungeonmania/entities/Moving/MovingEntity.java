@@ -50,7 +50,7 @@ public class MovingEntity extends Entity {
     }
 
     @Override
-    public void move(Position pos, List<Entity> walls) {
+    public void move(Position pos, List<Entity> walls, int width, int height) {
         return;
     }
 
