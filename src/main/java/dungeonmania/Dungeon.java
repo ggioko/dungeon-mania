@@ -164,6 +164,10 @@ public class Dungeon {
         this.entities = entities;
     }
 
+    public void addEntity(Entity e) {
+        this.entities.add(e);
+    }
+
     public void setItems(List<Entity> items) {
         this.inventory = items;
     }

@@ -122,7 +122,6 @@ public class Player extends Entity {
             Midnight_Armour m_armour = (Midnight_Armour) dungeon.getItem("midnight_armour");
             enemyAD = m_armour.effect(enemyAD, dungeon.getItems());
         }
-
         this.setHealth(this.health - ((enemyHP * enemyAD) / 10));
     }
 

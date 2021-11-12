@@ -62,7 +62,6 @@ public class Midnight_Armour extends Buildable {
             this.subtractDurability(inventory);
             return enemyAD/2;
         } else {
-            this.subtractDurability(inventory);
             return -1;
         }
     }

@@ -65,7 +65,7 @@ public class MovingEntity extends Entity {
         
         if (dungeon.getItem("midnight_armour") != null) {
             Midnight_Armour m_armour = (Midnight_Armour) dungeon.getItem("midnight_armour");
-            this.setHealth(this.health - m_armour.effect(-1, dungeon.getItems()));
+            this.setHealth(this.health + m_armour.effect(-1, dungeon.getItems()));
         }
 
         this.setHealth(this.health - ((playerHP * playerAD) / 5));
