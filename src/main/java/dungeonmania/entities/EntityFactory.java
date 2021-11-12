@@ -14,6 +14,7 @@ import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.Static.SwampTile;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.Arrow;
 import dungeonmania.entities.collectable.Bomb;
@@ -106,6 +107,8 @@ public class EntityFactory {
             Portal portal = new Portal((JSONObject)entity, coords);
             portal.setType("portal_" + ((JSONObject)entity).getString("colour"));
 			e = portal;
+		} else if (entity.getString("type").equalsIgnoreCase("swamp_tile")) {
+			e = new SwampTile(entity);
 		}
 		return e;
 	}

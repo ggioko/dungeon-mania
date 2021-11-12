@@ -194,18 +194,26 @@ public class Dungeon {
         List<Entity> walls = getWalls();
 
         for (Entity e : this.entities) {
-            if (e instanceof Mercenary) {
-                walls.add(this.player);
-                walls.add(e);
-                Mercenary entity = (Mercenary)e;
-                if (entity.isInBattle()) {
-                    e.move(this.player.getPosition(), walls, width, height);
-                } else if (!entity.isInBattle()) {
-                    e.moveAway(this.player.getPosition(), walls);
-                    
+            if (e instanceof MovingEntity) {
+                MovingEntity me = (MovingEntity) e;
+                if (me.isInSwapTile(this.entities) && !me.isSlowed()) {
+                    me.setSlowed(true);
                 }
-            } else if (!(e instanceof Player)) {
-                e.move(this.player.getPosition(), walls, width, height);
+                else if (e instanceof Mercenary) {
+                    walls.add(this.player);
+                    walls.add(e);
+                    Mercenary entity = (Mercenary)e;
+                    if (entity.isInBattle()) {
+                        e.move(this.player.getPosition(), walls, width, height);
+                        me.setSlowed(false);
+                    } else if (!entity.isInBattle()) {
+                        e.moveAway(this.player.getPosition(), walls);
+                        me.setSlowed(false);
+                    }
+                } else if (!(e instanceof Player)) {
+                    e.move(this.player.getPosition(), walls, width, height);
+                    me.setSlowed(false);
+                }
             }
         }
     }
