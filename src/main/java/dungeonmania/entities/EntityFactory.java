@@ -23,6 +23,7 @@ import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.collectable.OneRing;
+import dungeonmania.entities.collectable.SunStone;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
@@ -86,6 +87,8 @@ public class EntityFactory {
 			e = new Zombie(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("wall")) {
 			e = new Wall(entity);
+		} else if (entity.getString("type").equalsIgnoreCase("sun_stone")) {
+			e = new SunStone(entity);
 		}  else if (entity.getString("type").equalsIgnoreCase("player")) {
 			e = new Player(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("portal")) {

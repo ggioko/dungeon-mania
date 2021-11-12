@@ -101,7 +101,7 @@ public class Entity {
 
     public boolean isCollectable() {
         List<String> collectables = new ArrayList<String>();
-        collectables.addAll(Arrays.asList("armour", "arrow", "health_potion", "invincibility_potion", "invisibility_potion", "key_1", "key_2", "sword", "treasure", "wood", "one_ring"));
+        collectables.addAll(Arrays.asList("armour", "arrow", "health_potion", "invincibility_potion", "invisibility_potion", "key_1", "key_2", "sword", "treasure", "wood", "one_ring", "sun_stone"));
         if (this.type.equals("bomb")) {
             Bomb b = (Bomb) this;
             if (!b.isPlaced()) {

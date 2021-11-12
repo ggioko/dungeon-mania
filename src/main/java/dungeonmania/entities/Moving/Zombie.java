@@ -39,4 +39,13 @@ public class Zombie extends MovingEntity {
         }
     }
 
+    public static boolean zombieExistOnMap(List<Entity> entities) {
+        for (Entity e : entities) {
+            if (e instanceof Zombie) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }  

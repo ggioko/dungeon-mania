@@ -4,6 +4,8 @@ import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Static.SwampTile;
 import dungeonmania.entities.collectable.Sword;
+import dungeonmania.entities.collectable.buildable.Bow;
+import dungeonmania.entities.collectable.buildable.Midnight_Armour;
 import dungeonmania.util.Position;
 import java.util.List;
 
@@ -66,6 +68,17 @@ public class MovingEntity extends Entity {
             Sword.isBroken(dungeon.getItems());
             // decrease sword durability by 1 // TODO
         }
+        //Bow allows player to attack twice
+        if (dungeon.getItem("bow") != null) {
+            Bow bow = (Bow) dungeon.getItem("bow");
+            bow.effect(this, this.health, playerHP, playerAD, dungeon.getItems());
+        }
+        
+        if (dungeon.getItem("midnight_armour") != null) {
+            Midnight_Armour m_armour = (Midnight_Armour) dungeon.getItem("midnight_armour");
+            this.setHealth(this.health + m_armour.effect(-1, dungeon.getItems()));
+        }
+
         this.setHealth(this.health - ((playerHP * playerAD) / 5));
     }
     

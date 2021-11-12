@@ -10,10 +10,8 @@ import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.OneRing;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.Bomb;
-import dungeonmania.entities.collectable.Sword;
-import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.Buildable;
-import dungeonmania.entities.collectable.buildable.Shield;
+import dungeonmania.entities.collectable.buildable.Midnight_Armour;
 import dungeonmania.goals.CompositeGoals;
 import dungeonmania.goals.Goal;
 import dungeonmania.goals.GoalLeaf;
@@ -47,11 +45,6 @@ public class Dungeon {
     List<AnimationQueue> animations;
     Player player;
     String gameMode;
-    boolean complete;
-    String goaltype;
-    List<String> goalsToComplete;
-    List<String> goalsCompleted;
-    boolean nogoals;
     Position entry;
     int width;
     int height;
@@ -171,6 +164,10 @@ public class Dungeon {
         this.entities = entities;
     }
 
+    public void addEntity(Entity e) {
+        this.entities.add(e);
+    }
+
     public void setItems(List<Entity> items) {
         this.inventory = items;
     }
@@ -231,13 +228,9 @@ public class Dungeon {
             itemList.add(new ItemResponse(i.getId(), i.getType()));
         }
         if (!inventory.isEmpty()) {
-            if (Buildable.getBuildable("bow").isBuildable(inventory)) {
-                if (!buildables.contains("bow")) {buildables.add("bow");}
-            } else {buildables.remove("bow");}
-
-            if (Buildable.getBuildable("shield").isBuildable(inventory)) {
-                if (!buildables.contains("shield")) {buildables.add("shield");}
-            } else {buildables.remove("shield");}
+            for (String item : Buildable.BUILDABLES_LIST) {
+                addOrRemoveBuildable(item);
+            }
         } 
         if (this.goalTree != null) {
             this.goals = getGoals();
@@ -248,6 +241,18 @@ public class Dungeon {
         ), false, -1));
         animations.add(new AnimationQueue("PostTick", "player", Arrays.asList("healthbar shake, over 0.5s, ease Sin"), false, 0.5));
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals, animations);
+    }
+
+    public void addOrRemoveBuildable(String item) {
+        if (item.equals("midnight_armour")) {
+            if (((Midnight_Armour) (Buildable.getBuildable(item))).isBuildable(inventory, entities)) {
+                if (!buildables.contains(item)) {buildables.add(item);}
+            } else {buildables.remove(item);}
+        } else {
+            if (Buildable.getBuildable(item).isBuildable(inventory)) {
+                if (!buildables.contains(item)) {buildables.add(item);}
+            } else {buildables.remove(item);}
+        }
     }
 
     public void itemPickup() {
@@ -343,7 +348,7 @@ public class Dungeon {
             if (e instanceof MovingEntity) {
                 if (e instanceof Mercenary) {
                     Mercenary mercenary = (Mercenary) e;
-                    if (mercenary.isBribed()) {
+                    if (mercenary.isBribed() || mercenary.isBrainWashed()) {
                         continue;
                     }
                 }
@@ -359,18 +364,24 @@ public class Dungeon {
                         double playerAD = current.player.getAttack();
                         double enemyAD = enemy.getAttack();
                         
-                        // Player should take damage only if invincibility potion effect is off
-                        if (!this.player.isInvincibilityPotionEffect()) {
-                            current.player.takeDamage(enemyHP, enemyAD, this, enemy);
-                        }
                         enemy.takeDamage(playerHP, playerAD, this);
 
                         //Has an ally Mercenary
                         if (this.getPlayer().haveAlly()) {
                             enemy.setHealth(enemyHP - ((playerHP * playerAD) / 5));
                         }
-                       
-                        
+
+                        if (enemyHP <= 0) {
+                            //enemy is dead
+                            current.enemyDeath(enemy);
+                            battleOver = true;
+                            return current;
+                        }
+                    
+                        // Player should take damage only if invincibility potion effect is off
+                        if (!this.player.isInvincibilityPotionEffect()) {
+                            current.player.takeDamage(enemyHP, enemyAD, this, enemy);
+                        }
                         
                         if (playerHP <= 0) {
                             //one ring
@@ -380,13 +391,10 @@ public class Dungeon {
                             }
                             //game over
                             else {
-                                return null;
+                                this.player = null;
+                                return current;
                             }
-                        } else if (enemyHP <= 0) {
-                            //enemy is dead
-                            current.enemyDeath(enemy);
-                            battleOver = true;
-                        }
+                        } 
                     }
                     return current;
                 }
@@ -396,12 +404,24 @@ public class Dungeon {
         return current;
     }
 
+    public boolean existsBrainwashedEntity(List<Entity> entities) {
+        for (Entity e : entities) {
+            if (e instanceof Mercenary || e instanceof Assassin) {
+                Mercenary m = (Mercenary) e;
+                if (m.isBrainWashed()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public List<Entity> getWalls() {
         List<Entity> walls = new ArrayList<Entity>();       
         for (Entity e : this.entities) {
             if (e instanceof Mercenary){
                 Mercenary m = (Mercenary) e;
-                if (m.isBribed()) {
+                if (m.isBribed() || m.isBrainWashed()) {
                     walls.add(m);
                 }
             }
