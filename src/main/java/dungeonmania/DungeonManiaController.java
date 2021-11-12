@@ -219,6 +219,7 @@ public class DungeonManiaController {
         dungeonNames.add("bombTest");
         dungeonNames.add("invincibility");
         dungeonNames.add("interactAssassin");
+        dungeonNames.add("swampTileTest");
         dungeonNames.add("hydra");
         return dungeonNames;
     }
@@ -321,7 +322,6 @@ public class DungeonManiaController {
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
         }
-        
         // SIMPLE AND COMPLEX GOALS
         boolean teleported = false;
         for (Entity e : currentDungeon.entities) {

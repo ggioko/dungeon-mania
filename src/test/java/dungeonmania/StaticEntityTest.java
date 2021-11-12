@@ -30,6 +30,23 @@ public class StaticEntityTest {
   
     }
 
+    @Test
+    public void testSwampTile() {
+        DungeonManiaController controller = new DungeonManiaController();
+        controller.newGame("swampTileTest", "standard");
+        Position swampTile = controller.currentDungeon.getEntity("swamp_tile41").getPosition();
+        controller.tick(null, Direction.LEFT);
+        Position mercenary = controller.currentDungeon.getEntity("mercenary51").getPosition();
+        assertTrue(swampTile.getX() == mercenary.getX() && swampTile.getY() == mercenary.getY());
+        controller.tick(null, Direction.LEFT);
+        mercenary = controller.currentDungeon.getEntity("mercenary51").getPosition();
+        assertTrue(swampTile.getX() == mercenary.getX() && swampTile.getY() == mercenary.getY());
+        controller.tick(null, Direction.LEFT);
+        mercenary = controller.currentDungeon.getEntity("mercenary51").getPosition();
+        assertFalse(swampTile.getX() == mercenary.getX() && swampTile.getY() == mercenary.getY());
+    }
+
+    /*
     //boulder test
     @Test
     public void testBoulder() {
@@ -150,4 +167,5 @@ public class StaticEntityTest {
         //should spawn after 15 ticks becuase its in hard mode
         assertFalse(start.equals(end));
     }
+    */
 }
