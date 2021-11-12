@@ -1,44 +1,77 @@
-# Assumptions
+# **Assumptions**
 
-### Spawners
+### **Spawners**
+
 - Max number of spiders : 5
 - Bomb blast radius : 2
 - Mercenary radius : 3
 - Duabilities for gear : random durabilities from 10-30 hits
 
-### Player
+### **Player**
+
 - Player has a max health of 10
 - Only one player can be present in a dungeon (subject to change possibly)
+- Player can only have 1 ally at time
 
-### Weapons
-- Durability of Bow is 20 attacks
-- Durability of Shield is 10 attacks
+### **Weapons and Armours**
+
 - Durability of Sword is between 2 and 15 attacks
 - Durability of Armour is between 4 and 15 hits
-- Shield reduces incoming damage by 50 %
-- When player has shield AND armour, incoming damage is reduced by 75 %
+- When player has armour, incoming damage is reduced by 50%
+- When player has shield AND armour, incoming damage is reduced by 75%
+- When player has shield AND midnight armour, incoming damage is reduced by 75%
+- When player has armour and midnight armour, incoming damage is recuded by 75%
+- When player has shield AND armour AND midnight armour, incoming damage is reduced by 87.5%
 
-### Building Assumptions
-- When building a shield, if key and treasure exists in the inventory, the treasure will be used instead of the key.
+### **Building Assumptions**
 
-### Drop Chance
+- #### **Shields**
+
+    - When building a shield, if key and treasure exists in the inventory, the treasure will be used instead of the key.
+    - Shield reduces incoming damage by 50%
+    - Durability of Shield is 10 attacks
+
+- #### **Bow**
+
+    - Durability of Bow is 20 attacks
+    - Allows the player to deal damage twice to the enemy. (Damage of both attacks are equal)
+
+- #### **Sceptre**
+
+    - Durability of Sceptre is 5 uses
+    - When building a sceptre, the following rules will be followed
+        - Wood will be used before arrows when both are present in inventory
+        - Treasure before Keys
+    - Sceptre will be used through interaction rather than tick
+    - Sceptre's brainwashing remains in effect for 10 ticks and disapprears on the 11<sup>th</sup> tick
+
+- #### **Midnight Armour**
+
+    - Durability of Midnight Armour is 10 attacks
+    - Equipping midnight armour will deal 1 extra damage when attacking enemy
+    - Equipping midnight armour will reduce incoming damange by 50%
+
+### **Drop Chance**
+
 - Mercenaries drop armour directly into the inventory of the player
 - Mercenaries drop armour with a chance of 1/10
 - All enemies can drop 'The One Ring' with a chance of 1/50
 - Every map has a maximum of two keys
 
-### Interact Method Assumptions
+### **Interact Method Assumptions**
+
 - Treasure is gold and only one gold coin is required to bribe the player
 - When interacting with a spawner the weapon durability goes down by 1 when it is destroyed
 - Bomb cannot be used to destroy spawner
 - Mercenary always follows behind the player and never in front of the player
 
 
-### Potion Assumptions
+### **Potion Assumptions**
+
 - Invincibility potion time : 10 ticks
 - Invisibility potion time : 10 ticks
 
 
-### Bomb Assumptions
+### **Bomb Assumptions**
 - Bomb has a detonation radius of 1
 - Bomb cannot be picked back up once placed

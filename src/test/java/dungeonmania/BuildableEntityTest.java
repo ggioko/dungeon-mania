@@ -299,6 +299,7 @@ public class BuildableEntityTest {
         controller5.currentDungeon.addEntity(new Mercenary(jo1));
         controller6.currentDungeon.addEntity(new Mercenary(jo1));
 
+        // Adding items to inventory that are needed for test
         controller2.currentDungeon.inventory.add(new Armour("armour", "armour"));
 
         controller3.currentDungeon.inventory.add(new Armour("armour", "armour"));
@@ -332,6 +333,7 @@ public class BuildableEntityTest {
         Armour.durability = 10;
         controller6.tick(null, Direction.NONE);
 
+        // Check health differences between the controller instances
         assertTrue(controller2.currentDungeon.player.getHealth() > controller1.currentDungeon.player.getHealth());
         assertTrue(controller3.currentDungeon.player.getHealth() > controller1.currentDungeon.player.getHealth());
         assertTrue(controller4.currentDungeon.player.getHealth() > controller1.currentDungeon.player.getHealth());
