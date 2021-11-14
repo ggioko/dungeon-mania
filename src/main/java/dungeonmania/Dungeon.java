@@ -109,7 +109,10 @@ public class Dungeon {
         this.entities = new ArrayList<Entity>();
         this.inventory = new ArrayList<Entity>();
         this.buildables = new ArrayList<String>();
-        this.goals = ":exit";
+        this.goalTree = new CompositeGoals("Goal", false);
+        GoalLeaf exit = new GoalLeaf("exit", false);
+        goalTree.add(exit);
+        this.goals = getGoals();
         this.width = 50;
         this.height = 50;
     }
