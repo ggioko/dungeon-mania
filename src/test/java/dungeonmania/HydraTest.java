@@ -60,7 +60,6 @@ public class HydraTest {
             }
         }
         
-        System.out.println(increase);
         //check if winrate is 50%. if it is it means the hydra will heal instead of take damage 50% of the time
         assertTrue(increase/1000 > 0.45 && increase/1000 < 0.55);
     }

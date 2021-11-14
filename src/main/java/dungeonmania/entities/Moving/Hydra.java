@@ -19,7 +19,7 @@ public class Hydra extends Zombie {
 
     public Hydra(JSONObject entity) {
         super(entity);
-        this.health = 5;
+        this.health = 15;
         this.attack = 1;
     }
     
@@ -35,8 +35,12 @@ public class Hydra extends Zombie {
 
     @Override
     public void takeDamage(double playerHP, double playerAD, Dungeon dungeon) {
-        if (Math.random() < 0.5 && dungeon.getItem("anduril") != null) {
+        Random random = new Random();
+        if (random.nextBoolean() && dungeon.getItem("anduril") == null) {
             this.setHealth(this.health + ((playerHP * playerAD) / 5));
+            if(this.health > 15) {
+                this.setHealth(15);
+            }
         } else {
             if (dungeon.getItem("anduril") != null) {
                 this.setHealth(this.health - 3);
