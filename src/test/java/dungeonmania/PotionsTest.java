@@ -179,4 +179,27 @@ public class PotionsTest {
         int y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
         assertTrue(x == 2 && y == 1);
     }
+
+    @Test
+    public void invincibilityNotWorkInHardModeTest() {
+        // test for healthPotion not used
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("potions", "hard");
+
+        assertTrue(controller.currentDungeon.inventory.isEmpty());
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick("invincibility_potion31", Direction.NONE);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+
+        assertTrue(controller.currentDungeon.player.getHealth() != 10);
+    }
+
+
 }

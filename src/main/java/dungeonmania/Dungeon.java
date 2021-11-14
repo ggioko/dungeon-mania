@@ -135,7 +135,7 @@ public class Dungeon {
         return null;
     }
 
-
+    
     public void removeEntity(String stringId) {
         for (Iterator<Entity> entity = entities.iterator(); entity.hasNext();) {
             Entity value = entity.next();
@@ -178,6 +178,10 @@ public class Dungeon {
 
     public List<Entity> getItems() {
         return this.inventory;
+    }
+
+    public String getGameMode() {
+        return this.gameMode;
     }
 
     public Entity getItemUsed(String stringId) {

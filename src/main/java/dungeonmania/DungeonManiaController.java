@@ -230,15 +230,17 @@ public class DungeonManiaController {
 
         // POTION LOGIC
         // Invincibility potion
-        if (invincibilityTicks >= 10) {
+        if (invincibilityTicks >= 10 && !currentDungeon.gameMode.equalsIgnoreCase("Hard")) {
             currentDungeon.player.setInvincibilityPotionEffect(false);
 
             this.invincibilityTicks = 0;
         }
-        if (currentDungeon.player.isInvincibilityPotionEffect()) {
+        if (currentDungeon.player.isInvincibilityPotionEffect() && !currentDungeon.gameMode.equalsIgnoreCase("Hard")) {
             
             this.invincibilityTicks++;
         }
+
+        
         currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         // Invisibility potion
@@ -253,7 +255,7 @@ public class DungeonManiaController {
         currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         //hydra spawning
-        if (currentDungeon.gameMode.equals("hard")) {
+        if (currentDungeon.gameMode.equalsIgnoreCase("hard")) {
             if (this.hydratick >= 50) {
                 Hydra.spawn(currentDungeon, currentDungeon.entry);
                 this.hydratick = 0;
@@ -267,7 +269,7 @@ public class DungeonManiaController {
 
         // ENEMY PATHING
         currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
-        if (!currentDungeon.gameMode.equals("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
+        if (!currentDungeon.gameMode.equalsIgnoreCase("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
             if (currentDungeon.player == null) {
@@ -278,7 +280,7 @@ public class DungeonManiaController {
         currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
 
         // ENEMY PATHING
-        if (!currentDungeon.gameMode.equals("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
+        if (!currentDungeon.gameMode.equalsIgnoreCase("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
             if (currentDungeon.player == null) {
