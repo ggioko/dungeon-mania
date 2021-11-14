@@ -40,6 +40,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * DungeonManiaController
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class DungeonManiaController {
     Dungeon currentDungeon;
     int ticknum;
