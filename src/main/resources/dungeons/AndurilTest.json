@@ -1,0 +1,22 @@
+{
+    "width": 15,
+    "height": 15,
+    "entities": [
+      {
+        "x": 0,
+        "y": 0,
+        "type": "player"
+      },
+      {
+        "x": 2,
+        "y": 0,
+        "type": "hydra"
+      },
+      {
+        "x": 1,
+        "y": 0,
+        "type": "anduril"
+      }
+
+    ]
+  }
