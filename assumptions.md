@@ -15,13 +15,20 @@
 
 ### **Weapons and Armours**
 
-- Durability of Sword is between 2 and 15 attacks
+- Durability of Sword is 10 attacks
+- Durability of Anduril Sword is 10 attacks
 - Durability of Armour is between 4 and 15 hits
+- Anduril sword does the same damage as a normal sword to entities that is not a hydra
 - When player has armour, incoming damage is reduced by 50%
 - When player has shield AND armour, incoming damage is reduced by 75%
 - When player has shield AND midnight armour, incoming damage is reduced by 75%
 - When player has armour and midnight armour, incoming damage is recuded by 75%
 - When player has shield AND armour AND midnight armour, incoming damage is reduced by 87.5%
+
+### **Hydra**
+
+- Hydra health is 15
+- Hydra damage is 1
 
 ### **Building Assumptions**
 

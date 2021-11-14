@@ -8,10 +8,9 @@ import org.json.JSONObject;
 import dungeonmania.entities.Entity;
 
 public class Sword extends CollectableEntity {
-    public static int durability = 6;
-
     public Sword(JSONObject entity) {
         super(entity);
+        setDurability(10);
         //TODO Auto-generated constructor stub
     }
 
@@ -19,8 +18,8 @@ public class Sword extends CollectableEntity {
         super(id,type);
     }
 
-    public static void isBroken(List<Entity> inventory) {
-        if (durability <= 0) {
+    public void isBroken(List<Entity> inventory) {
+        if (this.getDurability() <= 0) {
             for (Iterator<Entity> it = inventory.iterator(); it.hasNext();){
                 Entity anItem = it.next();
                 if(anItem.getType().equals("sword")) {

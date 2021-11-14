@@ -48,6 +48,7 @@ public class Dungeon {
     Position entry;
     int width;
     int height;
+    int spiderCount;
 
 
     public Dungeon(String dungeonName, JSONObject entities, String gameMode) {
@@ -55,6 +56,7 @@ public class Dungeon {
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
         this.gameMode = gameMode;
+        this.spiderCount = 0;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
             Entity e = EntityFactory.getEntity((JSONObject)entity, gameMode, doorcreated, entities);
@@ -415,7 +417,14 @@ public class Dungeon {
                                 this.player = null;
                                 return current;
                             }
-                        } 
+                        } else if (enemyHP <= 0) {
+                            //enemy is dead
+                            if (enemy instanceof Spider) {
+                                this.spiderCount--;
+                            }
+                            current.enemyDeath(enemy);
+                            battleOver = true;
+                        }
                     }
                     return current;
                 }
@@ -425,6 +434,14 @@ public class Dungeon {
         return current;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.width;
+    }
+    
     public boolean existsBrainwashedEntity(List<Entity> entities) {
         for (Entity e : entities) {
             if (e instanceof Mercenary || e instanceof Assassin) {
