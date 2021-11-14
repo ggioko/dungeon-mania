@@ -75,7 +75,7 @@ public class EntityFactory {
 		} else if (entity.getString("type").equalsIgnoreCase("spider")) {
 			e = new Spider(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("zombie_toast_spawner")) {
-            if (gameMode.equals("hard")) {
+            if (gameMode.equalsIgnoreCase("hard")) {
                 e = new Spawner(entity, 15);
             } else {
                 e = new Spawner(entity, 20);

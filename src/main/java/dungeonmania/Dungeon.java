@@ -4,6 +4,7 @@ import dungeonmania.response.models.EntityResponse;
 import dungeonmania.response.models.ItemResponse;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
+import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
@@ -294,8 +295,14 @@ public class Dungeon {
     public void pathing(Direction direction, int width, int height) {
         //make a list of walls
         List<Entity> walls = getWalls();
+        for (Entity e : this.entities) {
+            if (e instanceof Boulder) {
+                walls.add(e);
+            }
+        }
 
         for (Entity e : this.entities) {
+            
             if (e instanceof MovingEntity) {
                 MovingEntity me = (MovingEntity) e;
                 if (me.isInSwampTile(this.entities) && !me.isSlowed()) {
@@ -454,8 +461,8 @@ public class Dungeon {
     public void enemyDeath(MovingEntity enemy) {
         //remove enemy from entities and give player loot
         this.entities.remove(enemy);
-        if (enemy instanceof Mercenary) {
-            int num = (int)Math.floor(Math.random()*(10-1+1)+1);
+        if (enemy instanceof Mercenary || enemy instanceof Zombie) {
+            int num = (int)Math.floor(Math.random()*(15-1+1)+1);
             if (num == 2) {
                 inventory.add(new Armour("armour_drop", "armour"));
             }
@@ -466,6 +473,8 @@ public class Dungeon {
             if (num == 2) {
                 inventory.add(new OneRing("one_ring_drop", "one_ring"));
             }
+
+            
         }
     }
 

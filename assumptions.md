@@ -64,6 +64,7 @@
 - Mercenaries drop armour with a chance of 1/10
 - All enemies can drop 'The One Ring' with a chance of 1/50
 - Every map has a maximum of two keys
+- Zombies can't use armour but only drop it
 
 ### **Interact Method Assumptions**
 
@@ -71,12 +72,16 @@
 - When interacting with a spawner the weapon durability goes down by 1 when it is destroyed
 - Bomb cannot be used to destroy spawner
 - Mercenary always follows behind the player and never in front of the player
+- If a spider has no where to move (surrounded by boulders) it gets scared and cant move anywhere
 
 
 ### **Potion Assumptions**
 
 - Invincibility potion time : 10 ticks
 - Invisibility potion time : 10 ticks
+- Allies cannot follow you when invisibile
+- Allies will ALSO run away when player has invincibility potion as they are reminded of their past
+- Invincibility potion will not reduce damage in hard mode
 
 
 ### **Bomb Assumptions**
