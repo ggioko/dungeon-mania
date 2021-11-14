@@ -28,8 +28,8 @@ public class MercenaryBattleTest {
         // will battle spider
 
         // check if mercenary moved 2 tiles
-        int x = controller.currentDungeon.getEntity("mercenary33").getPosition().getX();
-        int y = controller.currentDungeon.getEntity("mercenary33").getPosition().getY();
+        int x = controller.currentDungeon.getEntity("mercenary3_3").getPosition().getX();
+        int y = controller.currentDungeon.getEntity("mercenary3_3").getPosition().getY();
         assertTrue(x == 2 && y == 2);
     }
 }

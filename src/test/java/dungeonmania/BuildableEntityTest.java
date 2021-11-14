@@ -378,21 +378,21 @@ public class BuildableEntityTest {
 
         //Check prerequisites
         assertEquals(5, ((Sceptre) controller1.currentDungeon.getItem("sceptre")).getDurability());
-        assertTrue(controller1.currentDungeon.getEntity("mercenary42").isInteractable());
-        assertTrue(controller1.currentDungeon.getEntity("mercenary43").isInteractable());
+        assertTrue(controller1.currentDungeon.getEntity("mercenary4_2").isInteractable());
+        assertTrue(controller1.currentDungeon.getEntity("mercenary4_3").isInteractable());
         assertFalse(controller1.currentDungeon.getPlayer().haveAlly());
 
         //Check to make sure only 1 ally is possible at a time
         assertDoesNotThrow(() -> {
-            controller1.interact("mercenary42");
+            controller1.interact("mercenary4_2");
         });
 
         assertThrows(InvalidActionException.class, () -> {
-            controller1.interact("mercenary43");
+            controller1.interact("mercenary4_3");
         });
 
-        assertFalse(controller1.currentDungeon.getEntity("mercenary42").isInteractable());
-        assertTrue(controller1.currentDungeon.getEntity("mercenary43").isInteractable());
+        assertFalse(controller1.currentDungeon.getEntity("mercenary4_2").isInteractable());
+        assertTrue(controller1.currentDungeon.getEntity("mercenary4_3").isInteractable());
         assertTrue(controller1.currentDungeon.getPlayer().haveAlly());
         assertEquals(4, ((Sceptre) controller1.currentDungeon.getItem("sceptre")).getDurability());
 
@@ -410,17 +410,17 @@ public class BuildableEntityTest {
         controller1.tick(null, Direction.LEFT);
         
         //Player does not have ally and mercenary is not brainwashed anymore
-        assertTrue(controller1.currentDungeon.getEntity("mercenary42").isInteractable());
+        assertTrue(controller1.currentDungeon.getEntity("mercenary4_2").isInteractable());
         assertFalse(controller1.currentDungeon.getPlayer().haveAlly());
 
         //Interact with other mercenary
         assertDoesNotThrow(() -> {
-            controller1.interact("mercenary43");
+            controller1.interact("mercenary4_3");
         });
 
         //Check post interact state
-        assertFalse(controller1.currentDungeon.getEntity("mercenary43").isInteractable());
-        assertTrue(controller1.currentDungeon.getEntity("mercenary42").isInteractable());
+        assertFalse(controller1.currentDungeon.getEntity("mercenary4_3").isInteractable());
+        assertTrue(controller1.currentDungeon.getEntity("mercenary4_2").isInteractable());
         assertTrue(controller1.currentDungeon.getPlayer().haveAlly());
         assertEquals(3, ((Sceptre) controller1.currentDungeon.getItem("sceptre")).getDurability());
 

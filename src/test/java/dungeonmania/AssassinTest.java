@@ -52,7 +52,7 @@ public class AssassinTest {
         controller.currentDungeon.inventory.add(gold);
         //should not be able to bribe without ring
         assertThrows(InvalidActionException.class ,() -> {
-            controller.interact("assassin33");
+            controller.interact("assassin3_3");
         });
         // check if gold is gone from inventory
         assertFalse(controller.currentDungeon.inventory.isEmpty());
@@ -62,7 +62,7 @@ public class AssassinTest {
         controller.currentDungeon.inventory.remove(gold);
         //should not be able to bribe without gold
         assertThrows(InvalidActionException.class ,() -> {
-            controller.interact("assassin33");
+            controller.interact("assassin3_3");
         });
         // check if ring is gone from inventory
         assertFalse(controller.currentDungeon.inventory.isEmpty());
@@ -70,7 +70,7 @@ public class AssassinTest {
         controller.currentDungeon.inventory.add(gold);
         //should be able to bribe with ring and gold
         assertDoesNotThrow(() -> {
-            controller.interact("assassin33");
+            controller.interact("assassin3_3");
         });
         // check if gold and ring is gone from inventory
         assertTrue(controller.currentDungeon.inventory.isEmpty());

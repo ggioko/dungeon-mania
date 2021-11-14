@@ -23,14 +23,14 @@ public class bombTest {
         //Picks up bomb
         controller.tick(null, Direction.DOWN);
         assertTrue(!(controller.currentDungeon.getItem("bomb") == null));
-        assertTrue(controller.currentDungeon.getEntity("bomb12") == null);
+        assertTrue(controller.currentDungeon.getEntity("bomb1_2") == null);
         controller.tick(null, Direction.UP);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.RIGHT);
         //Place bomb down
-        controller.tick("bomb12", Direction.NONE);
+        controller.tick("bomb1_2", Direction.NONE);
         assertTrue(controller.currentDungeon.getItem("bomb") == null);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.UP);
@@ -40,14 +40,14 @@ public class bombTest {
         //Push boudler into switch
         controller.tick(null, Direction.RIGHT);
         //Walls within one radius of bomb should be removed
-        assertTrue(controller.currentDungeon.getEntity("wall41") == null);
-        assertTrue(controller.currentDungeon.getEntity("wall51") == null);
-        assertTrue(controller.currentDungeon.getEntity("wall52") == null);
-        assertTrue(controller.currentDungeon.getEntity("wall53") == null);
-        assertTrue(controller.currentDungeon.getEntity("wall43") == null);
-        assertTrue(controller.currentDungeon.getEntity("boulder22") == null);
-        assertTrue(controller.currentDungeon.getEntity("switch32") == null);
-        assertTrue(controller.currentDungeon.getEntity("bomb12") == null);
+        assertTrue(controller.currentDungeon.getEntity("wall4_1") == null);
+        assertTrue(controller.currentDungeon.getEntity("wall5_1") == null);
+        assertTrue(controller.currentDungeon.getEntity("wall5_2") == null);
+        assertTrue(controller.currentDungeon.getEntity("wall5_3") == null);
+        assertTrue(controller.currentDungeon.getEntity("wall4_3") == null);
+        assertTrue(controller.currentDungeon.getEntity("boulder2_2") == null);
+        assertTrue(controller.currentDungeon.getEntity("switch3_2") == null);
+        assertTrue(controller.currentDungeon.getEntity("bomb1_2") == null);
     }
 
 }

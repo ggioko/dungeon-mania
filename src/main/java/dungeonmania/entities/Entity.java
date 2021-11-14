@@ -27,12 +27,19 @@ public class Entity {
             this.type = entity.getString("type");
         }
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
-        this.id = entity.getString("type") + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
+        this.id = entity.getString("type") + Integer.toString(this.position.getX()) + "_" + Integer.toString(this.position.getY());
         if (this instanceof Mercenary || this instanceof Spawner) {
             this.isInteractable = true;
         } else {
             this.isInteractable = false;
         }
+    }
+
+    public Entity(String id, String type, Position position) {
+        this.id = id;
+        this.type = type;
+        this.position = position;
+        this.isInteractable = false;
     }
 
     public Entity(String id, String type) {
