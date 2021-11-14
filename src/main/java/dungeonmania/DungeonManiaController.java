@@ -282,6 +282,8 @@ public class DungeonManiaController {
             this.invisibilityTicks++;
             
         }
+        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
         //hydra spawning
         if (currentDungeon.gameMode.equals("hard")) {
             if (this.hydratick >= 50) {
@@ -290,7 +292,7 @@ public class DungeonManiaController {
             }
             this.hydratick++;
         }
-        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+        
 
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
@@ -315,6 +317,7 @@ public class DungeonManiaController {
                 currentDungeon = null;
                 throw new NullPointerException("YOU ARE DEAD!");
             }
+            
         }
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);

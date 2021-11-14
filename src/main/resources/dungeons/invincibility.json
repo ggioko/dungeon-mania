@@ -114,6 +114,11 @@
         "type": "invincibility_potion"
       },
       {
+        "x": 4,
+        "y": 1,
+        "type": "invisibility_potion"
+      },
+      {
         "x": 6,
         "y": 1,
         "type": "sword"
