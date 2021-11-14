@@ -12,6 +12,11 @@ public class Midnight_Armour extends Buildable {
 
     private static final List<String> recipe = Arrays.asList("armour", "sun_stone");
 
+    /**
+     * Constructor for Midnight Armour
+     * @param id
+     * @param type
+     */
     public Midnight_Armour(String id, String type) {
         super(id, type);
         this.setDurability(10);
@@ -21,7 +26,13 @@ public class Midnight_Armour extends Buildable {
     public boolean isBuildable(List<Entity> inventory) {
         return false;
     }
-
+    
+    /**
+     * Checker method to check if Midnight Armour is buildable
+     * @param inventory
+     * @param entities
+     * @return
+     */
     public boolean isBuildable(List<Entity> inventory, List<Entity> entities) {
         HashMap<String, Integer> materialCount = getRelevantMaterialCount(inventory);
 
@@ -57,6 +68,12 @@ public class Midnight_Armour extends Buildable {
         return materialCount;
     }
 
+    /**
+     * Handles effect of Midnight Armour
+     * @param enemyAD
+     * @param inventory
+     * @return half of incoming damage or 1 damage
+     */
     public double effect(double enemyAD, List<Entity> inventory) {
         if (enemyAD >= 0) {
             this.subtractDurability(inventory);

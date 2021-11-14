@@ -13,6 +13,11 @@ public class Sceptre extends Buildable {
     private static final int arrowsNeeded = 2;
     private static final List<String> recipe = Arrays.asList("wood", "arrow", "sun_stone", "treasure", "key_1", "key_2");
 
+    /**
+     * Constructor for Sceptre
+     * @param id
+     * @param type
+     */
     public Sceptre(String id, String type) {
         super(id, type);
         this.setDurability(5);
@@ -84,6 +89,11 @@ public class Sceptre extends Buildable {
         }     
     }
 
+    /**
+     * Handles Effects of Sceptre (Brainwash Enemy for 10 ticks)
+     * @param m
+     * @param inventory
+     */
     public void effect(Mercenary m, List<Entity> inventory) {
         m.setBrainWashed(true);
         m.setInteractable(false);

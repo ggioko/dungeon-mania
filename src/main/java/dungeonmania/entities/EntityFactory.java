@@ -32,6 +32,14 @@ import dungeonmania.util.Position;
 
 public class EntityFactory {
 
+	/**
+	 * A Factory Method that returns required Entity
+	 * @param entity
+	 * @param gameMode
+	 * @param doorcreated
+	 * @param entities
+	 * @return
+	 */
 	public static Entity getEntity(JSONObject entity, String gameMode, boolean doorcreated, JSONObject entities) {
 		Entity e = null;
 

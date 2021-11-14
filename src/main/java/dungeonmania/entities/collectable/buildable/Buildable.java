@@ -12,6 +12,11 @@ public abstract class Buildable extends CollectableEntity {
 
     public static final List<String> BUILDABLES_LIST= Arrays.asList("bow", "shield", "sceptre", "midnight_armour");
 
+    /**
+     * Constructor for Buildable
+     * @param id
+     * @param type
+     */
     public Buildable(String id, String type) {
         super(id, type);
     }
@@ -19,9 +24,13 @@ public abstract class Buildable extends CollectableEntity {
     public abstract boolean isBuildable(List<Entity> inventory);
     public abstract Map<String, Integer> materialNeeded(List<Entity> inventory);
     public abstract HashMap<String, Integer> getRelevantMaterialCount(List<Entity> inventory);
-    
     public abstract void subtractDurability(List<Entity> inventory);
 
+    /**
+     * A Factory Method that retrieves buildable type
+     * @param type
+     * @return Buildable
+     */
     public static Buildable getBuildable(String type) {
         Buildable buildable = null;
         if (type.equalsIgnoreCase("shield")) {
