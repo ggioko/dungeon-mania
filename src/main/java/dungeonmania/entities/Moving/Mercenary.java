@@ -17,6 +17,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+/**
+ * Mercenary Class which extends MovingEntity
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class Mercenary extends MovingEntity{
     private boolean bribed;
     private boolean inBattle;
@@ -25,6 +30,10 @@ public class Mercenary extends MovingEntity{
 
     static int ids;
 
+    /**
+     * Contructor for Mercenary
+     * @param entity  JSONObject
+     */
     public Mercenary(JSONObject entity) {
         super(entity);
         this.health = 5;
@@ -34,6 +43,13 @@ public class Mercenary extends MovingEntity{
         this.inBattle = true;
         this.brainWashTick = 0;
     }
+
+    /**
+     * Spawns mercenary in the given dungeon
+     * @param current   current dungeon
+     * @param entry     entrance
+     * @return current
+     */
     public static Dungeon spawn(Dungeon currentDungeon, Position entry) {
         Mercenary ass = new Mercenary(new JSONObject("{x:"+ entry.getX() + ",y:"+entry.getY()+",type:mercenary}"));
         ass.setId("mercenary_" + ((Integer)ids).toString());
@@ -118,100 +134,8 @@ public class Mercenary extends MovingEntity{
             }
         }
         
-    }/*
-    @Override
-    public void move(Position pos, List<Entity> walls) {
-        //move mercenary towards position pathfinding algorithm
-        int xdiff = pos.getX() - this.getPosition().getX();
-        int ydiff = pos.getY() - this.getPosition().getY();
-
-        boolean moved = false;
-        if (Math.abs(xdiff) > Math.abs(ydiff)) {
-            //x++
-            if (pos.getX() - this.getPosition().getX() < 0 ) {
-                boolean move = true;
-                for (Entity w : walls) {
-                    if (w.getPosition().equals(this.getPosition().translateBy(Direction.LEFT))) {
-                        move = false;
-                    }
-                }
-                if (move) {
-                    this.setPosition(this.getPosition().translateBy(Direction.LEFT));
-                    moved = true;
-                }
-            } 
-            if (moved == false && pos.getX() - this.getPosition().getX() > 0 ) {
-                boolean move = true;
-                for (Entity w : walls) {
-                    if (w.getPosition().equals(this.getPosition().translateBy(Direction.RIGHT))) {
-                        move = false;
-                    }
-                }
-                if (move) {
-                    this.setPosition(this.getPosition().translateBy(Direction.RIGHT));
-                    moved = true;
-                }
-            }
-        } 
-        if (moved == false) {
-            //x++
-            if (pos.getY() - this.getPosition().getY() < 0 ) {
-                boolean move = true;
-                for (Entity w : walls) {
-                    if (w.getPosition().equals(this.getPosition().translateBy(Direction.UP))) {
-                        move = false;
-                    }
-                }
-                if (move) {
-                    this.setPosition(this.getPosition().translateBy(Direction.UP));
-                    moved = true;
-                }
-            } 
-            if (moved == false && pos.getY() - this.getPosition().getY() > 0 ) {
-                boolean move = true;
-                for (Entity w : walls) {
-                    if (w.getPosition().equals(this.getPosition().translateBy(Direction.DOWN))) {
-                        move = false;
-                    }
-                }
-                if (move) {
-                    this.setPosition(this.getPosition().translateBy(Direction.DOWN));
-                    moved = true;
-                }
-            }
-            if (moved == false) {
-                if (pos.getX() - this.getPosition().getX() < 0 ) {
-                    boolean move = true;
-                    for (Entity w : walls) {
-                        if (w.getPosition().equals(this.getPosition().translateBy(Direction.LEFT))) {
-                            move = false;
-                        }
-                    }
-                    if (move) {
-                        this.setPosition(this.getPosition().translateBy(Direction.LEFT));
-                        moved = true;
-                    }
-                } 
-                if (moved == false && pos.getX() - this.getPosition().getX() > 0 ) {
-                    boolean move = true;
-                    for (Entity w : walls) {
-                        if (w.getPosition().equals(this.getPosition().translateBy(Direction.RIGHT))) {
-                            move = false;
-                        }
-                    }
-                    if (move) {
-                        this.setPosition(this.getPosition().translateBy(Direction.RIGHT));
-                        moved = true;
-                    }
-                }
-            }
-        } 
     }
-    */
 
-    /**
-     * Move mercenary away depending on if invincibility potion effects are on or off
-     */
     @Override
     public void moveAway(Position pos, List<Entity> walls) {
         //move mercenary away algorithm
@@ -301,7 +225,13 @@ public class Mercenary extends MovingEntity{
         }
         
     }
-    
+
+    /**
+     * Method which checks if a mercenary is in a bribable range of a Player by add all bribable postions to a a list and checking
+     * if player position matches one of them.
+     * @param playerPosition    Players position
+     * @return Boolean statement
+     */
     public boolean isInBribableRange (Position playerPosition) {
         int x = this.getPosition().getX();
         int y = this.getPosition().getY();
@@ -342,6 +272,11 @@ public class Mercenary extends MovingEntity{
 
         return false;
     }
+    /**
+     * Method which checks if a mercenary is in a battle radius of a Player.
+     * @param playerPosition    Players position
+     * @return Boolean statement
+     */
     public boolean isInBattleRadius (Position playerPosition) {
         int x = playerPosition.getX() - this.getPosition().getX();
         int y = playerPosition.getY() - this.getPosition().getY();
@@ -359,34 +294,67 @@ public class Mercenary extends MovingEntity{
         else return false;
     }
     
+    /**
+     * Set bribed
+     * @param bribed
+     */
     public void setBribed (boolean bribed) {
         this.bribed = bribed;
     }
 
+    /**
+     * Get bribed
+     * @return bribed
+     */
     public boolean isBribed () {
         return this.bribed;
     }
 
+    /**
+     * Set brainwashed
+     * @param brainWashTick
+     */
     public void setBrainWashTick (int brainWashTick) {
         this.brainWashTick = brainWashTick;
     }
 
+    /**
+     * Get brainwashedTick
+     * @return brainWashTick
+     */
     public int getBrainWashTick () {
         return this.brainWashTick;
     }
 
+    /**
+     * Set brainwashed
+     * @param brainWashed
+     */
     public void setBrainWashed (boolean brainWashed) {
         this.brainWashed = brainWashed;
     }
 
+    /**
+     * Get brainwashed
+     * @return brainWashed
+     */
     public boolean isBrainWashed () {
         return this.brainWashed;
     }
 
+
+    /**
+     * Get inBattle
+     * @return inBattle
+     */
     public boolean isInBattle() {
         return inBattle;
     }
 
+    /**
+     * Set inBattle
+     * @param inBattle
+     */
     public void setInBattle(boolean inBattle) {
         this.inBattle = inBattle;
     }

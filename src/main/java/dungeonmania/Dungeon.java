@@ -33,7 +33,11 @@ import javax.sound.sampled.Port;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-
+/**
+ * Dungeon Class
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class Dungeon {
     String dungeonId;
     String dungeonName;
@@ -50,7 +54,12 @@ public class Dungeon {
     int height;
     int spiderCount;
 
-
+    /**
+     * Constructor for Dungeon
+     * @param dungeonName   name of dungeon
+     * @param entities      JSONObject entities
+     * @param gamemode      mode of game
+     */
     public Dungeon(String dungeonName, JSONObject entities, String gameMode) {
         this.dungeonName = dungeonName;
         this.dungeonId = dungeonName;
@@ -103,6 +112,11 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Method which looks through a json file and sets the composite goal tree.
+     * @param goals     JSONObject goals
+     * @return          r of type Goal
+     */
     public Dungeon(String dungeonName, String gameMode) {
         this.dungeonName = dungeonName;
         this.dungeonId = dungeonName;
@@ -139,11 +153,21 @@ public class Dungeon {
         return r;
     }
 
+    /**
+     * Method which takes the goal tree and returns its contents as a String.
+     * @return          returns goals as a String
+     */
     private String getGoals() {
         return goalTree.goalsString();
     }
 
-
+    /**
+     * Method which takes a string and loops through the inventory until
+     * an Entity's type matches the given string, returning the object. if 
+     * string is not matched to a type, returns null.
+     * @param type      entity type
+     * @return          entity
+     */    
     public Entity getItem(String type) {
         for (Entity i : this.inventory) {
             if (i.getType().equals(type)) {
@@ -153,7 +177,11 @@ public class Dungeon {
         return null;
     }
 
-    
+    /**
+     * Method which takes a string and loops through the inventory until
+     * an Entity's id matches the given string, removing the object.
+     * @param stringId   entity id
+     */        
     public void removeEntity(String stringId) {
         for (Iterator<Entity> entity = entities.iterator(); entity.hasNext();) {
             Entity value = entity.next();
@@ -161,6 +189,13 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Method which takes a string and loops through the entity list until
+     * an Entity's id matches the given string, returning the object. if 
+     * string is not matched to a id, returns null.
+     * @param stringId      entity id
+     * @return              entity
+     */    
     public Entity getEntity(String stringId) {
         for (Entity entity : this.entities) {
             if (entity.getId().equals(stringId)) {
@@ -170,38 +205,76 @@ public class Dungeon {
         return null;
     }
 
+    /**
+     * Gets player
+     * @return player
+     */
     public Player getPlayer() {
         return this.player;
     }
     
+    /**
+     * Gets dungeon entity list
+     * @return entities
+     */
     public List<Entity> getEntities() {
         return this.entities;
     }
 
+    /**
+     * Sets dungeon entity list
+     * @param entities  list of entities
+     */
     public void setEntities(List<Entity> entities) {
         this.entities = entities;
     }
 
+    /**
+     * Adds entity to dungeon entity list
+     * @param e Entity
+     */
     public void addEntity(Entity e) {
         this.entities.add(e);
     }
 
+    /**
+     * Adds entity to dungeon inventory
+     * @param entities  inventory
+     */
     public void setItems(List<Entity> items) {
         this.inventory = items;
     }
 
+    /**
+     * Sets dungeon player
+     * @param player  a new player
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * Gets dungeon inventory
+     * @return inventory
+     */
     public List<Entity> getItems() {
         return this.inventory;
     }
 
+    /**
+     * Gets dungeon gamemode
+     * @return gamemode
+     */
     public String getGameMode() {
         return this.gameMode;
     }
 
+    /**
+     * Method which takes a string as an input and loops through inventory,
+     * if itemUsed id matches string return entity, otherwise returns null.
+     * @param stringId
+     * @return entity
+     */
     public Entity getItemUsed(String stringId) {
         for (Entity item : this.inventory) {
             if (item.getId().equals(stringId)) {
@@ -211,6 +284,13 @@ public class Dungeon {
         return null;
     }
 
+    /**
+     * Method which moves all the entities besides the player in the dungeon,
+     * Loops through entity list and activates move method for each entity.
+     * @param direction the direction the entity is moving towards
+     * @param width     the width of the dungeon
+     * @param height    the height of the dungeon
+     */
     public void pathing(Direction direction, int width, int height) {
         //make a list of walls
         List<Entity> walls = getWalls();
@@ -218,7 +298,7 @@ public class Dungeon {
         for (Entity e : this.entities) {
             if (e instanceof MovingEntity) {
                 MovingEntity me = (MovingEntity) e;
-                if (me.isInSwapTile(this.entities) && !me.isSlowed()) {
+                if (me.isInSwampTile(this.entities) && !me.isSlowed()) {
                     me.setSlowed(true);
                 }
                 else if (e instanceof Mercenary) {
@@ -244,6 +324,10 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Method which creates a dungeon response to the frontend 
+     * @return dungeon response
+     */
     public DungeonResponse createResponse() {
         List<EntityResponse> entityList = new ArrayList<EntityResponse>();
         for (Entity e : this.entities) {
@@ -270,6 +354,10 @@ public class Dungeon {
         return new DungeonResponse(this.dungeonId, this.dungeonName, entityList, itemList, this.buildables, this.goals, animations);
     }
 
+    /**
+     * Method which assists in creating a response for buildable items
+     * @param item
+     */
     public void addOrRemoveBuildable(String item) {
         if (item.equals("midnight_armour")) {
             if (((Midnight_Armour) (Buildable.getBuildable(item))).isBuildable(inventory, entities)) {
@@ -282,6 +370,10 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Method which adds a CollectibleEntity to the dungeon inventory if Player 
+     * is in the same position and the CollectibleEntity, removes Entity from dungeon entites.
+     */
     public void itemPickup() {
         for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
             Entity anEntity = it.next();
@@ -296,6 +388,10 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Method which checks if key exists in inventory, returning true or false.
+     * @return boolean statement
+     */
     public boolean hasKey() {
         for (Entity i : inventory) {
             if (i.getType().equals("key_1") || i.getType().equals("key_2")) {
@@ -303,8 +399,13 @@ public class Dungeon {
             }
         }
         return false;
-     }
-
+    }
+    
+    /**
+     * Method which takes in a string and loops through invetory, if Entity type matches
+     * the string, Entity is removed from inventory.
+     * @param type
+     */
     public void removeItemFromInventory(String type) {
         for (Iterator<Entity> it = inventory.iterator(); it.hasNext();) {
             Entity anItem = it.next();
@@ -315,6 +416,11 @@ public class Dungeon {
         } 
     }
 
+    /**
+     * Method which takes in a string and loops through invetory, if Entity type matches
+     * the string, Entity is removed from inventory.
+     * @param type
+     */
     public void removeItem(String type) {
         for (Iterator<Entity> item = inventory.iterator(); item.hasNext();) {
             Entity value = item.next();
@@ -322,7 +428,11 @@ public class Dungeon {
         }
     }
 
-
+    /**
+     * Method which creates the buidable Entity given that the inventory has
+     * all the required items in the recipe.
+     * @param type
+     */
     public void createBuildable(String type) {
         Buildable buildable = Buildable.getBuildable(type);
         if (buildables.contains(buildable.getType())) {
@@ -336,7 +446,11 @@ public class Dungeon {
         }
     }
     
-    
+    /**
+     * Method which simulates enemy death, also has a chance to add Armour or One Ring 
+     * to inventory upon enemy death.
+     * @param enemy
+     */
     public void enemyDeath(MovingEntity enemy) {
         //remove enemy from entities and give player loot
         this.entities.remove(enemy);
@@ -355,6 +469,10 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Method which checks if a mercenary is in radius of a battle, if so the mercenary is able to move again.
+     * @param current currentDungeon
+     */
     public void MercenaryBattleMovement(Dungeon current) {
         List<Entity> walls = getWalls();
         for (Entity entity: this.entities) {
@@ -370,8 +488,14 @@ public class Dungeon {
         }
     }
 
+    /**
+     * Method which starts a battle between a Player and a Entity if they are in the same position in the given Dungeon.
+     * Loops through entity List and checks if Player collides with Enemy. Player and Enemy take turns giving damage until
+     * one of the heals drop to zero or below where the battle ends and the current Dungeon is returned.
+     * @param current currentDungeon
+     * @return current 
+     */
     public Dungeon battle(Dungeon current) {
-        
         for (Entity e : current.entities) {
             //for all moving entities aka enemies
             if (e instanceof MovingEntity) {

@@ -7,13 +7,27 @@ import org.json.JSONObject;
 
 import dungeonmania.entities.Entity;
 
+/**
+ * Sword Class which extends CollectableEntity
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class Sword extends CollectableEntity {
+    /**
+     * Contructor for Sword
+     * @param entity  JSONObject
+     */
     public Sword(JSONObject entity) {
         super(entity);
         setDurability(10);
         //TODO Auto-generated constructor stub
     }
 
+    /**
+     * Contructor for Sword
+     * @param id
+     * @param type
+     */
     public Sword(String id, String type) {
         super(id,type);
     }

@@ -15,6 +15,11 @@ import dungeonmania.util.Position;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Player Class which extends Entity
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class Player extends Entity {
     
     double health;
@@ -24,6 +29,10 @@ public class Player extends Entity {
     boolean invincibilityPotionEffect;
     boolean invisibilityPotionEffect;
 
+    /**
+     * Contructor for Player
+     * @param entity  JSONObject
+     */
     public Player(JSONObject entity) {
         super(entity);
         this.health = 10;
@@ -43,38 +52,73 @@ public class Player extends Entity {
         this.invincibilityPotionEffect = false;
         this.invisibilityPotionEffect = false;
     }
-    
-    //getters
 
+
+    /**
+     * Gets invisibilityPotionEffect of Player
+     * @return invisibilityPotionEffect
+     */
     public boolean isInvisibilityPotionEffect() {
         return invisibilityPotionEffect;
     }
 
+    /**
+     * Sets invisibilityPotionEffect of Player
+     * @param invisibilityPotionEffect
+     */
     public void setInvisibilityPotionEffect(boolean invisibilityPotionEffect) {
         this.invisibilityPotionEffect = invisibilityPotionEffect;
     }
 
+
+    /**
+     * Gets invincibilityPotionEffect of Player
+     * @return invincibilityPotionEffect
+     */
     public boolean isInvincibilityPotionEffect() {
         return invincibilityPotionEffect;
     }
 
+    /**
+     * Sets invincibilityPotionEffect of Player
+     * @Param invincibilityPotionEffect
+     */
     public void setInvincibilityPotionEffect(boolean invincibilityPotionEffect) {
         this.invincibilityPotionEffect = invincibilityPotionEffect;
     }
 
+    /**
+     * Gets Health of Player
+     * @return health of player
+     */
     public double getHealth() {
         return this.health;
     }
+    
+    /**
+     * Sets Health of Player
+     * @param health of player
+     */
     public void setHealth(double health) {
         this.health = health;
     }
 
+    /**
+     * Gets Health of Player
+     * @return health of player
+     */
     public double getAttack() {
         return this.attack;
     }
+
+    /**
+     * Sets Attack of Player
+     * @param attack of player
+     */
     public void setAttack(double attack) {
         this.attack = attack;
     }
+    
     @Override
     public void move(Position pos, List<Entity> walls, int width, int height, Direction direction) {
         boolean move = true;
@@ -110,10 +154,21 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Sets Battling of Player
+     * @param battling of player
+     */
     public void setBattling (boolean battling) {
         this.battling = battling;
     }
 
+    /**
+     * Method which simulates the player taking damage when in battle
+     * @param enemyHP
+     * @param enemyAD
+     * @param dungeon
+     * @param enemy
+     */
     public void takeDamage(double enemyHP, double enemyAD, Dungeon dungeon, MovingEntity enemy) {
         //Armour cuts enemy damage to half
         if (dungeon.getItem("armour") != null) {
@@ -136,14 +191,26 @@ public class Player extends Entity {
         this.setHealth(this.health - ((enemyHP * enemyAD) / 10));
     }
 
+    /**
+     * Gets Baattling state of Player
+     * @return boolean statement
+     */
     public boolean isBattling () {
         return this.battling;
     }
 
+    /**
+     * Sets Ally of Player
+     * @param ally of player
+     */
     public void setAlly (boolean ally) {
         this.ally = ally;
     }
 
+    /**
+     * Gets Ally of Player
+     * @return boolean statement
+     */
     public boolean haveAlly () {
         return this.ally;
     }
