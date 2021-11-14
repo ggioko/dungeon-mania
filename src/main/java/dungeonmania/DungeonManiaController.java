@@ -88,13 +88,6 @@ public class DungeonManiaController {
             throw new IllegalArgumentException();
         }
 
-        // If dungeon name doesnt exist
-        ArrayList<String> dungeonNames = new ArrayList<String>();
-        dungeonNames = setDungeonNames(dungeonName);
-
-        if (!checkIfDungeonExists(dungeonName, dungeonNames)) {
-            throw new IllegalArgumentException();
-        }
         
         try {
             obj = new JSONObject(FileLoader.loadResourceFile("/dungeons" + "/" + dungeonName + ".json"));
@@ -201,31 +194,6 @@ public class DungeonManiaController {
             }
         }
         return exists;
-    }
-
-    public ArrayList<String> setDungeonNames(String dungeonName) {
-        ArrayList<String> dungeonNames = new ArrayList<String>();
-        dungeonNames.add("advanced-2");
-        dungeonNames.add("boulders");
-        dungeonNames.add("advanced");
-        dungeonNames.add("crafting");
-        dungeonNames.add("doors");
-        dungeonNames.add("exist");
-        dungeonNames.add("exit");
-        dungeonNames.add("goals");
-        dungeonNames.add("interact");
-        dungeonNames.add("portals");
-        dungeonNames.add("potions");
-        dungeonNames.add("maze");
-        dungeonNames.add("characterTest");
-        dungeonNames.add("interactTest");
-        dungeonNames.add("bombTest");
-        dungeonNames.add("invincibility");
-        dungeonNames.add("interactAssassin");
-        dungeonNames.add("swampTileTest");
-        dungeonNames.add("hydra");
-        dungeonNames.add("crafting_zombie");
-        return dungeonNames;
     }
     
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {

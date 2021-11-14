@@ -29,56 +29,36 @@ public class PotionsTest {
         controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
-        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
-        controller.tick(null, Direction.LEFT);
-
-        assertTrue(controller.currentDungeon.player.getHealth() == 10);
-        // Move to fight enemies
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        assertTrue(controller.currentDungeon.player.getHealth() == 10);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        
+        controller.tick(null, Direction.DOWN);
         assertTrue(controller.currentDungeon.player.getHealth() != 10);
     }
 
 
     @Test
     public void healthPotionUsedTest() {
-        // test for healthPotion not used
+        // test for healthPotion used
         DungeonManiaController controller = new DungeonManiaController();
 
         controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
-        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
-        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
 
-        assertTrue(controller.currentDungeon.player.getHealth() == 10);
-        // Move to fight enemies
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        assertTrue(controller.currentDungeon.player.getHealth() != 10);
-        controller.tick("health_potion11", Direction.UP);
+        controller.tick("health_potion21", Direction.NONE);
         assertTrue(controller.currentDungeon.player.getHealth() == 10);
     }
 
@@ -87,7 +67,7 @@ public class PotionsTest {
         // test for healthPotion not used
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("invincibility", "standard");
+        controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
         controller.tick(null, Direction.RIGHT);
@@ -107,7 +87,7 @@ public class PotionsTest {
         // test for healthPotion not used
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("invincibility", "standard");
+        controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
         controller.tick(null, Direction.RIGHT);
@@ -126,7 +106,7 @@ public class PotionsTest {
         // test for invincibility_potion used and mercenaries running away
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("invincibility", "standard");
+        controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
         controller.tick(null, Direction.RIGHT);
@@ -152,7 +132,7 @@ public class PotionsTest {
         // test for healthPotion not used
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("invincibility", "standard");
+        controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
         controller.tick(null, Direction.RIGHT);
@@ -180,7 +160,7 @@ public class PotionsTest {
         // test for healthPotion not used
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("invincibility", "standard");
+        controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
         controller.tick(null, Direction.RIGHT);
