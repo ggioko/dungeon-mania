@@ -217,8 +217,9 @@ public class DungeonManiaController {
         }
 
         //gets the item that is used 
-        if (ticknum >= 25) {
+        if (ticknum >= 25 && currentDungeon.spiderCount <= 4) {
             currentDungeon = Spider.spawn(currentDungeon);
+            currentDungeon.spiderCount++;
             if (Math.random() <= 0.3) {
                 currentDungeon = Assassin.spawn(currentDungeon, currentDungeon.entry);
             } else {
@@ -303,7 +304,6 @@ public class DungeonManiaController {
             s.spawn(currentDungeon);
         }
         // SIMPLE AND COMPLEX GOALS
-        boolean teleported = false;
         for (Entity e : currentDungeon.entities) {
             //boulder movement and floor switch
             if (e instanceof Boulder) {
@@ -317,9 +317,8 @@ public class DungeonManiaController {
                 currentDungeon = ((Door)e).unlock(currentDungeon.entities, currentDungeon.inventory, currentDungeon, currentDungeon.player, movementDirection);
             }
             if (e instanceof Portal) {
-                if (e.getPosition().equals(currentDungeon.player.getPosition()) && !teleported) {
+                if (e.getPosition().equals(currentDungeon.player.getPosition())) {
                     currentDungeon.player.setPosition(((Portal)e).getCoords().translateBy(movementDirection));
-                    teleported = true;
                 }
             }
             if (e instanceof Mercenary) {

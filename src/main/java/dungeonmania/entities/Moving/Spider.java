@@ -46,8 +46,8 @@ public class Spider extends MovingEntity {
 
     static public Dungeon spawn(Dungeon current) {
         JSONObject obj = new JSONObject();
-        obj.put("x", Math.random()*10);
-        obj.put("y", Math.random()*10);
+        obj.put("x", Math.random()*current.getWidth());
+        obj.put("y", Math.random()*current.getHeight());
         obj.put("type", "spider");
         Spider spider = new Spider(obj);
         spider.setId("spider_" + ((Integer)ids).toString());
