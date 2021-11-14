@@ -69,4 +69,10 @@ public class GoalLeaf implements Goal {
     public String getName() {
         return this.name;
     }
+
+    @Override
+    public void checkComplete() {
+        // TODO Auto-generated method stub
+        
+    }
 }  
