@@ -78,6 +78,8 @@
 
 - Invincibility potion time : 10 ticks
 - Invisibility potion time : 10 ticks
+- Allies cannot follow you when invisibile
+- Allies will ALSO run away when player has invincibility potion as they are reminded of their past
 
 
 ### **Bomb Assumptions**

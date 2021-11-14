@@ -47,12 +47,6 @@ public class Spider extends MovingEntity {
             }
         }
         
-        // if (this.spawned) {
-        //     this.setPosition(this.getPosition().translateBy(Direction.UP));
-        //     this.spawned = false;
-        //     return;
-        // }
-
         if (!spider_walls.contains(this.getPosition().translateBy(Direction.UP)) && this.spawned) {
             this.setPosition(this.getPosition().translateBy(Direction.UP));
             this.spawned = false;
