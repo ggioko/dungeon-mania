@@ -35,7 +35,7 @@ public class InteractTest {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("mercenary51");
+            controller.interact("mercenary5_1");
         });
     }
 
@@ -45,7 +45,7 @@ public class InteractTest {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("interact", "standard");
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("zombie_toast_spawner41");
+            controller.interact("zombie_toast_spawner4_1");
         });
     }
 
@@ -57,7 +57,7 @@ public class InteractTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("mercenary51");
+            controller.interact("mercenary5_1");
         });
     }
 
@@ -69,7 +69,7 @@ public class InteractTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("zombie_toast_spawner14");
+            controller.interact("zombie_toast_spawner1_4");
         });
     }
 
@@ -83,7 +83,7 @@ public class InteractTest {
 
         controller.currentDungeon.inventory.add(new Entity("treasure_test", "treasure"));
         assertDoesNotThrow(() -> {
-            controller.interact("mercenary33");
+            controller.interact("mercenary3_3");
         });
         // check if gold is gone from inventory
         assertTrue(controller.currentDungeon.inventory.isEmpty());
@@ -96,7 +96,7 @@ public class InteractTest {
         controller.newGame("interact", "standard");
         
         assertThrows(InvalidActionException.class, () -> {
-            controller.interact("zombie_toast_spawner14");
+            controller.interact("zombie_toast_spawner1_4");
         });
 
         controller.tick(null, Direction.DOWN);
@@ -105,10 +105,10 @@ public class InteractTest {
         controller.currentDungeon.inventory.add(new Sword("sword_test", "sword"));
 
         assertDoesNotThrow(() -> {
-            controller.interact("zombie_toast_spawner14");
+            controller.interact("zombie_toast_spawner1_4");
         });
 
-        assertTrue(controller.currentDungeon.getEntity("zombie_toast_spawner14") == null);
+        assertTrue(controller.currentDungeon.getEntity("zombie_toast_spawner1_4") == null);
 
     }
 }

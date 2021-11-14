@@ -123,7 +123,7 @@ public class App {
         }, gson::toJson);
 
         Spark.post("/api/game/new/generate/", "application/json", (request, response) -> {
-            return callUsingSessionAndArgument(request, (dmc) -> dmc.generateDungeon(0, 0, 20, 20, request.queryParams("gameMode")));
+            return callUsingSessionAndArgument(request, (dmc) -> dmc.generateDungeon(0, 0, 50, 50, request.queryParams("gameMode")));
         }, gson::toJson);
 
         Scintilla.start();

@@ -34,15 +34,15 @@ public class StaticEntityTest {
     public void testSwampTile() {
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("swampTileTest", "standard");
-        Position swampTile = controller.currentDungeon.getEntity("swamp_tile41").getPosition();
+        Position swampTile = controller.currentDungeon.getEntity("swamp_tile4_1").getPosition();
         controller.tick(null, Direction.LEFT);
-        Position mercenary = controller.currentDungeon.getEntity("mercenary51").getPosition();
+        Position mercenary = controller.currentDungeon.getEntity("mercenary5_1").getPosition();
         assertTrue(swampTile.getX() == mercenary.getX() && swampTile.getY() == mercenary.getY());
         controller.tick(null, Direction.LEFT);
-        mercenary = controller.currentDungeon.getEntity("mercenary51").getPosition();
+        mercenary = controller.currentDungeon.getEntity("mercenary5_1").getPosition();
         assertTrue(swampTile.getX() == mercenary.getX() && swampTile.getY() == mercenary.getY());
         controller.tick(null, Direction.LEFT);
-        mercenary = controller.currentDungeon.getEntity("mercenary51").getPosition();
+        mercenary = controller.currentDungeon.getEntity("mercenary5_1").getPosition();
         assertFalse(swampTile.getX() == mercenary.getX() && swampTile.getY() == mercenary.getY());
     }
 
