@@ -25,7 +25,7 @@
 - When player has armour and midnight armour, incoming damage is recuded by 75%
 - When player has shield AND armour AND midnight armour, incoming damage is reduced by 87.5%
 
-### **Hydraw**
+### **Hydra**
 
 - Hydra health is 15
 - Hydra damage is 1
