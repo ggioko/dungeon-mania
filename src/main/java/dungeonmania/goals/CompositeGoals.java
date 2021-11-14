@@ -53,6 +53,7 @@ public class CompositeGoals implements Goal {
         return true;
     }
 
+    @Override
     public void checkComplete() {
         if (this.name.equals("AND")) {
             if (children.get(0).isComplete() && children.get(1).isComplete()) {

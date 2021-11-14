@@ -9,8 +9,17 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Zombie Class which extends MovingEntity
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class Zombie extends MovingEntity {
-
+    
+    /**
+     * Contructor for Zombie
+     * @param entity  JSONObject
+     */
     public Zombie(JSONObject entity) {
         super(entity);
         this.health = 5;
@@ -39,6 +48,11 @@ public class Zombie extends MovingEntity {
         }
     }
 
+    /**
+     * Method which checks if zombies exists in the dungeon
+     * @param entities  list of entities in the dungeon
+     * @return boolean statement
+     */
     public static boolean zombieExistOnMap(List<Entity> entities) {
         for (Entity e : entities) {
             if (e instanceof Zombie) {

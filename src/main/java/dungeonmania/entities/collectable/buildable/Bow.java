@@ -14,6 +14,11 @@ public class Bow extends Buildable {
     private static final int woodNeeded = 1;
     private static final int arrowNeeded = 3;
 
+    /**
+     * Constructor for Bow
+     * @param id
+     * @param type
+     */
     public Bow(String id, String type) {
         super(id, type);
         this.setDurability(20);
@@ -59,6 +64,14 @@ public class Bow extends Buildable {
         return returnMap;
     }    
 
+    /**
+     * Handles Effect of Bow (Allows player to attack once more)
+     * @param e
+     * @param enemyHP
+     * @param playerHP
+     * @param playerAD
+     * @param inventory
+     */
     public void effect(MovingEntity e, double enemyHP, double playerHP, double playerAD, List<Entity> inventory) {
         e.setHealth(enemyHP - ((playerHP * playerAD) / 5));
         this.subtractDurability(inventory);

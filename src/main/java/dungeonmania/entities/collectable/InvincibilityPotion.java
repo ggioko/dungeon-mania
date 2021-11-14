@@ -7,15 +7,30 @@ import org.json.JSONObject;
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Entity;
-
+/**
+ * InvincibilityPotion Class which extends CollectableEntity
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class InvincibilityPotion extends CollectableEntity {
-
+    /**
+     * Contructor for InvincibilityPotion
+     * @param entity  JSONObject
+     */
     public InvincibilityPotion(JSONObject entity) {
         super(entity);
         int durability = 1;
         this.setDurability(durability);
     }
 
+    /**
+     * Adds effects for the potion
+     * @param currentDungeon
+     * @param itemUsed
+     * @param player
+     * @param inventory
+     * @return currentDungeon
+     */
     public static Dungeon addEffects(Dungeon currentDungeon, String itemUsed, Player player, List<Entity> inventory) {
         Entity invincibility = null;
         if (currentDungeon.getGameMode().equalsIgnoreCase("Hard")) {

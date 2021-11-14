@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Spider Class which extends MovingEntity
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class Spider extends MovingEntity {
     
     boolean spawned;
@@ -20,7 +25,10 @@ public class Spider extends MovingEntity {
         Arrays.asList(Direction.LEFT, Direction.DOWN, Direction.DOWN, Direction.RIGHT, Direction.RIGHT, Direction.UP, Direction.UP, Direction.LEFT)
     );
     
-
+    /**
+     * Contructor for Spider
+     * @param entity  JSONObject
+     */
     public Spider(JSONObject entity) {
         super(entity);
         this.health = 5;
@@ -62,6 +70,11 @@ public class Spider extends MovingEntity {
         }
     }
 
+    /**
+     * Spawns spiders in the given dungeon
+     * @param current  current dungeon
+     * @return current
+     */
     static public Dungeon spawn(Dungeon current) {
         JSONObject obj = new JSONObject();
         obj.put("x", Math.random()*current.getWidth());

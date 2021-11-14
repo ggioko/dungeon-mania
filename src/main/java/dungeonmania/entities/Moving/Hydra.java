@@ -14,15 +14,30 @@ import java.util.Random;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.Midnight_Armour;
 
+/**
+ * Hydra Class which extends Zombie
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class Hydra extends Zombie {
     static int ids;
 
+    /**
+     * Contructor for Hydra
+     * @param entity  JSONObject
+     */
     public Hydra(JSONObject entity) {
         super(entity);
         this.health = 15;
         this.attack = 1;
     }
     
+    /**
+     * Spawns Hydra in the given dungeon
+     * @param current   current dungeon
+     * @param entry     entrance
+     * @return current
+     */
     public static Dungeon spawn(Dungeon currentDungeon, Position entry) {
         Hydra ass = new Hydra(new JSONObject("{x:"+ entry.getX() + ",y:"+entry.getY()+",type:hydra}"));
         ass.setId("hydra_" + ((Integer)ids).toString());

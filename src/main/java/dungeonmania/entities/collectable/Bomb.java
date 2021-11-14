@@ -14,15 +14,29 @@ import dungeonmania.util.Direction;
 import java.lang.Math;
 import java.util.ArrayList;
 
+/**
+ * Bomb Class which extends CollectableEntity
+ * @author Gio Ko, Neeraj Mirashi, Michael Earey, Jordan Lee
+ *
+ */
 public class Bomb extends CollectableEntity {
     private boolean placed;
 
+    /**
+     * Contructor for Bomb
+     * @param entity  JSONObject
+     */
     public Bomb(JSONObject entity) {
         super(entity);
         this.placed = false;
         //TODO Auto-generated constructor stub
     }
     
+    /**
+     * Place bomb in dungeon
+     * @param current
+     * @return current
+     */
     public Dungeon placeBomb(Dungeon current) {
         JSONObject obj = new JSONObject();
         obj.put("x", current.getPlayer().getPosition().getX());
@@ -37,6 +51,11 @@ public class Bomb extends CollectableEntity {
         return current;
     }
 
+    /**
+     * Checks if bomb is activated
+     * @param current
+     * @return boolean statement
+     */
     public boolean isActivated(Dungeon current) { 
         for (Entity entity1 : current.getEntities()) {
             if (entity1 instanceof FloorSwitch) {
@@ -53,6 +72,11 @@ public class Bomb extends CollectableEntity {
         return false;
     }
 
+    /**
+     * Explode bomb in dungeon
+     * @param current
+     * @return current
+     */
     public Dungeon explode(Dungeon current) {
         List<String> toRemove = new ArrayList<String>();
         for (Entity entity : current.getEntities()) {
@@ -67,6 +91,12 @@ public class Bomb extends CollectableEntity {
         return current;
     }
 
+    /**
+     * Check if bomb is in range of explosion or switch
+     * @param pos
+     * @param mode
+     * @return boolean
+     */
     public boolean isInRange(Position pos, String mode) {
         int x = this.getPosition().getX();
         int y = this.getPosition().getY();
