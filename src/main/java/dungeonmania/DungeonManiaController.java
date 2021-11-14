@@ -477,82 +477,38 @@ public class DungeonManiaController {
     public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
         // let maze be a 2D array of booleans (of size width and height) default false
         // // false representing a wall and true representing empty space
-        int w = 49;
-        int h = 49;
-        boolean[][] maze = new boolean[xEnd][yEnd];
-        
-        // maze[start] = empty
-        maze[xStart][yStart] = true;
-        
-        // let options be a list of positions
-        List<Position> options = new ArrayList<Position>();
-
-        // add to options all neighbours of 'start' not on boundary that are of distance 2 away and are walls
-        for (int x = -2; x <= 2; x++) {
-            for (int y = -2; y <= 2; y++) {
-                if (x == 0 && y == 0 || x != 0 && y != 0) continue;
-                try {
-                if (maze[xStart + x][yStart + y] == false) options.add(new Position(xStart + x, yStart + y));
-                } catch (Exception e) { // ignore ArrayIndexOutOfBounds
-                continue;
-                }
-            }
-        }
-        
-        // while options is not empty:
-        while (!options.isEmpty()) {
-            //     let next = remove random from options
-            Position next = options.remove(Math.random() * options.size());
-            
-            //     let neighbours = each neighbour of distance 2 from next not on boundary that are empty
-            //     if neighbours is not empty:
-            //         let neighbour = random from neighbours
-            //         maze[ next ] = empty (i.e. true)
-            //         maze[ position inbetween next and neighbour ] = empty (i.e. true)
-            //         maze[ neighbour ] = empty (i.e. true)
-            
-            //     add to options all neighbours of 'next' not on boundary that are of distance 2 away and are walls
-        }
-        
-        // // at the end there is still a case where our end position isn't connected to the map
-        // // we don't necessarily need this, you can just keep randomly generating maps (was original intention)
-        // // but this will make it consistently have a pathway between the two.
-        // if maze[end] is a wall:
-        //     maze[end] = empty
-        
-        //     let neighbours = neighbours not on boundary of distance 1 from maze[end]
-        //     if there are no cells in neighbours that are empty:
-        //         // let's connect it to the grid
-        //         let neighbour = random from neighbours
-        //         maze[neighbour] = empty
-        return null;
-    
-    }
-
-    public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
-        //     let maze be a 2D array of booleans (of size width and height) default false
-        // // false representing a wall and true representing empty space
         int w = xEnd;
         int h = yEnd;
-        boolean[][] maze = new boolean[xEnd][yEnd];
-        List<Position> neighbours = new ArrayList<Position>();
+        boolean[][] maze = new boolean[w][h];
+        int[] dirVert = new int[2];
+        int[] dirHor = new int[2];
+        dirVert[0] = 2;
+        dirVert[1] = -2;
+        dirHor[0] = 2;
+        dirHor[1] = -2;
+
+        Random random = new Random();
 
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 maze[x][y] = false;
             }
         }
-
+        
         // maze[start] = empty
-        Position start = new Position((int)(Math.random() * w), (int)(Math.random() * h));
-        Position end = new Position(w, h);
-        maze[start.getX()][start.getY()] = false; // Should be player
+        Position start = new Position(random.nextInt(xEnd), random.nextInt(yEnd));
+        Position end = new Position(random.nextInt(xEnd), random.nextInt(yEnd));
 
+        while (end == start) {
+            end = new Position(random.nextInt(xEnd), random.nextInt(yEnd));
+        }
+
+        maze[start.getX()][start.getY()] = true;
+        
         // let options be a list of positions
         List<Position> options = new ArrayList<Position>();
-        
-        // add to options all neighbours of 'start' not on boundary that are of distance 2 away and are walls
 
+        // add to options all neighbours of 'start' not on boundary that are of distance 2 away and are walls
         for (int x = -2; x <= 2; x++) {
             for (int y = -2; y <= 2; y++) {
                 if (x == 0 && y == 0 || x != 0 && y != 0) continue;
@@ -563,81 +519,72 @@ public class DungeonManiaController {
                 }
             }
         }
-        // for (Position p : start.getAdjacentPositions()) {
-        //     if (p.getX() != 0 && p.getY() != 0) {
-        //         if (  && maze[p.getX()][p.getY()] == false) {
-        //             options.add(p);
-        //         }    
-        //     }
-        // }
-        System.out.println(options.size());
-
-
+        
         // while options is not empty:
         while (!options.isEmpty()) {
             //     let next = remove random from options
-            Position next = options.remove((int)(Math.random() * options.size()));
-            System.out.println(next.getX()+","+next.getY() +"="+ maze[next.getX()][next.getY()]);
+            Position next = options.remove(random.nextInt(options.size()));
+            
             //     let neighbours = each neighbour of distance 2 from next not on boundary that are empty
+            List<Position> neighbours = new ArrayList<Position>();
+
             for (int x = -2; x <= 2; x++) {
                 for (int y = -2; y <= 2; y++) {
-                    if (x == 0 && y == 0 || x != 0 && y != 0) continue;
+                    // if (x == 0 && y == 0 || x != 0 && y != 0) continue;
                     try {
                     if (maze[next.getX() + x][next.getY() + y] == true) neighbours.add(new Position(next.getX() + x, next.getY() + y));
                     } catch (Exception e) { // ignore ArrayIndexOutOfBounds
                     continue;
                     }
                 }
-            }        
+            }
             System.out.println(neighbours.size());
-            // for (Position p : next.getAdjacentPositions()) {
-            //     if (p.getX() != 0 && p.getY() != 0) {
-            //         Position dist = Position.calculatePositionBetween(p, next);
-            //         if (dist.getX() <= 2 && dist.getY() <= 2 && maze[p.getX()][p.getY()] == true) {
-            //             neighbours.add(p);
-            //         }    
-            //     }
-            // }
             //     if neighbours is not empty:
-            if (!neighbours.isEmpty()) {
+            if (!neighbours.isEmpty()) {    
                 //         let neighbour = random from neighbours
-                Position neighbour = neighbours.get((int)(Math.random() * neighbours.size()));
+                Position neighbour = neighbours.get(random.nextInt(neighbours.size()));
+
                 //         maze[ next ] = empty (i.e. true)
                 maze[next.getX()][next.getY()] = true;
+
                 //         maze[ position inbetween next and neighbour ] = empty (i.e. true)
-                maze[(next.getX()+neighbour.getX())/2][(next.getY()+neighbour.getY())/2] = true;
+                maze[(next.getX() + neighbour.getX())/2][(next.getY() + neighbour.getY())/2] = true;
+
                 //         maze[ neighbour ] = empty (i.e. true)
                 maze[neighbour.getX()][neighbour.getY()] = true;
             }
-            
             //     add to options all neighbours of 'next' not on boundary that are of distance 2 away and are walls
-            for (Position p : neighbours) {
-                if (p.getX() != 0 && p.getY() != 0) {
-                    Position dist = Position.calculatePositionBetween(p, next);
-                    if (dist.getX() <= 2 && dist.getY() <= 2 && maze[p.getX()][p.getY()] == false) {
-                        options.add(p);
-                    }    
+
+            for (int x = -2; x <= 2; x++) {
+                for (int y = -2; y <= 2; y++) {
+                    // if (x == 0 && y == 0 || x != 0 && y != 0) continue;
+                    try {
+                    if (maze[next.getX() + x][next.getY() + y] == false) neighbours.add(new Position(next.getX() + x, next.getY() + y));
+                    } catch (Exception e) { // ignore ArrayIndexOutOfBounds
+                    continue;
+                    }
                 }
             }
+
         }
         
         // // at the end there is still a case where our end position isn't connected to the map
         // // we don't necessarily need this, you can just keep randomly generating maps (was original intention)
         // // but this will make it consistently have a pathway between the two.
+
         // if maze[end] is a wall:
-        if (maze[w-1][h-1] == false) {
+        if (maze[end.getX()][end.getY()] == false) {
+
             //     maze[end] = empty
-            maze[w-1][h-1] = true;
+            maze[end.getX()][end.getY()] = true;
             //     let neighbours = neighbours not on boundary of distance 1 from maze[end]
-            for (Position p : neighbours) {
-                if (p.getX() != 0 && p.getY() != 0) {
-                    Position dist = Position.calculatePositionBetween(p, end);
-                    if (dist.getX() <= 2 && dist.getY() <= 2) {
-                        neighbours.add(p);
-                    }    
+            List<Position> neighbours = new ArrayList<Position>();
+            for (Position p : end.getAdjacentPositions()) {
+                if (p.getX() > 0 && p.getY() > 0) {
+                    neighbours.add(p);
                 }
             }
-            System.out.println(neighbours.size());
+
             boolean empty = false;
             //     if there are no cells in neighbours that are empty:
             for (Position p : neighbours) {
@@ -649,28 +596,178 @@ public class DungeonManiaController {
             if (!empty) {
                 //         // let's connect it to the grid
                 //         let neighbour = random from neighbours
+                Position neighbour = neighbours.get(random.nextInt(neighbours.size()));
+
                 //         maze[neighbour] = empty
-                Position neighbour = neighbours.get((int)(Math.random() * neighbours.size()));
                 maze[neighbour.getX()][neighbour.getY()] = true;
             }
-        }
-        Dungeon newDungeon = new Dungeon(gameMode, null, gameMode);
 
+        }
+        Dungeon newDungeon = new Dungeon(gameMode, gameMode);
+        currentDungeon = newDungeon;
         for (int x = 0; x < w; x++) {
             for (int y = 0; y < h; y++) {
                 Entity e = null;
                 if (x == start.getX() && y == start.getY()) {
-                    e = new Player("player", "player", start);
+                    e = new Player("player", "player", new Position(start.getX(), start.getY()));
+                    currentDungeon.player = (Player) e;
+                    currentDungeon.entry = e.getPosition();
                 } else if (x == end.getX() && y == end.getY()) {
-                    e = new Exit("exit", "exit", end);
+                    e = new Exit("exit", "exit", new Position(xEnd, yEnd));
                 } else if (maze[x][y] == false) {
-                    e = new Wall("wall" + x + y, "wall", new Position(x, y));
+                    e = new Wall("wall" + Integer.toString(x) +"_"+ Integer.toString(y), "wall", new Position(x, y));
                 }
-                newDungeon.entities.add(e);
+                if (e != null) {
+                    currentDungeon.entities.add(e);
+                }
             }
         }
-
-        return newDungeon.createResponse();
+        return currentDungeon.createResponse();
+    
     }
+
+    // public DungeonResponse generateDungeon(int xStart, int yStart, int xEnd, int yEnd, String gameMode) throws IllegalArgumentException {
+    //     //     let maze be a 2D array of booleans (of size width and height) default false
+    //     // // false representing a wall and true representing empty space
+    //     int w = xEnd;
+    //     int h = yEnd;
+    //     boolean[][] maze = new boolean[xEnd][yEnd];
+    //     List<Position> neighbours = new ArrayList<Position>();
+
+    //     for (int x = 0; x < w; x++) {
+    //         for (int y = 0; y < h; y++) {
+    //             maze[x][y] = false;
+    //         }
+    //     }
+
+    //     // maze[start] = empty
+    //     Position start = new Position((int)(Math.random() * w), (int)(Math.random() * h));
+    //     Position end = new Position(w, h);
+    //     maze[start.getX()][start.getY()] = false; // Should be player
+
+    //     // let options be a list of positions
+    //     List<Position> options = new ArrayList<Position>();
+        
+    //     // add to options all neighbours of 'start' not on boundary that are of distance 2 away and are walls
+
+    //     for (int x = -2; x <= 2; x++) {
+    //         for (int y = -2; y <= 2; y++) {
+    //             if (x == 0 && y == 0 || x != 0 && y != 0) continue;
+    //             try {
+    //             if (maze[start.getX() + x][start.getY() + y] == false) options.add(new Position(start.getX() + x, start.getY() + y));
+    //             } catch (Exception e) { // ignore ArrayIndexOutOfBounds
+    //             continue;
+    //             }
+    //         }
+    //     }
+    //     // for (Position p : start.getAdjacentPositions()) {
+    //     //     if (p.getX() != 0 && p.getY() != 0) {
+    //     //         if (  && maze[p.getX()][p.getY()] == false) {
+    //     //             options.add(p);
+    //     //         }    
+    //     //     }
+    //     // }
+    //     System.out.println(options.size());
+
+
+    //     // while options is not empty:
+    //     while (!options.isEmpty()) {
+    //         //     let next = remove random from options
+    //         Position next = options.remove((int)(Math.random() * options.size()));
+    //         System.out.println(next.getX()+","+next.getY() +"="+ maze[next.getX()][next.getY()]);
+    //         //     let neighbours = each neighbour of distance 2 from next not on boundary that are empty
+    //         for (int x = -2; x <= 2; x++) {
+    //             for (int y = -2; y <= 2; y++) {
+    //                 if (x == 0 && y == 0 || x != 0 && y != 0) continue;
+    //                 try {
+    //                 if (maze[next.getX() + x][next.getY() + y] == true) neighbours.add(new Position(next.getX() + x, next.getY() + y));
+    //                 } catch (Exception e) { // ignore ArrayIndexOutOfBounds
+    //                 continue;
+    //                 }
+    //             }
+    //         }        
+    //         System.out.println(neighbours.size());
+    //         // for (Position p : next.getAdjacentPositions()) {
+    //         //     if (p.getX() != 0 && p.getY() != 0) {
+    //         //         Position dist = Position.calculatePositionBetween(p, next);
+    //         //         if (dist.getX() <= 2 && dist.getY() <= 2 && maze[p.getX()][p.getY()] == true) {
+    //         //             neighbours.add(p);
+    //         //         }    
+    //         //     }
+    //         // }
+    //         //     if neighbours is not empty:
+    //         if (!neighbours.isEmpty()) {
+    //             //         let neighbour = random from neighbours
+    //             Position neighbour = neighbours.get((int)(Math.random() * neighbours.size()));
+    //             //         maze[ next ] = empty (i.e. true)
+    //             maze[next.getX()][next.getY()] = true;
+    //             //         maze[ position inbetween next and neighbour ] = empty (i.e. true)
+    //             maze[(next.getX()+neighbour.getX())/2][(next.getY()+neighbour.getY())/2] = true;
+    //             //         maze[ neighbour ] = empty (i.e. true)
+    //             maze[neighbour.getX()][neighbour.getY()] = true;
+    //         }
+            
+    //         //     add to options all neighbours of 'next' not on boundary that are of distance 2 away and are walls
+    //         for (Position p : neighbours) {
+    //             if (p.getX() != 0 && p.getY() != 0) {
+    //                 Position dist = Position.calculatePositionBetween(p, next);
+    //                 if (dist.getX() <= 2 && dist.getY() <= 2 && maze[p.getX()][p.getY()] == false) {
+    //                     options.add(p);
+    //                 }    
+    //             }
+    //         }
+    //     }
+        
+    //     // // at the end there is still a case where our end position isn't connected to the map
+    //     // // we don't necessarily need this, you can just keep randomly generating maps (was original intention)
+    //     // // but this will make it consistently have a pathway between the two.
+    //     // if maze[end] is a wall:
+    //     if (maze[w-1][h-1] == false) {
+    //         //     maze[end] = empty
+    //         maze[w-1][h-1] = true;
+    //         //     let neighbours = neighbours not on boundary of distance 1 from maze[end]
+    //         for (Position p : neighbours) {
+    //             if (p.getX() != 0 && p.getY() != 0) {
+    //                 Position dist = Position.calculatePositionBetween(p, end);
+    //                 if (dist.getX() <= 2 && dist.getY() <= 2) {
+    //                     neighbours.add(p);
+    //                 }    
+    //             }
+    //         }
+    //         System.out.println(neighbours.size());
+    //         boolean empty = false;
+    //         //     if there are no cells in neighbours that are empty:
+    //         for (Position p : neighbours) {
+    //             if (maze[p.getX()][p.getY()] == true) {
+    //                 empty = true;
+    //                 break;
+    //             }
+    //         }
+    //         if (!empty) {
+    //             //         // let's connect it to the grid
+    //             //         let neighbour = random from neighbours
+    //             //         maze[neighbour] = empty
+    //             Position neighbour = neighbours.get((int)(Math.random() * neighbours.size()));
+    //             maze[neighbour.getX()][neighbour.getY()] = true;
+    //         }
+    //     }
+    //     Dungeon newDungeon = new Dungeon(gameMode, null, gameMode);
+
+    //     for (int x = 0; x < w; x++) {
+    //         for (int y = 0; y < h; y++) {
+    //             Entity e = null;
+    //             if (x == start.getX() && y == start.getY()) {
+    //                 e = new Player("player", "player", start);
+    //             } else if (x == end.getX() && y == end.getY()) {
+    //                 e = new Exit("exit", "exit", end);
+    //             } else if (maze[x][y] == false) {
+    //                 e = new Wall("wall" + x + y, "wall", new Position(x, y));
+    //             }
+    //             newDungeon.entities.add(e);
+    //         }
+    //     }
+
+    //     return newDungeon.createResponse();
+    // }
 
 }

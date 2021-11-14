@@ -101,6 +101,19 @@ public class Dungeon {
         }
     }
 
+    public Dungeon(String dungeonName, String gameMode) {
+        this.dungeonName = dungeonName;
+        this.dungeonId = dungeonName;
+        this.entities = new ArrayList<Entity>();
+        this.gameMode = gameMode;
+        this.entities = new ArrayList<Entity>();
+        this.inventory = new ArrayList<Entity>();
+        this.buildables = new ArrayList<String>();
+        this.goals = ":exit";
+        this.width = 50;
+        this.height = 50;
+    }
+
     //getters
     private Goal setGoals(JSONObject goals) {
         CompositeGoals r = new CompositeGoals(goals.getString("goal"), false);
@@ -225,6 +238,7 @@ public class Dungeon {
     public DungeonResponse createResponse() {
         List<EntityResponse> entityList = new ArrayList<EntityResponse>();
         for (Entity e : this.entities) {
+            // System.out.println(e.getId());
             entityList.add(e.createResponse());
         }
         List<ItemResponse> itemList = new ArrayList<ItemResponse>();
