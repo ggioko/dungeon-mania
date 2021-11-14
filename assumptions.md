@@ -72,6 +72,7 @@
 - When interacting with a spawner the weapon durability goes down by 1 when it is destroyed
 - Bomb cannot be used to destroy spawner
 - Mercenary always follows behind the player and never in front of the player
+- If a spider has no where to move (surrounded by boulders) it gets scared and cant move anywhere
 
 
 ### **Potion Assumptions**
@@ -80,6 +81,7 @@
 - Invisibility potion time : 10 ticks
 - Allies cannot follow you when invisibile
 - Allies will ALSO run away when player has invincibility potion as they are reminded of their past
+- Invincibility potion will not reduce damage in hard mode
 
 
 ### **Bomb Assumptions**
