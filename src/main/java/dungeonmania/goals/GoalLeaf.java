@@ -12,11 +12,16 @@ public class GoalLeaf implements Goal {
     private String name;
     private boolean complete;
     
+    /**
+     * Constructor for GoalLeaf
+     * @param name
+     * @param complete
+     */
     public GoalLeaf (String name, boolean complete) {
         this.name = name;
         this.complete = complete;
     }
-
+    
     @Override
     public String goalsString() {
         return ":"+this.name;
@@ -32,14 +37,26 @@ public class GoalLeaf implements Goal {
         return false;
     }
 
+    /**
+     * Complete setter
+     */
     public void setComplete() {
         this.complete = true;
     }
 
+    /**
+     * Incomplete setter
+     */
     public void setIncomplete() {
         this.complete = false;
     }
 
+    /**
+     * Checks if specific leaf goal is complete
+     * @param entities
+     * @param player
+     * @return true if complete/ false when incomplete
+     */
     public boolean checkComplete(List<Entity> entities, Player player) {
         if (this.name.equals("treasure")) {
             if (Treasure.treasureOnMap(entities)) {
