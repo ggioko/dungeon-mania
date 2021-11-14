@@ -299,7 +299,7 @@ public class DungeonManiaController {
 
         // ENEMY PATHING
         currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
-        if (!currentDungeon.gameMode.equals("Peaceful")) {
+        if (!currentDungeon.gameMode.equals("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
             if (currentDungeon.player == null) {
@@ -310,14 +310,13 @@ public class DungeonManiaController {
         currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
 
         // ENEMY PATHING
-        if (!currentDungeon.gameMode.equals("Peaceful")) {
+        if (!currentDungeon.gameMode.equals("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
             if (currentDungeon.player == null) {
                 currentDungeon = null;
                 throw new NullPointerException("YOU ARE DEAD!");
             }
-            
         }
         //mercenary moves again if battling
         currentDungeon.MercenaryBattleMovement(currentDungeon);
