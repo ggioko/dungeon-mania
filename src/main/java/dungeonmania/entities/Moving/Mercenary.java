@@ -61,7 +61,7 @@ public class Mercenary extends MovingEntity{
     }
 
     @Override
-    public void move(Position pos, List<Entity> walls, int width, int height) {
+    public void move(Position pos, List<Entity> walls, int width, int height, Direction direction) {
         List<Position> grid = new ArrayList<Position>();
         for (int i = width; i>0-width; i--) {
             for (int c = height;c>0-height; c--) {
@@ -117,6 +117,21 @@ public class Mercenary extends MovingEntity{
         }
         if (prev.get(this.getPosition()) != null) {
             this.setPosition(prev.get(this.getPosition()));
+        }
+
+        if (this.getPosition().equals(pos) && this.isBribed()) {
+            if (direction.equals(Direction.UP)) {
+                this.setPosition(this.getPosition().translateBy(Direction.DOWN));
+            }
+            if (direction.equals(Direction.DOWN)) {
+                this.setPosition(this.getPosition().translateBy(Direction.UP));
+            }
+            if (direction.equals(Direction.LEFT)) {
+                this.setPosition(this.getPosition().translateBy(Direction.RIGHT));
+            }
+            if (direction.equals(Direction.RIGHT)) {
+                this.setPosition(this.getPosition().translateBy(Direction.LEFT));
+            }
         }
         
     }

@@ -104,14 +104,29 @@
         "type": "player"
       },
       {
+        "x": 1,
+        "y": 2,
+        "type": "treasure"
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "type": "sun_stone"
+      },
+      {
         "x": 2,
         "y": 1,
-        "type": "health_potion"
+        "type": "one_ring"
       },
       {
         "x": 3,
         "y": 1,
-        "type": "invincibility_potion"
+        "type": "treasure"
+      },
+      {
+        "x": 3,
+        "y": 4,
+        "type": "assassin"
       },
       {
         "x": 4,
@@ -250,7 +265,7 @@
       },
       {
         "x": 3,
-        "y": 5,
+        "y": 7,
         "type": "mercenary"
       },
       {
@@ -475,7 +490,7 @@
       {
         "x": 13,
         "y": 14,
-        "type": "zombie_toast_spawner"
+        "type": "wood"
       },
       {
         "x": 17,

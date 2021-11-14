@@ -6,6 +6,7 @@ import dungeonmania.entities.Static.SwampTile;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.buildable.Bow;
 import dungeonmania.entities.collectable.buildable.Midnight_Armour;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import java.util.List;
 
@@ -88,7 +89,7 @@ public class MovingEntity extends Entity {
     }
 
     @Override
-    public void move(Position pos, List<Entity> walls, int width, int height) {
+    public void move(Position pos, List<Entity> walls, int width, int height, Direction direction) {
         return;
     }
 

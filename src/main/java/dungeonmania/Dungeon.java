@@ -52,6 +52,7 @@ public class Dungeon {
     Position entry;
     int width;
     int height;
+    int spiderCount;
 
     /**
      * Constructor for Dungeon
@@ -64,6 +65,7 @@ public class Dungeon {
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
         this.gameMode = gameMode;
+        this.spiderCount = 0;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
             Entity e = EntityFactory.getEntity((JSONObject)entity, gameMode, doorcreated, entities);
@@ -115,6 +117,23 @@ public class Dungeon {
      * @param goals     JSONObject goals
      * @return          r of type Goal
      */
+    public Dungeon(String dungeonName, String gameMode) {
+        this.dungeonName = dungeonName;
+        this.dungeonId = dungeonName;
+        this.entities = new ArrayList<Entity>();
+        this.gameMode = gameMode;
+        this.entities = new ArrayList<Entity>();
+        this.inventory = new ArrayList<Entity>();
+        this.buildables = new ArrayList<String>();
+        this.goalTree = new CompositeGoals("Goal", false);
+        GoalLeaf exit = new GoalLeaf("exit", false);
+        goalTree.add(exit);
+        this.goals = getGoals();
+        this.width = 50;
+        this.height = 50;
+    }
+
+    //getters
     private Goal setGoals(JSONObject goals) {
         CompositeGoals r = new CompositeGoals(goals.getString("goal"), false);
         if (goals.equals(null)) {
@@ -283,18 +302,22 @@ public class Dungeon {
                     me.setSlowed(true);
                 }
                 else if (e instanceof Mercenary) {
+
                     walls.add(this.player);
                     walls.add(e);
+                    
                     Mercenary entity = (Mercenary)e;
+                
+                    
                     if (entity.isInBattle() && this.player.isInvisibilityPotionEffect() == false) {
-                        e.move(this.player.getPosition(), walls, width, height);
+                        e.move(this.player.getPosition(), walls, width, height, direction);
                         me.setSlowed(false);
                     } else if (!entity.isInBattle() && this.player.isInvisibilityPotionEffect() == false) {
                         e.moveAway(this.player.getPosition(), walls);
                         me.setSlowed(false);
                     }
                 } else if (!(e instanceof Player)) {
-                    e.move(this.player.getPosition(), walls, width, height);
+                    e.move(this.player.getPosition(), walls, width, height, direction);
                     me.setSlowed(false);
                 }
             }
@@ -308,6 +331,7 @@ public class Dungeon {
     public DungeonResponse createResponse() {
         List<EntityResponse> entityList = new ArrayList<EntityResponse>();
         for (Entity e : this.entities) {
+            // System.out.println(e.getId());
             entityList.add(e.createResponse());
         }
         List<ItemResponse> itemList = new ArrayList<ItemResponse>();
@@ -457,7 +481,8 @@ public class Dungeon {
                 if (mercenary.isInBattleRadius(current.getPlayer().getPosition()) && current.getPlayer().isBattling()) {
                     walls.add(this.player);
                     walls.add(entity);
-                    mercenary.move(this.player.getPosition(), walls, this.width, this.height);
+                    
+                    mercenary.move(this.player.getPosition(), walls, this.width, this.height, Direction.NONE);
                 }
             }
         }
@@ -522,7 +547,14 @@ public class Dungeon {
                                 this.player = null;
                                 return current;
                             }
-                        } 
+                        } else if (enemyHP <= 0) {
+                            //enemy is dead
+                            if (enemy instanceof Spider) {
+                                this.spiderCount--;
+                            }
+                            current.enemyDeath(enemy);
+                            battleOver = true;
+                        }
                     }
                     return current;
                 }
@@ -532,6 +564,14 @@ public class Dungeon {
         return current;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.width;
+    }
+    
     public boolean existsBrainwashedEntity(List<Entity> entities) {
         for (Entity e : entities) {
             if (e instanceof Mercenary || e instanceof Assassin) {

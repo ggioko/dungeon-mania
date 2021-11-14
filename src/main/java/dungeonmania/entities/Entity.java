@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import dungeonmania.response.models.EntityResponse;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.Spider;
@@ -36,7 +37,7 @@ public class Entity {
             this.type = entity.getString("type");
         }
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
-        this.id = entity.getString("type") + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
+        this.id = entity.getString("type") + Integer.toString(this.position.getX()) + "_" + Integer.toString(this.position.getY());
         if (this instanceof Mercenary || this instanceof Spawner) {
             this.isInteractable = true;
         } else {
@@ -49,6 +50,13 @@ public class Entity {
      * @param id
      * @param type
      */
+    public Entity(String id, String type, Position position) {
+        this.id = id;
+        this.type = type;
+        this.position = position;
+        this.isInteractable = false;
+    }
+
     public Entity(String id, String type) {
         this.id = id;
         this.type = type;
@@ -147,9 +155,10 @@ public class Entity {
      * @param walls     List of walls which restrict enemy movement
      * @param width     Width of dungeon
      * @param height    Height of dungeon
+     * @param direction Direction of movement
      * @return  
      */
-    public void move(Position pos, List<Entity> walls, int width, int height) {
+    public void move(Position pos, List<Entity> walls, int width, int height, Direction direction) {
         return;
     }
 

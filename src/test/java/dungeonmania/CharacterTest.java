@@ -26,12 +26,12 @@ public class CharacterTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.UP);
         assertThrows(IllegalArgumentException.class, () -> {
-            controller.tick("sword22", Direction.NONE);
+            controller.tick("sword2_2", Direction.NONE);
         });
 
         assertDoesNotThrow(() -> {
-            controller.tick("bomb12", Direction.NONE);
-            controller.tick("health_potion21", Direction.NONE);
+            controller.tick("bomb1_2", Direction.NONE);
+            controller.tick("health_potion2_1", Direction.NONE);
         });
     }
     @Test
@@ -42,7 +42,7 @@ public class CharacterTest {
         //move to collect potion
 
         assertThrows(InvalidActionException.class, () -> {
-            controller.tick("bomb134", Direction.NONE);
+            controller.tick("bomb13_4", Direction.NONE);
         });
     }
 

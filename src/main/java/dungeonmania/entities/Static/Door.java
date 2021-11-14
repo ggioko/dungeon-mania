@@ -24,7 +24,11 @@ public class Door extends Entity {
     public Dungeon unlock(List<Entity> entities, List<Entity> inventory, Dungeon current, Player player, Direction direction) {
         String doornum = this.getType().replace("door_", "");
         for (Entity i : inventory) {
-            if (i.getType().equals("key_1") && doornum.equals("1") && player.getPosition().translateBy(direction).equals(this.getPosition())) {
+            if (i.getType().equals("sun_stone") && player.getPosition().translateBy(direction).equals(this.getPosition())) {
+                this.setType("door_unlocked");
+                this.unlocked = true;
+                break;
+            } else if (i.getType().equals("key_1") && doornum.equals("1") && player.getPosition().translateBy(direction).equals(this.getPosition())) {
                 //unlock
                 this.setType("door_unlocked");
                 this.unlocked = true;
