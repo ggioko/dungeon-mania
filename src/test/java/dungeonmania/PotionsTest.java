@@ -75,7 +75,7 @@ public class PotionsTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.DOWN);
-        controller.tick("invincibility_potion31", Direction.NONE);
+        controller.tick("invincibility_potion3_1", Direction.NONE);
         controller.tick(null, Direction.DOWN);
 
         assertTrue(controller.currentDungeon.player.getHealth() == 10);
@@ -114,15 +114,15 @@ public class PotionsTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
-        controller.tick("invincibility_potion31", Direction.NONE);
+        controller.tick("invincibility_potion3_1", Direction.NONE);
         controller.tick(null, Direction.RIGHT);
 
-        int x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
-        int y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
+        int x = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getX();
+        int y = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getY();
         assertTrue(x == 2 && y == 1);
         controller.tick(null, Direction.RIGHT);
-        x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
-        y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
+        x = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getX();
+        y = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getY();
         assertTrue(x == 1 && y == 1);
         // Move to fight enemies
     }
@@ -144,12 +144,12 @@ public class PotionsTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
 
-        int x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
-        int y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
+        int x = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getX();
+        int y = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getY();
         assertTrue(x == 2 && y == 1);
         controller.tick(null, Direction.RIGHT);
-        x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
-        y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
+        x = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getX();
+        y = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getY();
         assertTrue(x == 2 && y == 1);
         // Move to fight enemies
     }
@@ -168,15 +168,15 @@ public class PotionsTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
-        controller.tick("invisibility_potion41", Direction.NONE);
+        controller.tick("invisibility_potion4_1", Direction.NONE);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.DOWN);
 
         assertTrue(controller.currentDungeon.player.getHealth() == 10);
 
-        int x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
-        int y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
+        int x = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getX();
+        int y = controller.currentDungeon.getEntity("mercenary3_5").getPosition().getY();
         assertTrue(x == 2 && y == 1);
     }
 
@@ -193,7 +193,7 @@ public class PotionsTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
-        controller.tick("invincibility_potion31", Direction.NONE);
+        controller.tick("invincibility_potion3_1", Direction.NONE);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.DOWN);

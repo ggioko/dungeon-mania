@@ -48,6 +48,7 @@ public class Dungeon {
     Position entry;
     int width;
     int height;
+    int spiderCount;
 
 
     public Dungeon(String dungeonName, JSONObject entities, String gameMode) {
@@ -55,6 +56,7 @@ public class Dungeon {
         this.dungeonId = dungeonName;
         this.entities = new ArrayList<Entity>();
         this.gameMode = gameMode;
+        this.spiderCount = 0;
         boolean doorcreated = false;
         for (Object entity : entities.getJSONArray("entities")) {
             Entity e = EntityFactory.getEntity((JSONObject)entity, gameMode, doorcreated, entities);
@@ -99,6 +101,22 @@ public class Dungeon {
             this.width = greatestW;
             this.height = greatestH;
         }
+    }
+
+    public Dungeon(String dungeonName, String gameMode) {
+        this.dungeonName = dungeonName;
+        this.dungeonId = dungeonName;
+        this.entities = new ArrayList<Entity>();
+        this.gameMode = gameMode;
+        this.entities = new ArrayList<Entity>();
+        this.inventory = new ArrayList<Entity>();
+        this.buildables = new ArrayList<String>();
+        this.goalTree = new CompositeGoals("Goal", false);
+        GoalLeaf exit = new GoalLeaf("exit", false);
+        goalTree.add(exit);
+        this.goals = getGoals();
+        this.width = 50;
+        this.height = 50;
     }
 
     //getters
@@ -229,6 +247,7 @@ public class Dungeon {
     public DungeonResponse createResponse() {
         List<EntityResponse> entityList = new ArrayList<EntityResponse>();
         for (Entity e : this.entities) {
+            // System.out.println(e.getId());
             entityList.add(e.createResponse());
         }
         List<ItemResponse> itemList = new ArrayList<ItemResponse>();
@@ -404,7 +423,14 @@ public class Dungeon {
                                 this.player = null;
                                 return current;
                             }
-                        } 
+                        } else if (enemyHP <= 0) {
+                            //enemy is dead
+                            if (enemy instanceof Spider) {
+                                this.spiderCount--;
+                            }
+                            current.enemyDeath(enemy);
+                            battleOver = true;
+                        }
                     }
                     return current;
                 }
@@ -414,6 +440,14 @@ public class Dungeon {
         return current;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.width;
+    }
+    
     public boolean existsBrainwashedEntity(List<Entity> entities) {
         for (Entity e : entities) {
             if (e instanceof Mercenary || e instanceof Assassin) {

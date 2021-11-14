@@ -28,12 +28,19 @@ public class Entity {
             this.type = entity.getString("type");
         }
         this.position = new Position(entity.getInt("x"), entity.getInt("y"));
-        this.id = entity.getString("type") + Integer.toString(this.position.getX()) + Integer.toString(this.position.getY());
+        this.id = entity.getString("type") + Integer.toString(this.position.getX()) + "_" + Integer.toString(this.position.getY());
         if (this instanceof Mercenary || this instanceof Spawner) {
             this.isInteractable = true;
         } else {
             this.isInteractable = false;
         }
+    }
+
+    public Entity(String id, String type, Position position) {
+        this.id = id;
+        this.type = type;
+        this.position = position;
+        this.isInteractable = false;
     }
 
     public Entity(String id, String type) {
@@ -102,7 +109,7 @@ public class Entity {
 
     public boolean isCollectable() {
         List<String> collectables = new ArrayList<String>();
-        collectables.addAll(Arrays.asList("armour", "arrow", "health_potion", "invincibility_potion", "invisibility_potion", "key_1", "key_2", "sword", "treasure", "wood", "one_ring", "sun_stone"));
+        collectables.addAll(Arrays.asList("armour", "arrow", "health_potion", "invincibility_potion", "invisibility_potion", "key_1", "key_2", "sword", "treasure", "wood", "one_ring", "sun_stone", "anduril"));
         if (this.type.equals("bomb")) {
             Bomb b = (Bomb) this;
             if (!b.isPlaced()) {

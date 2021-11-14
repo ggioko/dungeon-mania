@@ -20,6 +20,7 @@ import dungeonmania.entities.*;
 import dungeonmania.entities.Moving.Assassin;
 import dungeonmania.entities.Moving.Hydra;
 import dungeonmania.entities.Moving.Mercenary;
+import dungeonmania.entities.collectable.AndurilSword;
 
 
 public class HydraTest {
@@ -42,21 +43,43 @@ public class HydraTest {
         assertTrue(spawned);
     }
     @Test
-    public void HydraTest() {
-        //take an average of health when fighing hydra
-        double wins = 0;
-        for (int i = 0; i <=1000; i++) {
+    public void HydraHealthRegenTest() {
+        double increase = 0;
+        for (int i = 0; i < 1000; i++) {
+            //when players health is 5 the winrate should be 50%
+            //take an average of health when fighing hydra
             DungeonManiaController controller = new DungeonManiaController();
             controller.newGame("hydra", "hard");
-            //when players health is 5 the winrate should be 50%
-            controller.currentDungeon.player.setHealth(5);
-            //colide with hyrda
+            controller.currentDungeon.getPlayer().setHealth(100);
+            Hydra hydra = (Hydra) controller.currentDungeon.getEntity("hydra00");
+            hydra.setHealth(2);
+            //colide with hydra
             controller.tick(null, Direction.NONE);
-            if (controller.currentDungeon != null) {
-                wins += 1;
+            if (controller.currentDungeon.getPlayer().getHealth() < 99.8) {
+                increase += 1;
             }
         }
+        
         //check if winrate is 50%. if it is it means the hydra will heal instead of take damage 50% of the time
-        assertTrue(wins/1000 > -0.05 && wins/1000 < 0.05);
+        assertTrue(increase/1000 > 0.45 && increase/1000 < 0.55);
+    }
+    @Test
+    public void HydraAndurilTest() {
+    // Test whether player can kill hydra with anduril
+    // normally player cannot kill hydraw without anduril
+    DungeonManiaController controller = new DungeonManiaController();
+    controller.newGame("AndurilTest", "hard");
+
+    // Pick up Anduril Sword
+    controller.tick(null, Direction.RIGHT);
+    // Fight Hydra
+    controller.tick(null, Direction.RIGHT);
+    controller.tick(null, Direction.RIGHT);
+    AndurilSword a = (AndurilSword) controller.currentDungeon.getItem("anduril");
+    // Anduril Sword loses durability
+    assertTrue(a.getDurability() < 10);
+
+    // Hydra dies    
+    assertTrue(controller.currentDungeon.getEntity("hydra20") == null);
     }
 }

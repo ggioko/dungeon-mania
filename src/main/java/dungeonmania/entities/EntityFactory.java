@@ -27,6 +27,7 @@ import dungeonmania.entities.collectable.SunStone;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
+import dungeonmania.entities.collectable.AndurilSword;
 import dungeonmania.util.Position;
 
 public class EntityFactory {
@@ -105,6 +106,8 @@ public class EntityFactory {
 			e = portal;
 		} else if (entity.getString("type").equalsIgnoreCase("swamp_tile")) {
 			e = new SwampTile(entity);
+		} else if (entity.getString("type").equalsIgnoreCase("anduril")) {
+			e = new AndurilSword(entity);
 		}
 		return e;
 	}

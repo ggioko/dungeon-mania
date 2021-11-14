@@ -23,13 +23,13 @@ public class MovingEntitiesTest {
         // test for invalid items
         DungeonManiaController controller = new DungeonManiaController();
         controller.newGame("advanced", "standard");
-        controller.currentDungeon.inventory.add(new Entity("bomb134", "bomb"));
-        controller.currentDungeon.inventory.add(new Entity("invincibility_potion1110", "invincibility_potion"));
+        controller.currentDungeon.inventory.add(new Entity("bomb13_4", "bomb"));
+        controller.currentDungeon.inventory.add(new Entity("invincibility_potion11_10", "invincibility_potion"));
         assertThrows(InvalidActionException.class, () -> {
             controller.tick("bomb1", Direction.NONE);
         });
         assertDoesNotThrow(() -> {
-            controller.tick("invincibility_potion1110", Direction.NONE);
+            controller.tick("invincibility_potion11_10", Direction.NONE);
         });
   
     }
@@ -42,7 +42,7 @@ public class MovingEntitiesTest {
         //collect potion
         controller.currentDungeon.inventory.add(new Entity("potion_test", "invincibility_potion"));
         assertThrows(InvalidActionException.class, () -> {
-            controller.tick("bomb134", Direction.NONE);
+            controller.tick("bomb13_4", Direction.NONE);
         });
         assertDoesNotThrow(() -> {
             controller.tick("potion_test", Direction.NONE);

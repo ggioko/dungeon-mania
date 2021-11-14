@@ -122,6 +122,10 @@ public class App {
             return callUsingSessionAndArgument(request, (dmc) -> dmc.interact(request.queryParams("entityId")));
         }, gson::toJson);
 
+        Spark.post("/api/game/new/generate/", "application/json", (request, response) -> {
+            return callUsingSessionAndArgument(request, (dmc) -> dmc.generateDungeon(0, 0, 50, 50, request.queryParams("gameMode")));
+        }, gson::toJson);
+
         Scintilla.start();
     }
 }
