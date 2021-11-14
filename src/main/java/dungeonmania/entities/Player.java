@@ -32,6 +32,10 @@ public class Player extends Entity {
         this.invincibilityPotionEffect = false;
         this.invisibilityPotionEffect = false;
     }
+
+    public Player(String id, String type, Position position) {
+        super(id, type, position);
+    }
     
     //getters
 

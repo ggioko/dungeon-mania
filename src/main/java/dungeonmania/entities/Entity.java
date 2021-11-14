@@ -35,6 +35,12 @@ public class Entity {
         }
     }
 
+    public Entity(String id, String type, Position position) {
+        this.id = id;
+        this.type = type;
+        this.position = position;
+    }
+
     public Entity(String id, String type) {
         this.id = id;
         this.type = type;
