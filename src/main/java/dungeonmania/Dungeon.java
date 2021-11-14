@@ -135,7 +135,7 @@ public class Dungeon {
         return null;
     }
 
-
+    
     public void removeEntity(String stringId) {
         for (Iterator<Entity> entity = entities.iterator(); entity.hasNext();) {
             Entity value = entity.next();
@@ -180,6 +180,10 @@ public class Dungeon {
         return this.inventory;
     }
 
+    public String getGameMode() {
+        return this.gameMode;
+    }
+
     public Entity getItemUsed(String stringId) {
         for (Entity item : this.inventory) {
             if (item.getId().equals(stringId)) {
@@ -203,10 +207,10 @@ public class Dungeon {
                     walls.add(this.player);
                     walls.add(e);
                     Mercenary entity = (Mercenary)e;
-                    if (entity.isInBattle()) {
+                    if (entity.isInBattle() && this.player.isInvisibilityPotionEffect() == false) {
                         e.move(this.player.getPosition(), walls, width, height);
                         me.setSlowed(false);
-                    } else if (!entity.isInBattle()) {
+                    } else if (!entity.isInBattle() && this.player.isInvisibilityPotionEffect() == false) {
                         e.moveAway(this.player.getPosition(), walls);
                         me.setSlowed(false);
                     }

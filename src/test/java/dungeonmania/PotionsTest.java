@@ -29,56 +29,36 @@ public class PotionsTest {
         controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
-        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
-        controller.tick(null, Direction.LEFT);
-
-        assertTrue(controller.currentDungeon.player.getHealth() == 10);
-        // Move to fight enemies
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        assertTrue(controller.currentDungeon.player.getHealth() == 10);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        
+        controller.tick(null, Direction.DOWN);
         assertTrue(controller.currentDungeon.player.getHealth() != 10);
     }
 
 
     @Test
     public void healthPotionUsedTest() {
-        // test for healthPotion not used
+        // test for healthPotion used
         DungeonManiaController controller = new DungeonManiaController();
 
         controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
-        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.LEFT);
-        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
 
-        assertTrue(controller.currentDungeon.player.getHealth() == 10);
-        // Move to fight enemies
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.RIGHT);
-        assertTrue(controller.currentDungeon.player.getHealth() != 10);
-        controller.tick("health_potion11", Direction.UP);
+        controller.tick("health_potion21", Direction.NONE);
         assertTrue(controller.currentDungeon.player.getHealth() == 10);
     }
 
@@ -87,7 +67,7 @@ public class PotionsTest {
         // test for healthPotion not used
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("invincibility", "standard");
+        controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
         controller.tick(null, Direction.RIGHT);
@@ -107,15 +87,15 @@ public class PotionsTest {
         // test for healthPotion not used
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("invincibility", "standard");
+        controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.DOWN);
-        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
 
         assertTrue(controller.currentDungeon.player.getHealth() != 10);
         // Move to fight enemies
@@ -123,27 +103,103 @@ public class PotionsTest {
 
     @Test
     public void mercenariesRunningAwayTest() {
-        // test for healthPotion not used
+        // test for invincibility_potion used and mercenaries running away
         DungeonManiaController controller = new DungeonManiaController();
 
-        controller.newGame("invincibility", "standard");
+        controller.newGame("potions", "standard");
 
         assertTrue(controller.currentDungeon.inventory.isEmpty());
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
-        controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.LEFT);
         controller.tick("invincibility_potion31", Direction.NONE);
-        controller.tick(null, Direction.UP);
+        controller.tick(null, Direction.RIGHT);
 
         int x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
         int y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
-        assertTrue(x == 5 && y == 4);
+        assertTrue(x == 2 && y == 1);
         controller.tick(null, Direction.RIGHT);
         x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
         y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
-        assertTrue(x == 5 && y == 5);
+        assertTrue(x == 1 && y == 1);
         // Move to fight enemies
     }
+
+    @Test
+    public void invisibilityPotionTest() {
+        // test for healthPotion not used
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("potions", "standard");
+
+        assertTrue(controller.currentDungeon.inventory.isEmpty());
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick("invisibility_potion41", Direction.NONE);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+
+        int x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
+        int y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
+        assertTrue(x == 2 && y == 1);
+        controller.tick(null, Direction.RIGHT);
+        x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
+        y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
+        assertTrue(x == 2 && y == 1);
+        // Move to fight enemies
+    }
+
+
+    @Test
+    public void invisibilityPassByTest() {
+        // test for healthPotion not used
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("potions", "standard");
+
+        assertTrue(controller.currentDungeon.inventory.isEmpty());
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick("invisibility_potion41", Direction.NONE);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+
+        assertTrue(controller.currentDungeon.player.getHealth() == 10);
+
+        int x = controller.currentDungeon.getEntity("mercenary35").getPosition().getX();
+        int y = controller.currentDungeon.getEntity("mercenary35").getPosition().getY();
+        assertTrue(x == 2 && y == 1);
+    }
+
+    @Test
+    public void invincibilityNotWorkInHardModeTest() {
+        // test for healthPotion not used
+        DungeonManiaController controller = new DungeonManiaController();
+
+        controller.newGame("potions", "hard");
+
+        assertTrue(controller.currentDungeon.inventory.isEmpty());
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.RIGHT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick("invincibility_potion31", Direction.NONE);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.LEFT);
+        controller.tick(null, Direction.DOWN);
+
+        assertTrue(controller.currentDungeon.player.getHealth() != 10);
+    }
+
+
 }

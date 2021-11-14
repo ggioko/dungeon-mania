@@ -88,13 +88,6 @@ public class DungeonManiaController {
             throw new IllegalArgumentException();
         }
 
-        // If dungeon name doesnt exist
-        ArrayList<String> dungeonNames = new ArrayList<String>();
-        dungeonNames = setDungeonNames(dungeonName);
-
-        if (!checkIfDungeonExists(dungeonName, dungeonNames)) {
-            throw new IllegalArgumentException();
-        }
         
         try {
             obj = new JSONObject(FileLoader.loadResourceFile("/dungeons" + "/" + dungeonName + ".json"));
@@ -202,31 +195,6 @@ public class DungeonManiaController {
         }
         return exists;
     }
-
-    public ArrayList<String> setDungeonNames(String dungeonName) {
-        ArrayList<String> dungeonNames = new ArrayList<String>();
-        dungeonNames.add("advanced-2");
-        dungeonNames.add("boulders");
-        dungeonNames.add("advanced");
-        dungeonNames.add("crafting");
-        dungeonNames.add("doors");
-        dungeonNames.add("exist");
-        dungeonNames.add("exit");
-        dungeonNames.add("goals");
-        dungeonNames.add("interact");
-        dungeonNames.add("portals");
-        dungeonNames.add("potions");
-        dungeonNames.add("maze");
-        dungeonNames.add("characterTest");
-        dungeonNames.add("interactTest");
-        dungeonNames.add("bombTest");
-        dungeonNames.add("invincibility");
-        dungeonNames.add("interactAssassin");
-        dungeonNames.add("swampTileTest");
-        dungeonNames.add("hydra");
-        dungeonNames.add("crafting_zombie");
-        return dungeonNames;
-    }
     
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
         if (currentDungeon == null) {
@@ -262,15 +230,17 @@ public class DungeonManiaController {
 
         // POTION LOGIC
         // Invincibility potion
-        if (invincibilityTicks >= 10) {
+        if (invincibilityTicks >= 10 && !currentDungeon.gameMode.equalsIgnoreCase("Hard")) {
             currentDungeon.player.setInvincibilityPotionEffect(false);
 
             this.invincibilityTicks = 0;
         }
-        if (currentDungeon.player.isInvincibilityPotionEffect()) {
+        if (currentDungeon.player.isInvincibilityPotionEffect() && !currentDungeon.gameMode.equalsIgnoreCase("Hard")) {
             
             this.invincibilityTicks++;
         }
+
+        
         currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         // Invisibility potion
@@ -282,22 +252,24 @@ public class DungeonManiaController {
             this.invisibilityTicks++;
             
         }
+        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
         //hydra spawning
-        if (currentDungeon.gameMode.equals("hard")) {
+        if (currentDungeon.gameMode.equalsIgnoreCase("hard")) {
             if (this.hydratick >= 50) {
                 Hydra.spawn(currentDungeon, currentDungeon.entry);
                 this.hydratick = 0;
             }
             this.hydratick++;
         }
-        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+        
 
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         // ENEMY PATHING
         currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
-        if (!currentDungeon.gameMode.equals("Peaceful")) {
+        if (!currentDungeon.gameMode.equalsIgnoreCase("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
             if (currentDungeon.player == null) {
@@ -308,7 +280,7 @@ public class DungeonManiaController {
         currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
 
         // ENEMY PATHING
-        if (!currentDungeon.gameMode.equals("Peaceful")) {
+        if (!currentDungeon.gameMode.equalsIgnoreCase("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
             if (currentDungeon.player == null) {
