@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.Static.Boulder;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import java.util.List;
@@ -31,13 +32,30 @@ public class Spider extends MovingEntity {
 
     @Override
     public void move(Position pos, List<Entity> walls, int width, int height, Direction direction) {
-        if (this.spawned) {
+        List<Position> spider_walls = new ArrayList<Position>();
+        for (Entity e : walls) {
+            if (e instanceof Boulder) {
+                spider_walls.add(e.getPosition());
+            }
+        }
+        
+        // if (this.spawned) {
+        //     this.setPosition(this.getPosition().translateBy(Direction.UP));
+        //     this.spawned = false;
+        //     return;
+        // }
+
+        if (!spider_walls.contains(this.getPosition().translateBy(Direction.UP)) && this.spawned) {
             this.setPosition(this.getPosition().translateBy(Direction.UP));
             this.spawned = false;
             return;
         }
+
+        if (!spider_walls.contains(this.getPosition().translateBy(Direction.UP))) {
+            this.setPosition(this.getPosition().translateBy(directions.get(pathnum)));
+        }
+
         //move in circle
-        this.setPosition(this.getPosition().translateBy(directions.get(pathnum)));
         this.pathnum++;
         if (this.pathnum == 8) {
             this.pathnum = 0;

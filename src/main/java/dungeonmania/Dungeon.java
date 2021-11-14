@@ -215,8 +215,14 @@ public class Dungeon {
     public void pathing(Direction direction, int width, int height) {
         //make a list of walls
         List<Entity> walls = getWalls();
+        for (Entity e : this.entities) {
+            if (e instanceof Boulder) {
+                walls.add(e);
+            }
+        }
 
         for (Entity e : this.entities) {
+            
             if (e instanceof MovingEntity) {
                 MovingEntity me = (MovingEntity) e;
                 if (me.isInSwapTile(this.entities) && !me.isSlowed()) {
@@ -478,8 +484,8 @@ public class Dungeon {
                     walls.add(e);
                 }
             }
-            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner || e instanceof Boulder) {
-                if (e instanceof Wall || e instanceof MovingEntity || e instanceof Spawner || e instanceof Boulder) {
+            else if (e instanceof Wall || e instanceof Door || e instanceof MovingEntity || e instanceof Spawner) {
+                if (e instanceof Wall || e instanceof MovingEntity || e instanceof Spawner) {
                     walls.add(e);
                 } else {
                     if (!(((Door)e).getType().equals("door_unlocked"))) {
