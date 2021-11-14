@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 import dungeonmania.Dungeon;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.collectable.AndurilSword;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -39,14 +40,16 @@ public class Hydra extends Zombie {
         } else {
             if (dungeon.getItem("anduril") != null) {
                 this.setHealth(this.health - 3);
-                Sword.durability -= 1;
-                Sword.isBroken(dungeon.getItems());
+                AndurilSword as = (AndurilSword) dungeon.getItem("anduril");
+                as.setDurability(as.getDurability() - 1);
+                as.isBroken(dungeon.getItems());
                 // decrease sword durability by 1 // TODO
             }
             else if (dungeon.getItem("sword") != null) {
                 this.setHealth(this.health - 1);
-                Sword.durability -= 1;
-                Sword.isBroken(dungeon.getItems());
+                Sword s = (Sword) dungeon.getItem("sword");
+                s.setDurability(s.getDurability() - 1);
+                s.isBroken(dungeon.getItems());
             }
             //Bow allows player to attack twice
             if (dungeon.getItem("bow") != null) {

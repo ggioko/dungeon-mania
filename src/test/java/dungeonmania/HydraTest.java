@@ -59,4 +59,12 @@ public class HydraTest {
         //check if winrate is 50%. if it is it means the hydra will heal instead of take damage 50% of the time
         assertTrue(wins/1000 > -0.05 && wins/1000 < 0.05);
     }
+    @Test
+    public void HydraAndurilTest() {
+    DungeonManiaController controller = new DungeonManiaController();
+    controller.newGame("hydra", "hard");
+
+    //colide with hyrda
+    controller.tick(null, Direction.NONE);
+    }
 }

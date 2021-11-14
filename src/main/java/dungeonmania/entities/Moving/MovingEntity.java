@@ -64,14 +64,16 @@ public class MovingEntity extends Entity {
     public void takeDamage(double playerHP, double playerAD, Dungeon dungeon) {
         if (dungeon.getItem("sword") != null) {
             this.setHealth(this.health - 1);
-            Sword.durability -= 1;
-            Sword.isBroken(dungeon.getItems());
+            Sword s = (Sword) dungeon.getItem("sword");
+            s.setDurability(s.getDurability() - 1);
+            s.isBroken(dungeon.getItems());
             // decrease sword durability by 1 // TODO
         }
         else if (dungeon.getItem("anduril") != null) {
             this.setHealth(this.health - 1);
-            Sword.durability -= 1;
-            Sword.isBroken(dungeon.getItems());
+            Sword s = (Sword) dungeon.getItem("sword");
+            s.setDurability(s.getDurability() - 1);
+            s.isBroken(dungeon.getItems());
             // decrease sword durability by 1 // TODO
         }
         //Bow allows player to attack twice
