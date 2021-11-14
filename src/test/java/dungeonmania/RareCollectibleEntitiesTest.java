@@ -9,15 +9,14 @@ import dungeonmania.util.*;
 
 public class RareCollectibleEntitiesTest {
     @Test
-    public void testTheOneRing() { // Test if character respawns with full health after getting killed
+    public void TheOneRingGoneTest() { // Test if character respawns with full health after getting killed
         DungeonManiaController controller = new DungeonManiaController();
-        controller.newGame("interact", "standard");
-        controller.currentDungeon.inventory.add(new Entity("one_ring_test", "one_ring"));
-        controller.currentDungeon.getPlayer().setHealth(0.01);
+        controller.newGame("oneRingMap", "standard");
         controller.tick(null, Direction.DOWN);
+        controller.tick(null, Direction.RIGHT);
         //player runs into hostile entity
         //Check if player respawns
-        assertTrue(controller.currentDungeon.getPlayer().getHealth() > 9);
+        assertTrue(controller.currentDungeon.player.getHealth() > 9);
         //Check if one ring is one use
         assertTrue(controller.currentDungeon.inventory.isEmpty());
     }

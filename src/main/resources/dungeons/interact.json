@@ -11,6 +11,11 @@
     {
       "x": 1,
       "y": 2,
+      "type": "one_ring"
+    },
+    {
+      "x": 1,
+      "y": 3,
       "type": "spider"
     },
     {
@@ -35,7 +40,7 @@
     },
     {
       "x": 1,
-      "y": 4,
+      "y": 5,
       "type": "zombie_toast_spawner"
     },
     {
