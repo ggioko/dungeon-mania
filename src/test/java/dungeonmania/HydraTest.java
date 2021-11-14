@@ -51,7 +51,7 @@ public class HydraTest {
             DungeonManiaController controller = new DungeonManiaController();
             controller.newGame("hydra", "hard");
             controller.currentDungeon.getPlayer().setHealth(100);
-            Hydra hydra = (Hydra) controller.currentDungeon.getEntity("hydra00");
+            Hydra hydra = (Hydra) controller.currentDungeon.getEntity("hydra0_0");
             hydra.setHealth(2);
             //colide with hydra
             controller.tick(null, Direction.NONE);

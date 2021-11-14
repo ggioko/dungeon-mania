@@ -222,18 +222,22 @@ public class Dungeon {
                     me.setSlowed(true);
                 }
                 else if (e instanceof Mercenary) {
+
                     walls.add(this.player);
                     walls.add(e);
+                    
                     Mercenary entity = (Mercenary)e;
+                
+                    
                     if (entity.isInBattle() && this.player.isInvisibilityPotionEffect() == false) {
-                        e.move(this.player.getPosition(), walls, width, height);
+                        e.move(this.player.getPosition(), walls, width, height, direction);
                         me.setSlowed(false);
                     } else if (!entity.isInBattle() && this.player.isInvisibilityPotionEffect() == false) {
                         e.moveAway(this.player.getPosition(), walls);
                         me.setSlowed(false);
                     }
                 } else if (!(e instanceof Player)) {
-                    e.move(this.player.getPosition(), walls, width, height);
+                    e.move(this.player.getPosition(), walls, width, height, direction);
                     me.setSlowed(false);
                 }
             }
@@ -332,6 +336,7 @@ public class Dungeon {
         }
     }
     
+    
     public void enemyDeath(MovingEntity enemy) {
         //remove enemy from entities and give player loot
         this.entities.remove(enemy);
@@ -358,7 +363,8 @@ public class Dungeon {
                 if (mercenary.isInBattleRadius(current.getPlayer().getPosition()) && current.getPlayer().isBattling()) {
                     walls.add(this.player);
                     walls.add(entity);
-                    mercenary.move(this.player.getPosition(), walls, this.width, this.height);
+                    
+                    mercenary.move(this.player.getPosition(), walls, this.width, this.height, Direction.NONE);
                 }
             }
         }
