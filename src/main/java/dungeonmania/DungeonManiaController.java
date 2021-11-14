@@ -268,7 +268,7 @@ public class DungeonManiaController {
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         // ENEMY PATHING
-        currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
+        currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height, Direction.NONE);
         if (!currentDungeon.gameMode.equalsIgnoreCase("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
@@ -277,6 +277,7 @@ public class DungeonManiaController {
                 throw new NullPointerException("YOU ARE DEAD!");
             }
         }
+        
         currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
 
         // ENEMY PATHING
@@ -384,19 +385,27 @@ public class DungeonManiaController {
             if (!currentDungeon.existsBrainwashedEntity(currentDungeon.getEntities())) {
                 if (entity instanceof Assassin) {
                     Assassin assassin = (Assassin) currentDungeon.getEntity(entityId);
+                    // Bribing the assassin with either (one_ring + treasure) or (one_ring + sun_stone) with preference for (one_ring + sun_stone)
                     if (assassin.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
                         if (currentDungeon.getItem("sceptre") != null) {
                             ((Sceptre) (currentDungeon.getItem("sceptre"))).effect(assassin, currentDungeon.inventory);
                             currentDungeon.getPlayer().setAlly(true);
-                        } else if (currentDungeon.getItem("treasure") == null || currentDungeon.getItem("one_ring") == null) {
-                            throw new InvalidActionException("No treasure or ring in inventory");
-                        }
-                        else {
+                        } else if (currentDungeon.getItem("one_ring") != null && currentDungeon.getItem("sun_stone") != null) {
+                            // Use one_ring but dont use sun_stone
+                            currentDungeon.removeItem("one_ring");
+                            assassin.setBribed(true);
+                            assassin.setInteractable(false);
+                            currentDungeon.getPlayer().setAlly(true);
+                        } else if (currentDungeon.getItem("one_ring") != null && currentDungeon.getItem("treasure") != null) {
+                            // Use one_ring and treasure
                             currentDungeon.removeItem("treasure");
                             currentDungeon.removeItem("one_ring");
                             assassin.setBribed(true);
                             assassin.setInteractable(false);
                             currentDungeon.getPlayer().setAlly(true);
+                        } else {
+                            // Throw exception if player doesnt have either (one_ring + treasure) or (one_ring + sun_stone)
+                            throw new InvalidActionException("Missing materials to bribe Assassin");
                         }
                     }
                     else {
@@ -404,19 +413,26 @@ public class DungeonManiaController {
                     }
                 } else {
                     Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
-    
+                    // Bribing the Mercenary with either (one_ring + treasure) or (one_ring + sun_stone) with preference for (one_ring + sun_stone)
                     if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
                         if (currentDungeon.getItem("sceptre") != null) {
                             ((Sceptre) (currentDungeon.getItem("sceptre"))).effect(mercenary, currentDungeon.inventory);
                             currentDungeon.getPlayer().setAlly(true);
-                        } else if (currentDungeon.getItem("treasure") == null) {
-                            throw new InvalidActionException("No treasure in inventory");
-                        }
-                        else {
+                        } else if (currentDungeon.getItem("sun_stone") != null) {
+                            // Use one_ring but dont use sun_stone
+
+                            mercenary.setBribed(true);
+                            mercenary.setInteractable(false);
+                            currentDungeon.getPlayer().setAlly(true);
+                        } else if (currentDungeon.getItem("treasure") != null) {
+                            // Use one_ring and treasure
                             currentDungeon.removeItem("treasure");
                             mercenary.setBribed(true);
                             mercenary.setInteractable(false);
                             currentDungeon.getPlayer().setAlly(true);
+                        } else {
+                            // Throw exception if player doesnt have either (one_ring + treasure) or (one_ring + sun_stone)
+                            throw new InvalidActionException("Missing materials to bribe Mercenary");
                         }
                     }
                     else {

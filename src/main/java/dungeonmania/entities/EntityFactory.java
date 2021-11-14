@@ -57,11 +57,7 @@ public class EntityFactory {
 		} else if (entity.getString("type").equalsIgnoreCase("wood")) {
 			e = new Wood(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("mercenary")) {
-			if (Math.random() <= 0.3) {
-				e = new Assassin(entity);
-			} else {
-				e = new Mercenary(entity);
-			}
+			e = new Mercenary(entity);
 		}
 		else if (entity.getString("type").equalsIgnoreCase("assassin")) {
 			e = new Assassin(entity);

@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import dungeonmania.response.models.EntityResponse;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 import dungeonmania.entities.Moving.Mercenary;
 import dungeonmania.entities.Moving.Spider;
@@ -87,7 +88,7 @@ public class Entity {
         return this.isInteractable;
     }
 
-    public void move(Position pos, List<Entity> walls, int width, int height) {
+    public void move(Position pos, List<Entity> walls, int width, int height, Direction direction) {
         return;
     }
 

@@ -9,6 +9,7 @@ import dungeonmania.entities.Static.Wall;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.buildable.Midnight_Armour;
 import dungeonmania.entities.collectable.buildable.Shield;
+import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class Player extends Entity {
         this.attack = attack;
     }
     @Override
-    public void move(Position pos, List<Entity> walls, int width, int height) {
+    public void move(Position pos, List<Entity> walls, int width, int height, Direction direction) {
         boolean move = true;
         boolean moveMercenary = false;
         List<Entity> temp = new ArrayList<Entity>();
@@ -92,7 +93,7 @@ public class Player extends Entity {
                 for (Entity entity : walls) {
                     if (entity instanceof Mercenary) {
                         Mercenary m = (Mercenary) entity;
-                        m.move(old, walls, width, height);
+                        m.move(old, walls, width, height, direction);
                     }
                 }
             }

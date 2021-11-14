@@ -30,7 +30,7 @@ public class Spider extends MovingEntity {
     }
 
     @Override
-    public void move(Position pos, List<Entity> walls, int width, int height) {
+    public void move(Position pos, List<Entity> walls, int width, int height, Direction direction) {
         if (this.spawned) {
             this.setPosition(this.getPosition().translateBy(Direction.UP));
             this.spawned = false;
