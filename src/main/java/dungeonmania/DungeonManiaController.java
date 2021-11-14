@@ -371,7 +371,7 @@ public class DungeonManiaController {
         currentDungeon.itemPickup();
         if (currentDungeon.goalTree != null && !currentDungeon.goalTree.isComplete()) {
             currentDungeon.goalTree.checkGoalState(currentDungeon.entities, currentDungeon.player);
-            ((CompositeGoals) currentDungeon.goalTree).checkComplete();
+            currentDungeon.goalTree.checkComplete();
         }
         return currentDungeon.createResponse();
     }
