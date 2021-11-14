@@ -11,7 +11,6 @@ import dungeonmania.entities.Entity;
 public class AndurilSword extends Sword {
     public AndurilSword(JSONObject entity) {
         super(entity);
-        this.setDurability(10);
         //TODO Auto-generated constructor stub
     }
 

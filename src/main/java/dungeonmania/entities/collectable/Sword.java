@@ -10,7 +10,7 @@ import dungeonmania.entities.Entity;
 public class Sword extends CollectableEntity {
     public Sword(JSONObject entity) {
         super(entity);
-        setDurability(6);
+        setDurability(10);
         //TODO Auto-generated constructor stub
     }
 
