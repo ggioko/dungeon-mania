@@ -58,7 +58,7 @@ public class PotionsTest {
         controller.tick(null, Direction.LEFT);
         controller.tick(null, Direction.DOWN);
 
-        controller.tick("health_potion21", Direction.NONE);
+        controller.tick("health_potion2_1", Direction.NONE);
         assertTrue(controller.currentDungeon.player.getHealth() == 10);
     }
 
@@ -140,7 +140,7 @@ public class PotionsTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
-        controller.tick("invisibility_potion41", Direction.NONE);
+        controller.tick("invisibility_potion4_1", Direction.NONE);
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.RIGHT);
 

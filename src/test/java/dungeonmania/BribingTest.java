@@ -35,7 +35,7 @@ public class BribingTest {
         controller.tick(null, Direction.LEFT);
         
         assertDoesNotThrow(() -> {
-            controller.interact("assassin34");
+            controller.interact("assassin3_4");
         });
         controller.tick(null, Direction.DOWN);
         assertTrue(controller.currentDungeon.player.getHealth() == 10);
@@ -73,7 +73,7 @@ public class BribingTest {
         controller.tick(null, Direction.RIGHT);
         controller.tick(null, Direction.LEFT);
         assertDoesNotThrow(() -> {
-            controller.interact("assassin34");
+            controller.interact("assassin3_4");
         });
         controller.tick(null, Direction.LEFT);
         assertTrue(controller.currentDungeon.player.getHealth() == 10);
@@ -110,7 +110,7 @@ public class BribingTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         assertDoesNotThrow(() -> {
-            controller.interact("mercenary37");
+            controller.interact("mercenary3_7");
         });
         controller.tick(null, Direction.DOWN);
 
@@ -130,7 +130,7 @@ public class BribingTest {
         controller.tick(null, Direction.DOWN);
         controller.tick(null, Direction.DOWN);
         assertDoesNotThrow(() -> {
-            controller.interact("mercenary37");
+            controller.interact("mercenary3_7");
         });
         controller.tick(null, Direction.DOWN);
 
