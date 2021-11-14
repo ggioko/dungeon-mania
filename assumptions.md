@@ -64,6 +64,7 @@
 - Mercenaries drop armour with a chance of 1/10
 - All enemies can drop 'The One Ring' with a chance of 1/50
 - Every map has a maximum of two keys
+- Zombies can't use armour but only drop it
 
 ### **Interact Method Assumptions**
 
