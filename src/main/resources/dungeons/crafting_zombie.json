@@ -59,6 +59,11 @@
         "type": "armour"
       },
       {
+        "x": 11,
+        "y": 4,
+        "type": "zombie_toast"
+      },
+      {
         "x": 15,
         "y": 4,
         "type": "mercenary"

@@ -11,5 +11,5 @@ public interface Goal {
     public boolean add(Goal child);
     public void checkGoalState(List<Entity> entities, Player player);
     public String getName();
-
+    public void checkComplete();
 }

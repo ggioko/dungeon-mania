@@ -15,6 +15,7 @@ import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Boulder;
 import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Moving.Spider;
+import dungeonmania.entities.Moving.Zombie;
 import dungeonmania.entities.Static.Door;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.collectable.CollectableEntity;
@@ -22,6 +23,8 @@ import dungeonmania.entities.collectable.HealthPotion;
 import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
+import dungeonmania.entities.collectable.buildable.Buildable;
+import dungeonmania.entities.collectable.buildable.Sceptre;
 import dungeonmania.entities.collectable.Bomb;
 
 import java.io.File;
@@ -43,7 +46,7 @@ public class DungeonManiaController {
     int invincibilityTicks;
     int invisibilityTicks;
     int hydratick;
-    private final List<String> buildables = Arrays.asList("bow", "shield");
+
     public DungeonManiaController() {
         this.ticknum = 0;
         this.invincibilityTicks = 0;
@@ -85,13 +88,6 @@ public class DungeonManiaController {
             throw new IllegalArgumentException();
         }
 
-        // If dungeon name doesnt exist
-        ArrayList<String> dungeonNames = new ArrayList<String>();
-        dungeonNames = setDungeonNames(dungeonName);
-
-        if (!checkIfDungeonExists(dungeonName, dungeonNames)) {
-            throw new IllegalArgumentException();
-        }
         
         try {
             obj = new JSONObject(FileLoader.loadResourceFile("/dungeons" + "/" + dungeonName + ".json"));
@@ -199,31 +195,11 @@ public class DungeonManiaController {
         }
         return exists;
     }
-
-    public ArrayList<String> setDungeonNames(String dungeonName) {
-        ArrayList<String> dungeonNames = new ArrayList<String>();
-        dungeonNames.add("advanced-2");
-        dungeonNames.add("boulders");
-        dungeonNames.add("advanced");
-        dungeonNames.add("crafting");
-        dungeonNames.add("doors");
-        dungeonNames.add("exist");
-        dungeonNames.add("exit");
-        dungeonNames.add("goals");
-        dungeonNames.add("interact");
-        dungeonNames.add("portals");
-        dungeonNames.add("potions");
-        dungeonNames.add("maze");
-        dungeonNames.add("characterTest");
-        dungeonNames.add("interactTest");
-        dungeonNames.add("bombTest");
-        dungeonNames.add("invincibility");
-        dungeonNames.add("interactAssassin");
-        dungeonNames.add("hydra");
-        return dungeonNames;
-    }
     
     public DungeonResponse tick(String itemUsed, Direction movementDirection) throws IllegalArgumentException, InvalidActionException {
+        if (currentDungeon == null) {
+            throw new NullPointerException("YOU ARE DEAD!");
+        }
         if (itemUsed != null) {
             Entity item = currentDungeon.getItemUsed(itemUsed);
             if (currentDungeon.getItemUsed(itemUsed) == null) {
@@ -255,15 +231,17 @@ public class DungeonManiaController {
 
         // POTION LOGIC
         // Invincibility potion
-        if (invincibilityTicks >= 10) {
+        if (invincibilityTicks >= 10 && !currentDungeon.gameMode.equalsIgnoreCase("Hard")) {
             currentDungeon.player.setInvincibilityPotionEffect(false);
 
             this.invincibilityTicks = 0;
         }
-        if (currentDungeon.player.isInvincibilityPotionEffect()) {
+        if (currentDungeon.player.isInvincibilityPotionEffect() && !currentDungeon.gameMode.equalsIgnoreCase("Hard")) {
             
             this.invincibilityTicks++;
         }
+
+        
         currentDungeon = InvincibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
         // Invisibility potion
@@ -275,37 +253,40 @@ public class DungeonManiaController {
             this.invisibilityTicks++;
             
         }
+        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+
         //hydra spawning
-        if (currentDungeon.gameMode.equals("hard")) {
+        if (currentDungeon.gameMode.equalsIgnoreCase("hard")) {
             if (this.hydratick >= 50) {
                 Hydra.spawn(currentDungeon, currentDungeon.entry);
                 this.hydratick = 0;
             }
             this.hydratick++;
         }
-        currentDungeon = InvisibilityPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
+        
 
         // Health potion
         currentDungeon = HealthPotion.addEffects(currentDungeon, itemUsed, currentDungeon.player, currentDungeon.inventory);
 
-        currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
         // ENEMY PATHING
-        if (!currentDungeon.gameMode.equals("Peaceful")) {
+        currentDungeon.player.move(currentDungeon.player.getPosition().translateBy(movementDirection), currentDungeon.getWalls(), currentDungeon.width, currentDungeon.height);
+        if (!currentDungeon.gameMode.equalsIgnoreCase("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
-            if (currentDungeon.battle(currentDungeon) == null) {
+            if (currentDungeon.player == null) {
                 currentDungeon = null;
-                return null;
+                throw new NullPointerException("YOU ARE DEAD!");
             }
         }
         currentDungeon.pathing(movementDirection, currentDungeon.width, currentDungeon.height);
+
         // ENEMY PATHING
-        if (!currentDungeon.gameMode.equals("Peaceful")) {
+        if (!currentDungeon.gameMode.equalsIgnoreCase("Peaceful") && !currentDungeon.player.isInvisibilityPotionEffect()) {
             // making sure that enemy interactions dont happen when on the peaceful game mode
             currentDungeon.battle(currentDungeon);
-            if (currentDungeon.battle(currentDungeon) == null) {
+            if (currentDungeon.player == null) {
                 currentDungeon = null;
-                return null;
+                throw new NullPointerException("YOU ARE DEAD!");
             }
         }
         //mercenary moves again if battling
@@ -322,7 +303,6 @@ public class DungeonManiaController {
         for (Spawner s : spawners) {
             s.spawn(currentDungeon);
         }
-        
         // SIMPLE AND COMPLEX GOALS
         for (Entity e : currentDungeon.entities) {
             //boulder movement and floor switch
@@ -368,14 +348,29 @@ public class DungeonManiaController {
             currentDungeon.removeEntity(bomb.getId());
         }
 
-        
+        // Enemies Brainwashed by Sceptre
+        for (Entity e : currentDungeon.entities) {
+            if (e instanceof Mercenary || e instanceof Assassin) {
+                Mercenary m = (Mercenary) e;
+                if (m.isBrainWashed()) {
+                    if (m.getBrainWashTick() >= 10) {
+                        m.setBrainWashed(false);
+                        m.setInteractable(true);
+                        m.setBrainWashTick(0);
+                        currentDungeon.getPlayer().setAlly(false);
+                    } else {
+                        m.setBrainWashTick(m.getBrainWashTick() + 1);
+                    }
+                }
+            }
+        }
         
         
         // ITEM PICKUP
         currentDungeon.itemPickup();
         if (currentDungeon.goalTree != null && !currentDungeon.goalTree.isComplete()) {
             currentDungeon.goalTree.checkGoalState(currentDungeon.entities, currentDungeon.player);
-            ((CompositeGoals) currentDungeon.goalTree).checkComplete();
+            currentDungeon.goalTree.checkComplete();
         }
         return currentDungeon.createResponse();
     }
@@ -385,41 +380,51 @@ public class DungeonManiaController {
         if (currentDungeon.getEntity(entityId) == null) {
             throw new IllegalArgumentException("entityId is not a valid entity ID");
         } else if (entity instanceof Mercenary) {
-            if (entity instanceof Assassin) {
-                Assassin assassin = (Assassin) currentDungeon.getEntity(entityId);
-
-                if (assassin.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
-                    if (currentDungeon.getItem("treasure") == null || currentDungeon.getItem("one_ring") == null) {
-                        throw new InvalidActionException("No treasure or ring in inventory");
+            if (!currentDungeon.existsBrainwashedEntity(currentDungeon.getEntities())) {
+                if (entity instanceof Assassin) {
+                    Assassin assassin = (Assassin) currentDungeon.getEntity(entityId);
+                    if (assassin.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
+                        if (currentDungeon.getItem("sceptre") != null) {
+                            ((Sceptre) (currentDungeon.getItem("sceptre"))).effect(assassin, currentDungeon.inventory);
+                            currentDungeon.getPlayer().setAlly(true);
+                        } else if (currentDungeon.getItem("treasure") == null || currentDungeon.getItem("one_ring") == null) {
+                            throw new InvalidActionException("No treasure or ring in inventory");
+                        }
+                        else {
+                            currentDungeon.removeItem("treasure");
+                            currentDungeon.removeItem("one_ring");
+                            assassin.setBribed(true);
+                            assassin.setInteractable(false);
+                            currentDungeon.getPlayer().setAlly(true);
+                        }
                     }
                     else {
-                        currentDungeon.removeItem("treasure");
-                        currentDungeon.removeItem("one_ring");
-                        assassin.setBribed(true);
-                        assassin.setInteractable(false);
-                        currentDungeon.getPlayer().setAlly(true);
+                        throw new InvalidActionException("Mercenary not in range");
                     }
-                }
-                else {
-                    throw new InvalidActionException("Mercenary not in range");
-                }
-            } else {
-                Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
-
-                if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
-                    if (currentDungeon.getItem("treasure") == null) {
-                        throw new InvalidActionException("No treasure in inventory");
+                } else {
+                    Mercenary mercenary = (Mercenary) currentDungeon.getEntity(entityId);
+    
+                    if (mercenary.isInBribableRange(currentDungeon.getPlayer().getPosition())) {
+                        if (currentDungeon.getItem("sceptre") != null) {
+                            ((Sceptre) (currentDungeon.getItem("sceptre"))).effect(mercenary, currentDungeon.inventory);
+                            currentDungeon.getPlayer().setAlly(true);
+                        } else if (currentDungeon.getItem("treasure") == null) {
+                            throw new InvalidActionException("No treasure in inventory");
+                        }
+                        else {
+                            currentDungeon.removeItem("treasure");
+                            mercenary.setBribed(true);
+                            mercenary.setInteractable(false);
+                            currentDungeon.getPlayer().setAlly(true);
+                        }
                     }
                     else {
-                        currentDungeon.removeItem("treasure");
-                        mercenary.setBribed(true);
-                        mercenary.setInteractable(false);
-                        currentDungeon.getPlayer().setAlly(true);
+                        throw new InvalidActionException("Mercenary not in range");
                     }
                 }
-                else {
-                    throw new InvalidActionException("Mercenary not in range");
-                }
+            }
+            else {
+                throw new InvalidActionException("You already have an ally!");
             }
         }
         else if (currentDungeon.getEntity(entityId).getType().equals("zombie_toast_spawner")) {
@@ -447,13 +452,18 @@ public class DungeonManiaController {
     }
     
     public DungeonResponse build(String buildable) throws IllegalArgumentException, InvalidActionException {
-        if (!buildables.contains(buildable)) {
+        if (!Buildable.BUILDABLES_LIST.contains(buildable)) {
             throw new IllegalArgumentException();
+        }
+        
+        if (Zombie.zombieExistOnMap(currentDungeon.entities) && buildable.equals("midnight_armour")) {
+            throw new InvalidActionException("Zombie Toasts Exist on Map");
         }
 
         if (!currentDungeon.buildables.contains(buildable)) {
             throw new InvalidActionException("Not Enough Materials");
         }
+
         currentDungeon.createBuildable(buildable);
 
         return currentDungeon.createResponse();

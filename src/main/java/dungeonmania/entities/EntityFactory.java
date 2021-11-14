@@ -14,6 +14,7 @@ import dungeonmania.entities.Static.FloorSwitch;
 import dungeonmania.entities.Static.Portal;
 import dungeonmania.entities.Static.Spawner;
 import dungeonmania.entities.Static.Wall;
+import dungeonmania.entities.Static.SwampTile;
 import dungeonmania.entities.collectable.Armour;
 import dungeonmania.entities.collectable.Arrow;
 import dungeonmania.entities.collectable.Bomb;
@@ -22,9 +23,11 @@ import dungeonmania.entities.collectable.InvincibilityPotion;
 import dungeonmania.entities.collectable.InvisibilityPotion;
 import dungeonmania.entities.collectable.Key;
 import dungeonmania.entities.collectable.OneRing;
+import dungeonmania.entities.collectable.SunStone;
 import dungeonmania.entities.collectable.Sword;
 import dungeonmania.entities.collectable.Treasure;
 import dungeonmania.entities.collectable.Wood;
+import dungeonmania.entities.collectable.AndurilSword;
 import dungeonmania.util.Position;
 
 public class EntityFactory {
@@ -85,6 +88,8 @@ public class EntityFactory {
 			e = new Zombie(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("wall")) {
 			e = new Wall(entity);
+		} else if (entity.getString("type").equalsIgnoreCase("sun_stone")) {
+			e = new SunStone(entity);
 		}  else if (entity.getString("type").equalsIgnoreCase("player")) {
 			e = new Player(entity);
 		} else if (entity.getString("type").equalsIgnoreCase("portal")) {
@@ -103,6 +108,10 @@ public class EntityFactory {
             Portal portal = new Portal((JSONObject)entity, coords);
             portal.setType("portal_" + ((JSONObject)entity).getString("colour"));
 			e = portal;
+		} else if (entity.getString("type").equalsIgnoreCase("swamp_tile")) {
+			e = new SwampTile(entity);
+		} else if (entity.getString("type").equalsIgnoreCase("anduril")) {
+			e = new AndurilSword(entity);
 		}
 		return e;
 	}

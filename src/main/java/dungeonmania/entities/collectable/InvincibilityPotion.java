@@ -18,7 +18,17 @@ public class InvincibilityPotion extends CollectableEntity {
 
     public static Dungeon addEffects(Dungeon currentDungeon, String itemUsed, Player player, List<Entity> inventory) {
         Entity invincibility = null;
-        
+        if (currentDungeon.getGameMode().equalsIgnoreCase("Hard")) {
+            if (itemUsed != null) {
+                if (itemUsed.contains("invincibility_potion")) {
+                    invincibility = currentDungeon.getItem("invincibility_potion");
+                    inventory.remove(invincibility);
+                }
+            }
+            currentDungeon.setItems(inventory);
+            currentDungeon.setPlayer(player);
+            return currentDungeon;
+        }
         if (itemUsed != null) {
             if (itemUsed.contains("invincibility_potion")) {
                 invincibility = currentDungeon.getItem("invincibility_potion");
