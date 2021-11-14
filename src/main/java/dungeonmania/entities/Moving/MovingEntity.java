@@ -68,6 +68,12 @@ public class MovingEntity extends Entity {
             Sword.isBroken(dungeon.getItems());
             // decrease sword durability by 1 // TODO
         }
+        else if (dungeon.getItem("anduril") != null) {
+            this.setHealth(this.health - 1);
+            Sword.durability -= 1;
+            Sword.isBroken(dungeon.getItems());
+            // decrease sword durability by 1 // TODO
+        }
         //Bow allows player to attack twice
         if (dungeon.getItem("bow") != null) {
             Bow bow = (Bow) dungeon.getItem("bow");
